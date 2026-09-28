@@ -1,0 +1,10 @@
+.genres-main { padding-bottom: max(34px, env(safe-area-inset-bottom)); }
+.genres-main > h2 { margin-left: 0; }
+.genre-list { gap: 11px; }
+.genre-choice { min-height: 82px; }
+.genre-mark { color: #c4a5ff; font-size: 1.08rem; font-weight: 700; }
+.choice-arrow { display: grid; place-items: center; font-size: 1.5rem; line-height: 1; }
+
+@media (max-width: 380px) {
+  .genre-choice { min-height: 78px; }
+}

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101b">
+  <meta name="description" content="Choose a movie or show genre to explore with MUVY.">
+  <title>Genres | MUVY</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="recognize.css">
+  <link rel="stylesheet" href="genres.css">
+</head>
+<body class="recognize-body genres-body">
+  <div class="recognize-shell genres-shell">
+    <header class="recognize-header">
+      <a class="recognize-back" href="explore.html" aria-label="Back to Explore">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <h1>Genres</h1>
+      <span class="header-spacer" aria-hidden="true"></span>
+    </header>
+    <main class="recognize-main genres-main">
+      <h2>What are you in the mood for?</h2>
+      <div class="recognize-list genre-list" aria-label="Movie and show genres">
+        <button class="recognize-choice genre-choice" type="button" data-genre="all"><span class="recognize-choice-icon"><span class="genre-mark">A</span></span><span class="recognize-choice-copy"><strong>All genres</strong><small>Browse every kind of story.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="action"><span class="recognize-choice-icon"><span class="genre-mark">A</span></span><span class="recognize-choice-copy"><strong>Action</strong><small>Fast-paced stories and big moments.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="adventure"><span class="recognize-choice-icon"><span class="genre-mark">A</span></span><span class="recognize-choice-copy"><strong>Adventure</strong><small>Journeys into the unexpected.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="comedy"><span class="recognize-choice-icon"><span class="genre-mark">C</span></span><span class="recognize-choice-copy"><strong>Comedy</strong><small>Easy laughs and feel-good stories.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="crime"><span class="recognize-choice-icon"><span class="genre-mark">C</span></span><span class="recognize-choice-copy"><strong>Crime</strong><small>Mysteries, investigations and heists.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="documentary"><span class="recognize-choice-icon"><span class="genre-mark">D</span></span><span class="recognize-choice-copy"><strong>Documentary</strong><small>Real people and true stories.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="drama"><span class="recognize-choice-icon"><span class="genre-mark">D</span></span><span class="recognize-choice-copy"><strong>Drama</strong><small>Character-led stories that stay with you.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="fantasy"><span class="recognize-choice-icon"><span class="genre-mark">F</span></span><span class="recognize-choice-copy"><strong>Fantasy</strong><small>Magic, myths and imagined worlds.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="horror"><span class="recognize-choice-icon"><span class="genre-mark">H</span></span><span class="recognize-choice-copy"><strong>Horror</strong><small>Dark stories built to thrill and unsettle.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="romance"><span class="recognize-choice-icon"><span class="genre-mark">R</span></span><span class="recognize-choice-copy"><strong>Romance</strong><small>Love stories and relationships.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="sci-fi"><span class="recognize-choice-icon"><span class="genre-mark">S</span></span><span class="recognize-choice-copy"><strong>Sci-Fi</strong><small>Future worlds and bold ideas.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        <button class="recognize-choice genre-choice" type="button" data-genre="thriller"><span class="recognize-choice-icon"><span class="genre-mark">T</span></span><span class="recognize-choice-copy"><strong>Thriller</strong><small>Suspense, twists and high stakes.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+      </div>
+    </main>
+  </div>
+  <script src="genres.js" defer></script>
+</body>
+</html>

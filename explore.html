@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101b">
+  <meta name="description" content="Explore movies and shows with MUVY.">
+  <title>Explore | MUVY</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="explore.css">
+</head>
+<body class="home-body explore-body">
+  <div class="app-shell explore-shell" id="explore">
+    <header class="app-header explore-header">
+      <h1>Explore</h1>
+    </header>
+
+    <main class="explore-main">
+      <div class="explore-search-row">
+        <form class="explore-search" id="explore-search" role="search">
+          <img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
+          <label class="visually-hidden" for="explore-query">Search movies, actors, genres</label>
+          <input id="explore-query" type="search" placeholder="Search movies, actors, genres..." autocomplete="off">
+        </form>
+        <button class="explore-filter-button" id="filter-toggle" type="button" aria-label="Open genre filters" aria-expanded="false">
+          <img src="images/nav%20tools/tune_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt="">
+        </button>
+      </div>
+
+      <div class="genre-filter-panel" id="genre-filter-panel" hidden aria-label="Filter by genre">
+        <button type="button" data-genre="all">All genres</button>
+        <button type="button" data-genre="action">Action</button>
+        <button type="button" data-genre="drama">Drama</button>
+        <button type="button" data-genre="sci-fi">Sci-Fi</button>
+        <button type="button" data-genre="adventure">Adventure</button>
+      </div>
+
+      <nav class="explore-categories" aria-label="Explore categories">
+        <button class="category-chip is-selected" type="button" data-category="for-you" aria-pressed="true">For You</button>
+        <button class="category-chip" type="button" data-category="movie" aria-pressed="false">Movies</button>
+        <button class="category-chip" type="button" data-category="tv" aria-pressed="false">TV Shows</button>
+        <button class="category-chip" id="genres-chip" type="button" data-category="genres" aria-pressed="false">Genres</button>
+      </nav>
+
+      <section class="explore-section" aria-labelledby="recommended-title">
+        <h2 id="recommended-title">Recommended for you</h2>
+        <div class="poster-rail explore-poster-rail" aria-label="Recommended titles">
+          <a class="movie-card explore-card" href="#explore" data-title="Sinners" data-search="sinners action drama thriller" data-media="movie" data-genres="action,drama">
+            <img class="poster-art" src="images/6b65c239-aa8a-4105-a81b-e0ef9cfa503d%20-%20Copy.jfif" alt="Sinners poster" loading="lazy">
+            <span class="movie-title">Sinners</span><span class="movie-year">2025</span>
+          </a>
+          <a class="movie-card explore-card" href="#explore" data-title="John Wick" data-search="john wick keanu reeves action thriller" data-media="movie" data-genres="action">
+            <img class="poster-art" src="images/5c889bc9-4494-4ccf-a19f-640a40ddfd2b.jfif" alt="John Wick poster" loading="lazy">
+            <span class="movie-title">John Wick</span><span class="movie-year">2014</span>
+          </a>
+          <a class="movie-card explore-card" href="#explore" data-title="Wakanda Forever" data-search="black panther wakanda forever action adventure" data-media="movie" data-genres="action,adventure">
+            <img class="poster-art" src="images/6a25f44e-59f5-4c21-b903-0172a0dd2059%20-%20Copy.jfif" alt="Black Panther: Wakanda Forever poster" loading="lazy">
+            <span class="movie-title">Wakanda Forever</span><span class="movie-year">2022</span>
+          </a>
+          <a class="movie-card explore-card" href="#explore" data-title="The Pursuit of Happyness" data-search="pursuit of happyness will smith drama" data-media="movie" data-genres="drama">
+            <img class="poster-art" src="images/11db61d7-6216-493c-9be0-2c440a9c0ec6.jfif" alt="The Pursuit of Happyness poster" loading="lazy">
+            <span class="movie-title">The Pursuit of Happyness</span><span class="movie-year">2006</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="explore-section trending-explore" aria-labelledby="trending-explore-title">
+        <h2 id="trending-explore-title">Trending now</h2>
+        <div class="poster-rail explore-poster-rail" aria-label="Trending titles">
+          <a class="movie-card explore-card" href="#explore" data-title="Peaky Blinders: The Immortal Man" data-search="peaky blinders immortal man crime drama" data-media="movie" data-genres="drama">
+            <img class="poster-art" src="images/22bab4cf-813a-4732-bd72-88b2d6c430fa.jfif" alt="Peaky Blinders: The Immortal Man poster" loading="lazy">
+            <span class="movie-title">Peaky Blinders</span><span class="movie-year">2026</span>
+          </a>
+          <a class="movie-card explore-card" href="#explore" data-title="Jumanji: The Next Level" data-search="jumanji next level adventure comedy" data-media="movie" data-genres="adventure">
+            <img class="poster-art" src="images/268a8853-9600-4764-a7ee-4a80a453b72c%20-%20Copy.jfif" alt="Jumanji: The Next Level poster" loading="lazy">
+            <span class="movie-title">Jumanji: The Next Level</span><span class="movie-year">2019</span>
+          </a>
+          <a class="movie-card explore-card" href="#explore" data-title="The Expendables 3" data-search="expendables 3 action adventure" data-media="movie" data-genres="action,adventure">
+            <img class="poster-art" src="images/38fd25ee-3093-408b-8e8e-426535a7a7dd.jfif" alt="The Expendables 3 poster" loading="lazy">
+            <span class="movie-title">The Expendables 3</span><span class="movie-year">2014</span>
+          </a>
+          <a class="movie-card explore-card" href="#explore" data-title="Peaky Blinders 2" data-search="peaky blinders crime drama" data-media="tv" data-genres="drama">
+            <img class="poster-art" src="images/8c6ef1d2-7ffb-4b93-ab07-5db127913e99.jfif" alt="Peaky Blinders poster" loading="lazy">
+            <span class="movie-title">Peaky Blinders</span><span class="movie-year">2013</span>
+          </a>
+        </div>
+      </section>
+      <p class="explore-empty" id="explore-empty" hidden>No titles match that search yet.</p>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <a class="nav-item" href="home.html" data-nav="home"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+      <a class="nav-item" href="#explore" data-nav="explore"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Explore</span></a>
+      <a class="nav-item" href="recognize.html" data-nav="recognize"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
+      <button class="nav-item" type="button" data-nav="watchlist" data-message="Your library will appear here."><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></button>
+      <button class="nav-item" type="button" data-nav="profile" data-message="Profile settings are coming soon."><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></button>
+    </nav>
+    <div class="toast" id="explore-toast" role="status" aria-live="polite"></div>
+  </div>
+  <script src="explore.js" defer></script>
+</body>
+</html>

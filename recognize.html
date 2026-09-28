@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101b">
+  <title>Recognize | MUVY</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="recognize.css">
+</head>
+<body class="recognize-body">
+  <div class="recognize-shell">
+    <header class="recognize-header">
+      <a class="recognize-back" href="home.html" aria-label="Back to home">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <h1>Recognize</h1>
+      <span class="header-spacer" aria-hidden="true"></span>
+    </header>
+
+    <main class="recognize-main">
+      <h2>How do you want to recognize?</h2>
+      <div class="recognize-list">
+        <button class="recognize-choice" id="audio-choice" type="button">
+          <span class="recognize-choice-icon audio-choice-icon"><img src="images/nav%20tools/mic_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
+          <span class="recognize-choice-copy"><strong>Audio</strong><small>Listen to the audio around you<br>or play a sound.</small></span>
+          <svg class="choice-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="recognize-choice" id="screen-choice" type="button" aria-haspopup="dialog" aria-controls="capture-dialog">
+          <span class="recognize-choice-icon screen-choice-icon"><img src="images/nav%20tools/mobile_cast_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
+          <span class="recognize-choice-copy"><strong>Screen</strong><small>Capture your screen to identify<br>what's playing.</small></span>
+          <svg class="choice-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="recognize-choice" id="upload-choice" type="button">
+          <span class="recognize-choice-icon upload-choice-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="recognize-choice-copy"><strong>Upload Clip</strong><small>Upload a short video clip<br>(10 to 15 seconds).</small></span>
+          <svg class="choice-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <input class="visually-hidden" id="clip-picker" type="file" accept="video/*">
+      <div class="audio-feedback" id="audio-feedback" hidden>
+        <p id="audio-status" role="status" aria-live="polite"></p>
+        <button id="stop-audio" type="button" hidden>Stop listening</button>
+      </div>
+
+      <aside class="recognize-tip">
+        <span class="tip-info" aria-hidden="true">i</span>
+        <p><strong>Tip:</strong> For best results, keep your clip short (10 to 15 seconds) and clear.</p>
+      </aside>
+    </main>
+
+    <div class="recognize-toast" id="recognize-toast" role="status" aria-live="polite"></div>
+
+    <dialog class="capture-dialog" id="capture-dialog" aria-labelledby="capture-title">
+      <div class="capture-sheet">
+        <div class="capture-heading">
+          <div><p class="capture-eyebrow">Identify a movie</p><h2 id="capture-title">Choose how to capture</h2></div>
+          <button class="capture-close" id="capture-close" type="button">Close</button>
+        </div>
+        <div class="capture-options" id="capture-options">
+          <button class="capture-option" id="screen-record-option" type="button">
+            <span class="capture-option-icon"><img src="images/nav%20tools/mobile_cast_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
+            <span><strong>Screen capture</strong><small>Record a clip playing on your screen.</small></span>
+          </button>
+          <button class="capture-option" id="back-camera-option" type="button">
+            <span class="capture-option-icon"><img src="images/nav%20tools/photo_camera_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
+            <span><strong>Open back camera</strong><small>Capture the movie playing on another screen.</small></span>
+          </button>
+        </div>
+        <div class="capture-live" id="capture-live" hidden>
+          <div class="capture-preview"><video id="capture-video" playsinline muted></video><p id="capture-preview-empty">Your preview will appear here.</p></div>
+          <p class="capture-status" id="capture-status" role="status" aria-live="polite"></p>
+          <div class="capture-controls">
+            <button class="capture-secondary" id="stop-capture" type="button" hidden>Stop capture</button>
+            <button class="capture-secondary" id="capture-frame" type="button" hidden>Capture frame</button>
+            <button class="capture-primary" id="identify-capture" type="button" hidden>Identify clip</button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  </div>
+  <script src="recognize.js" defer></script>
+</body>
+</html>

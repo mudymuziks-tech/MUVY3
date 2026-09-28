@@ -1,0 +1,147 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101b">
+  <meta name="description" content="Identify what's on screen and find your next watch with MUVY.">
+  <title>Home | MUVY</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="home.css">
+</head>
+<body class="home-body">
+  <div class="app-shell" id="home">
+    <header class="app-header">
+      <a class="app-wordmark" href="#home" aria-label="MUVY home">MU<span>V</span>Y</a>
+      <div class="header-actions">
+        <button class="icon-button" id="search-toggle" type="button" aria-label="Open movie search" aria-expanded="false">
+          <img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
+        </button>
+        <button class="avatar-button" id="profile-button" type="button" aria-label="Open Tunde's profile"><img src="images/0f3cef7f-cca3-482f-bbc7-264b839abbe5.jpg" alt=""></button>
+      </div>
+    </header>
+
+    <form class="search-row" id="search-row" role="search" hidden>
+      <label class="visually-hidden" for="movie-search">Search movies and shows</label>
+      <input id="movie-search" type="search" placeholder="Search movies and shows" autocomplete="off">
+      <button type="submit">Search</button>
+    </form>
+
+    <main>
+      <section class="greeting" aria-labelledby="greeting-title">
+        <h1 id="greeting-title">Good morning, Tunde</h1>
+        <p>What would you like to do today?</p>
+      </section>
+
+      <section class="recognize-section" id="recognize" aria-label="Recognize a movie">
+        <a class="recognize-feature" href="recognize.html">
+          <span class="sound-orb" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none"><path d="M8 21v6M16 15v18M24 10v28M32 17v14M40 21v6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="recognize-copy"><strong>Recognize a movie</strong><small>Use audio, screen or upload a clip to find what you're watching.</small></span>
+        </a>
+
+        <div class="recognize-actions" id="recognize-actions">
+          <button class="recognize-action" type="button" data-message="Audio recognition will be available soon.">
+            <span class="action-icon audio-icon" aria-hidden="true"><img src="images/nav%20tools/mic_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
+            <span class="action-title">Audio</span><span class="action-caption">Listen</span>
+          </button>
+          <button class="recognize-action" id="camera-options-button" type="button" aria-haspopup="dialog" aria-controls="capture-dialog">
+            <span class="action-icon"><img src="images/nav%20tools/photo_camera_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
+            <span class="action-title">Camera</span><span class="action-caption">Capture a scene</span>
+          </button>
+          <button class="recognize-action" type="button" data-picker="clip-picker">
+            <span class="action-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="action-title">Upload Clip</span><span class="action-caption">Video or image</span>
+          </button>
+        </div>
+        <input class="visually-hidden" id="clip-picker" type="file" accept="video/*,image/*">
+      </section>
+
+      <section class="movie-section" id="for-you" aria-labelledby="for-you-title">
+        <div class="section-heading"><h2 id="for-you-title">Movies to discover</h2><a href="#for-you">See all</a></div>
+        <div class="poster-rail" aria-label="Recommended for you">
+          <a class="movie-card" href="#for-you" data-title="Wakanda Forever">
+            <img class="poster-art" src="images/6a25f44e-59f5-4c21-b903-0172a0dd2059%20-%20Copy.jfif" alt="Wakanda Forever poster" loading="lazy">
+            <span class="movie-title">Wakanda Forever</span>
+          </a>
+          <a class="movie-card" href="#for-you" data-title="The Pursuit of Happyness">
+            <img class="poster-art" src="images/11db61d7-6216-493c-9be0-2c440a9c0ec6.jfif" alt="The Pursuit of Happyness poster" loading="lazy">
+            <span class="movie-title">The Pursuit of Happyness</span>
+          </a>
+          <a class="movie-card" href="#for-you" data-title="John Wick">
+            <img class="poster-art" src="images/5c889bc9-4494-4ccf-a19f-640a40ddfd2b.jfif" alt="John Wick poster" loading="lazy">
+            <span class="movie-title">John Wick</span>
+          </a>
+          <a class="movie-card" href="#for-you" data-title="Jumanji: The Next Level">
+            <img class="poster-art" src="images/268a8853-9600-4764-a7ee-4a80a453b72c%20-%20Copy.jfif" alt="Jumanji: The Next Level poster" loading="lazy">
+            <span class="movie-title">Jumanji: The Next Level</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="movie-section trending-section" id="trending" aria-labelledby="trending-title">
+        <div class="section-heading"><h2 id="trending-title">Trending this week</h2><a href="#trending">See all</a></div>
+        <div class="poster-rail" aria-label="Trending movies and shows">
+          <a class="movie-card" href="#trending" data-title="Sinners">
+            <img class="poster-art" src="images/6b65c239-aa8a-4105-a81b-e0ef9cfa503d%20-%20Copy.jfif" alt="Sinners poster" loading="lazy">
+            <span class="movie-title">Sinners</span>
+          </a>
+          <a class="movie-card" href="#trending" data-title="Peaky Blinders: The Immortal Man">
+            <img class="poster-art" src="images/22bab4cf-813a-4732-bd72-88b2d6c430fa.jfif" alt="Peaky Blinders: The Immortal Man poster" loading="lazy">
+            <span class="movie-title">Peaky Blinders: The Immortal Man</span>
+          </a>
+          <a class="movie-card" href="#trending" data-title="The Expendables 3">
+            <img class="poster-art" src="images/38fd25ee-3093-408b-8e8e-426535a7a7dd.jfif" alt="The Expendables 3 poster" loading="lazy">
+            <span class="movie-title">The Expendables 3</span>
+          </a>
+          <a class="movie-card" href="#trending" data-title="Peaky Blinders 2">
+            <img class="poster-art" src="images/8c6ef1d2-7ffb-4b93-ab07-5db127913e99.jfif" alt="Peaky Blinders 2 poster" loading="lazy">
+            <span class="movie-title">Peaky Blinders 2</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <a class="nav-item" href="#home" data-nav="home"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+      <a class="nav-item" href="explore.html" data-nav="explore"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Explore</span></a>
+      <a class="nav-item" href="recognize.html" data-nav="recognize"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
+      <button class="nav-item" type="button" data-nav="watchlist" data-message="Your library will appear here."><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></button>
+      <button class="nav-item" type="button" data-nav="profile" data-message="Profile settings are coming soon."><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></button>
+    </nav>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <dialog class="capture-dialog" id="capture-dialog" aria-labelledby="capture-title">
+      <div class="capture-sheet">
+        <div class="capture-heading">
+          <div><p class="capture-eyebrow">Identify a movie</p><h2 id="capture-title">Choose how to capture</h2></div>
+          <button class="capture-close" id="capture-close" type="button">Close</button>
+        </div>
+        <div class="capture-options" id="capture-options">
+          <button class="capture-option" id="screen-record-option" type="button">
+            <span class="capture-option-icon"><img src="images/nav%20tools/mobile_cast_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
+            <span><strong>Screen capture</strong><small>Record the movie playing on your screen.</small></span>
+          </button>
+          <button class="capture-option" id="back-camera-option" type="button">
+            <span class="capture-option-icon"><img src="images/nav%20tools/photo_camera_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
+            <span><strong>Open back camera</strong><small>Point your camera at the screen and capture a scene.</small></span>
+          </button>
+        </div>
+        <div class="capture-live" id="capture-live" hidden>
+          <div class="capture-preview"><video id="capture-video" playsinline muted></video><p id="capture-preview-empty">Your preview will appear here.</p></div>
+          <p class="capture-status" id="capture-status" role="status" aria-live="polite"></p>
+          <div class="capture-controls">
+            <button class="capture-secondary" id="stop-capture" type="button" hidden>Stop capture</button>
+            <button class="capture-secondary" id="capture-frame" type="button" hidden>Capture frame</button>
+            <button class="capture-primary" id="identify-capture" type="button" hidden>Identify clip</button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  </div>
+  <script src="home.js" defer></script>
+
+</body>
+</html>
+

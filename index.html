@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080611">
+  <meta http-equiv="refresh" content="10; url=login.html">
+  <title>MUVY</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="splash-body">
+  <main class="splash-screen">
+    <div class="splash-content" role="status" aria-label="MUVY is loading">
+      <h1 class="splash-wordmark" aria-label="MUVY"><span>M</span><span>U</span><span class="splash-v">V</span><span>Y</span></h1>
+      <p class="splash-tagline"><span>Identify</span><span>Discover</span><span>Watch</span></p>
+      <div class="splash-progress" aria-label="Getting MUVY ready">
+        <span class="splash-progress-track" aria-hidden="true"><span></span></span>
+        <p>Getting MUVY ready</p>
+      </div>
+    </div>
+    <noscript><a class="splash-fallback" href="login.html">Continue to MUVY</a></noscript>
+  </main>
+  <script>
+    window.setTimeout(() => window.location.replace('login.html'), 10000);
+  </script>
+</body>
+</html>

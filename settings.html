@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- App-wide account and recognition preferences. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101b">
+  <title>Settings | MUVY</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body class="settings-body">
+  <div class="settings-shell">
+    <header class="settings-header">
+      <button class="settings-menu-button" id="settings-menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="settings-menu-panel"><img src="images/nav%20tools/menu_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></button>
+      <a class="settings-brand" href="home.html">MU<span>V</span>Y</a>
+      <a class="settings-avatar" href="profile.html" aria-label="Profile"><img src="images/0f3cef7f-cca3-482f-bbc7-264b839abbe5.jpg" alt=""></a>
+    </header>
+    <nav class="settings-menu-panel" id="settings-menu-panel" hidden aria-label="App navigation">
+      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html">Recognize</a><a href="watchlist.html">Watchlist</a><a href="profile.html">Profile</a><a href="settings.html" aria-current="page">Settings</a><a href="login.html?logout=1">Log Out</a>
+    </nav>
+    <aside class="settings-sidebar" aria-label="Main navigation">
+      <a class="settings-side-brand" href="home.html">MU<span>V</span>Y</a>
+      <nav>
+        <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="genres.html">Browse</a><a href="recognize.html">Recognize</a><a href="watchlist.html">Watchlist</a><a class="active" href="settings.html" aria-current="page">Settings</a>
+      </nav>
+      <a class="settings-logout" href="login.html?logout=1">Log Out</a>
+    </aside>
+    <main class="settings-main">
+      <p class="settings-eyebrow">Your account</p>
+      <h1>Settings</h1>
+      <p class="settings-subtitle">Manage your MUVY app preferences.</p>
+      <section class="settings-group" id="preferences" aria-labelledby="account-settings-title">
+        <h2 id="account-settings-title">Account</h2>
+        <a class="settings-row" href="profile.html"><span><strong>Profile</strong><small>Manage your account details</small></span><b aria-hidden="true">›</b></a>
+      </section>
+      <section class="settings-group" aria-labelledby="app-settings-title">
+        <h2 id="app-settings-title">App preferences</h2>
+        <div class="settings-row"><span><strong>Recognition access</strong><small>MUVY asks before using your microphone or camera.</small></span></div>
+        <div class="settings-row" id="notifications"><span><strong>Notifications</strong><small>Notification preferences will be available here.</small></span></div>
+        <div class="settings-row" id="language"><span><strong>Language</strong><small>English</small></span></div>
+        <div class="settings-row"><span><strong>Privacy</strong><small>Your captures stay on your device until you choose to identify them.</small></span></div>
+      </section>
+      <section class="settings-group" id="help" aria-labelledby="help-settings-title"><h2 id="help-settings-title">Help &amp; Support</h2><div class="settings-row"><span><strong>Support</strong><small>Support information will be available here.</small></span></div></section>
+    </main>
+    <nav class="settings-bottom-nav" aria-label="Main navigation">
+      <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+      <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Discover</span></a>
+      <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
+      <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
+    </nav>
+  </div>
+  <script src="auth.js" defer></script>
+  <script src="settings.js" defer></script>
+</body>
+</html>

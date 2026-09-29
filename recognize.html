@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- Recognition method picker for audio listening, screen capture, and clip or image upload. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -14,12 +15,25 @@
       <a class="recognize-back" href="home.html" aria-label="Back to home">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
+      <button class="recognize-menu" id="recognize-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="recognize-menu-panel">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
       <h1>Recognize</h1>
+      <a class="recognize-brand" href="home.html" aria-label="MUVY home">MU<span>V</span>Y</a>
+      <a class="recognize-search" href="explore.html" aria-label="Search titles"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></a>
       <span class="header-spacer" aria-hidden="true"></span>
     </header>
 
+    <nav class="recognize-menu-panel" id="recognize-menu-panel" hidden aria-label="App navigation">
+      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html" aria-current="page">Recognize</a><a href="watchlist.html">Watchlist</a><a href="genres.html">Browse</a><a href="profile.html">Profile</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
+    </nav>
+
     <main class="recognize-main">
-      <h2>How do you want to recognize?</h2>
+      <div class="recognize-intro">
+        <p class="recognize-eyebrow">Recognize</p>
+        <h2>How do you want to recognize?</h2>
+        <p class="recognize-description">MUVY listens, watches, or identifies from your clip.</p>
+      </div>
       <div class="recognize-list">
         <button class="recognize-choice" id="audio-choice" type="button">
           <span class="recognize-choice-icon audio-choice-icon"><img src="images/nav%20tools/mic_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
@@ -38,11 +52,31 @@
         </button>
       </div>
 
+      <button class="audio-start-button" id="audio-recognition-button" type="button" aria-pressed="false">
+        <img class="audio-button-eq" src="images/nav%20tools/graphic_eq_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+        <img class="audio-button-stop" src="images/nav%20tools/stop_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" hidden>
+        <span id="audio-button-label">Start audio recognition</span>
+      </button>
+
       <input class="visually-hidden" id="clip-picker" type="file" accept="video/*">
       <div class="audio-feedback" id="audio-feedback" hidden>
         <p id="audio-status" role="status" aria-live="polite"></p>
         <button id="stop-audio" type="button" hidden>Stop listening</button>
       </div>
+
+      <aside class="match-preview" aria-label="Example movie identification result">
+        <div class="match-preview-heading"><span class="match-success-mark" aria-hidden="true">✓</span><strong>Example result</strong><button type="button" aria-label="More result options">•••</button></div>
+        <div class="match-preview-title">
+          <img src="images/6b65c239-aa8a-4105-a81b-e0ef9cfa503d%20-%20Copy.jfif" alt="Sinners poster">
+          <div><h3>Sinners</h3><p>2025 · Drama, Horror</p><span>Sample match preview</span></div>
+        </div>
+        <p class="match-preview-copy">A recognized title, scene timestamp, and streaming options will appear here.</p>
+        <div class="match-preview-actions">
+          <button type="button" data-message="Watchlist saving will be available soon.">Save to Watchlist</button>
+          <button type="button" data-message="Sharing will be available soon.">Share</button>
+        </div>
+        <div class="match-providers"><strong>Where to watch</strong><div><span>Netflix</span><span>Apple TV</span><span>Prime Video</span></div></div>
+      </aside>
 
       <aside class="recognize-tip">
         <span class="tip-info" aria-hidden="true">i</span>
@@ -51,6 +85,29 @@
     </main>
 
     <div class="recognize-toast" id="recognize-toast" role="status" aria-live="polite"></div>
+
+    <aside class="recognize-sidebar" aria-label="Main navigation">
+      <a class="recognize-sidebar-brand" href="home.html">MU<span>V</span>Y</a>
+      <nav>
+        <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+        <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Discover</span></a>
+        <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>My Watchlist</span></a>
+        <a class="is-active" href="recognize.html" aria-current="page"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
+        <a href="home.html#recognitions"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognitions</span></a>
+        <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
+        <a href="settings.html"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""><span>Settings</span></a>
+      </nav>
+      <div class="recognize-premium"><strong>MUVY Premium</strong><p>Unlimited recognition and more</p><a href="login.html">Upgrade</a></div>
+      <a class="recognize-logout" href="login.html?logout=1">Log Out</a>
+    </aside>
+
+    <nav class="recognize-bottom-nav" aria-label="Main navigation">
+      <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+      <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Discover</span></a>
+      <a class="is-active" href="recognize.html" aria-current="page"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
+      <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
+      <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
+    </nav>
 
     <dialog class="capture-dialog" id="capture-dialog" aria-labelledby="capture-title">
       <div class="capture-sheet">
@@ -72,7 +129,7 @@
           <div class="capture-preview"><video id="capture-video" playsinline muted></video><p id="capture-preview-empty">Your preview will appear here.</p></div>
           <p class="capture-status" id="capture-status" role="status" aria-live="polite"></p>
           <div class="capture-controls">
-            <button class="capture-secondary" id="stop-capture" type="button" hidden>Stop capture</button>
+            <button class="capture-secondary" id="stop-capture" type="button" hidden><img src="images/nav%20tools/stop_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Stop capture</span></button>
             <button class="capture-secondary" id="capture-frame" type="button" hidden>Capture frame</button>
             <button class="capture-primary" id="identify-capture" type="button" hidden>Identify clip</button>
           </div>
@@ -80,6 +137,7 @@
       </div>
     </dialog>
   </div>
+  <script src="auth.js" defer></script>
   <script src="recognize.js" defer></script>
 </body>
 </html>

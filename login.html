@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- Shared sign-in and sign-up page with mode selection and form feedback. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -10,9 +11,9 @@
 <body>
   <main class="auth-shell">
     <div class="auth-card">
-      <a class="auth-back" href="index.html">Back to welcome page</a>
+      <a class="auth-back" href="index.html" aria-label="Back to welcome page" title="Back to welcome page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <section class="auth-panel" aria-labelledby="auth-title">
-        <a class="wordmark auth-brand" href="index.html" aria-label="MUVY welcome page"><span class="wordmark-mark" aria-hidden="true">M</span>MUVY</a>
+        <a class="splash-wordmark auth-brand" href="index.html" aria-label="MUVY welcome page"><span>M</span><span>U</span><span class="splash-v">V</span><span>Y</span></a>
         <div class="auth-tabs" role="group" aria-label="Account access">
           <button class="auth-tab is-active" type="button" aria-pressed="true" data-mode="login">Log in</button>
           <button class="auth-tab" type="button" aria-pressed="false" data-mode="signup">Sign up</button>
@@ -20,8 +21,8 @@
         <h1 id="auth-title">Welcome back.</h1>
         <p class="auth-description" id="auth-description">Log in to continue discovering what to watch.</p>
         <form class="auth-form" id="auth-form">
-          <label class="auth-field" id="name-field" for="name" hidden>First name
-            <input id="name" name="name" type="text" autocomplete="given-name" placeholder="Your name">
+          <label class="auth-field" id="name-field" for="name" hidden>Your name
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="Your full name">
           </label>
           <label class="auth-field" for="email">Email address
             <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
@@ -29,54 +30,16 @@
           <label class="auth-field" for="password">Password
             <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
           </label>
+          <label class="auth-field" id="confirm-password-field" for="confirm-password" hidden>Confirm password
+            <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Enter your password again">
+          </label>
           <button class="primary-link auth-submit" id="auth-submit" type="submit">Log in</button>
           <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
         </form>
-        <p class="auth-footnote">Account access is not connected yet. Your details will not be sent anywhere.</p>
+        <p class="auth-footnote">Demo sign-in only: your name and email stay on this device for up to 8 hours. Your password is never saved or sent.</p>
       </section>
     </div>
   </main>
-  <script>
-    const form = document.getElementById('auth-form');
-    const tabs = document.querySelectorAll('.auth-tab');
-    const nameField = document.getElementById('name-field');
-    const nameInput = document.getElementById('name');
-    const passwordInput = document.getElementById('password');
-    const title = document.getElementById('auth-title');
-    const description = document.getElementById('auth-description');
-    const submit = document.getElementById('auth-submit');
-    const message = document.getElementById('auth-message');
-    let mode = 'login';
-
-    function setMode(nextMode) {
-      mode = nextMode === 'signup' ? 'signup' : 'login';
-      const signingUp = mode === 'signup';
-      nameField.hidden = !signingUp;
-      nameInput.required = signingUp;
-      passwordInput.autocomplete = signingUp ? 'new-password' : 'current-password';
-      title.textContent = signingUp ? 'Make yourself at home.' : 'Welcome back.';
-      description.textContent = signingUp
-        ? 'Create an account and keep every discovery close.'
-        : 'Log in to continue discovering what to watch.';
-      submit.textContent = signingUp ? 'Create account' : 'Log in';
-      message.textContent = '';
-      tabs.forEach((tab) => {
-        const active = tab.dataset.mode === mode;
-        tab.classList.toggle('is-active', active);
-        tab.setAttribute('aria-pressed', String(active));
-      });
-      document.title = signingUp ? 'Sign up for MUVY' : 'Log in to MUVY';
-    }
-
-    tabs.forEach((tab) => tab.addEventListener('click', () => setMode(tab.dataset.mode)));
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      message.textContent = mode === 'signup'
-        ? 'Account creation is not available yet. Please check back soon.'
-        : 'Sign in is not available yet. Please check back soon.';
-    });
-
-    setMode(window.location.hash === '#signup' ? 'signup' : 'login');
-  </script>
+  <script src="auth.js" defer></script>
 </body>
 </html>

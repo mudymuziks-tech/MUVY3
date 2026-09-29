@@ -1,4 +1,5 @@
-﻿<!doctype html>
+<!doctype html>
+<!-- Main dashboard: recognition shortcuts, movie shelves, account controls, and responsive navigation. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -13,19 +14,28 @@
   <div class="app-shell" id="home">
     <header class="app-header">
       <a class="app-wordmark" href="#home" aria-label="MUVY home">MU<span>V</span>Y</a>
+      <div class="desktop-brand-copy" aria-hidden="true"><strong>Same experience. Bigger screens.</strong><span>Recognize &nbsp; Discover &nbsp; Keep</span></div>
+      <form class="search-row" id="search-row" role="search" hidden>
+        <label class="visually-hidden" for="movie-search">Search movies and shows</label>
+        <input id="movie-search" type="search" placeholder="Search movies and shows" autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
       <div class="header-actions">
+        <button class="app-menu-button" id="app-menu-button" type="button" aria-label="Open app menu" aria-expanded="false" aria-controls="app-menu-panel">
+          <img src="images/nav%20tools/menu_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt="">
+        </button>
         <button class="icon-button" id="search-toggle" type="button" aria-label="Open movie search" aria-expanded="false">
           <img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
         </button>
-        <button class="avatar-button" id="profile-button" type="button" aria-label="Open Tunde's profile"><img src="images/0f3cef7f-cca3-482f-bbc7-264b839abbe5.jpg" alt=""></button>
+        <button class="icon-button notification-button" type="button" aria-label="Notifications" data-message="You are all caught up.">
+          <img src="images/nav%20tools/notifications_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
+        </button>
+        <a class="avatar-button" id="profile-button" href="profile.html" aria-label="Open profile"><img src="images/0f3cef7f-cca3-482f-bbc7-264b839abbe5.jpg" alt=""></a>
       </div>
     </header>
-
-    <form class="search-row" id="search-row" role="search" hidden>
-      <label class="visually-hidden" for="movie-search">Search movies and shows</label>
-      <input id="movie-search" type="search" placeholder="Search movies and shows" autocomplete="off">
-      <button type="submit">Search</button>
-    </form>
+    <nav class="app-menu-panel" id="app-menu-panel" hidden aria-label="App menu">
+      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html">Recognize</a><a href="genres.html">Browse</a><a href="watchlist.html">Watchlist</a><a href="profile.html">Profile</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
+    </nav>
 
     <main>
       <section class="greeting" aria-labelledby="greeting-title">
@@ -34,6 +44,11 @@
       </section>
 
       <section class="recognize-section" id="recognize" aria-label="Recognize a movie">
+        <div class="recognize-desktop-intro">
+          <p>Recognize a movie</p>
+          <h2>What would you like to do today?</h2>
+          <span>Use one of the methods below to identify a movie, show or sound.</span>
+        </div>
         <a class="recognize-feature" href="recognize.html">
           <span class="sound-orb" aria-hidden="true">
             <svg viewBox="0 0 48 48" fill="none"><path d="M8 21v6M16 15v18M24 10v28M32 17v14M40 21v6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
@@ -47,19 +62,22 @@
             <span class="action-title">Audio</span><span class="action-caption">Listen</span>
           </button>
           <button class="recognize-action" id="camera-options-button" type="button" aria-haspopup="dialog" aria-controls="capture-dialog">
-            <span class="action-icon"><img src="images/nav%20tools/photo_camera_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
-            <span class="action-title">Camera</span><span class="action-caption">Capture a scene</span>
+            <span class="action-icon"><img src="images/nav%20tools/mobile_cast_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
+            <span class="action-title">Screen</span><span class="action-caption">Capture your screen</span>
           </button>
           <button class="recognize-action" type="button" data-picker="clip-picker">
             <span class="action-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="action-title">Upload Clip</span><span class="action-caption">Video or image</span>
           </button>
         </div>
+        <button class="recognize-orb" type="button" aria-label="Listen to identify a movie" data-message="Audio recognition will be available soon.">
+          <span class="recognize-orb-core" aria-hidden="true"><svg viewBox="0 -960 960 960" focusable="false"><path d="M395-435q-35-35-35-85v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q0 50-35 85t-85 35Zm85-205Zm-40 520v-123q-104-14-172-93t-68-184h80q0 83 58.5 141.5T480-320q83 0 141.5-58.5T680-520h80q0 105-68 184t-172 93v123h-80Z"/></svg></span>
+        </button>
         <input class="visually-hidden" id="clip-picker" type="file" accept="video/*,image/*">
       </section>
 
       <section class="movie-section" id="for-you" aria-labelledby="for-you-title">
-        <div class="section-heading"><h2 id="for-you-title">Movies to discover</h2><a href="#for-you">See all</a></div>
+        <div class="section-heading"><h2 id="for-you-title">Recommended for you</h2><a href="#for-you">See all</a></div>
         <div class="poster-rail" aria-label="Recommended for you">
           <a class="movie-card" href="#for-you" data-title="Wakanda Forever">
             <img class="poster-art" src="images/6a25f44e-59f5-4c21-b903-0172a0dd2059%20-%20Copy.jfif" alt="Wakanda Forever poster" loading="lazy">
@@ -76,6 +94,22 @@
           <a class="movie-card" href="#for-you" data-title="Jumanji: The Next Level">
             <img class="poster-art" src="images/268a8853-9600-4764-a7ee-4a80a453b72c%20-%20Copy.jfif" alt="Jumanji: The Next Level poster" loading="lazy">
             <span class="movie-title">Jumanji: The Next Level</span>
+          </a>
+          <a class="movie-card" href="#for-you" data-title="Ballad of a Ghost">
+            <img class="poster-art" src="images/349fb1eb-657d-4370-ab65-a6c2479800a6.jfif" alt="Ballad of a Ghost poster" loading="lazy">
+            <span class="movie-title">Ballad of a Ghost</span>
+          </a>
+          <a class="movie-card" href="#for-you" data-title="Mosi: The First Black Panther">
+            <img class="poster-art" src="images/809d7f90-1464-452e-af18-a321fe0fa209.jfif" alt="Mosi: The First Black Panther poster" loading="lazy">
+            <span class="movie-title">Mosi: The First Black Panther</span>
+          </a>
+          <a class="movie-card" href="#for-you" data-title="The Last of Us">
+            <img class="poster-art" src="images/abfe304084030f02faf0a61095f620d7.jpg" alt="The Last of Us poster" loading="lazy">
+            <span class="movie-title">The Last of Us</span>
+          </a>
+          <a class="movie-card" href="#for-you" data-title="Redemption">
+            <img class="poster-art" src="images/7fcc38c29be687f7552c27576faac5ad.jpg" alt="Redemption poster" loading="lazy">
+            <span class="movie-title">Redemption</span>
           </a>
         </div>
       </section>
@@ -99,16 +133,36 @@
             <img class="poster-art" src="images/8c6ef1d2-7ffb-4b93-ab07-5db127913e99.jfif" alt="Peaky Blinders 2 poster" loading="lazy">
             <span class="movie-title">Peaky Blinders 2</span>
           </a>
+          <a class="movie-card" href="#trending" data-title="Wakanda Forever">
+            <img class="poster-art" src="images/6a25f44e-59f5-4c21-b903-0172a0dd2059%20-%20Copy.jfif" alt="Wakanda Forever poster" loading="lazy">
+            <span class="movie-title">Wakanda Forever</span>
+          </a>
+          <a class="movie-card" href="#trending" data-title="John Wick">
+            <img class="poster-art" src="images/5c889bc9-4494-4ccf-a19f-640a40ddfd2b.jfif" alt="John Wick poster" loading="lazy">
+            <span class="movie-title">John Wick</span>
+          </a>
+          <a class="movie-card" href="#trending" data-title="Jumanji: The Next Level">
+            <img class="poster-art" src="images/268a8853-9600-4764-a7ee-4a80a453b72c%20-%20Copy.jfif" alt="Jumanji: The Next Level poster" loading="lazy">
+            <span class="movie-title">Jumanji: The Next Level</span>
+          </a>
+          <a class="movie-card" href="#trending" data-title="The Last of Us">
+            <img class="poster-art" src="images/abfe304084030f02faf0a61095f620d7.jpg" alt="The Last of Us poster" loading="lazy">
+            <span class="movie-title">The Last of Us</span>
+          </a>
         </div>
       </section>
     </main>
 
     <nav class="bottom-nav" aria-label="Main navigation">
+      <a class="sidebar-wordmark" href="#home" aria-label="MUVY home">MU<span>V</span>Y</a>
       <a class="nav-item" href="#home" data-nav="home"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
       <a class="nav-item" href="explore.html" data-nav="explore"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Explore</span></a>
       <a class="nav-item" href="recognize.html" data-nav="recognize"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
-      <button class="nav-item" type="button" data-nav="watchlist" data-message="Your library will appear here."><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></button>
-      <button class="nav-item" type="button" data-nav="profile" data-message="Profile settings are coming soon."><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></button>
+      <a class="nav-item" href="watchlist.html" data-nav="watchlist"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
+      <a class="nav-item" href="profile.html" data-nav="profile"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
+      <a class="nav-item desktop-settings-item" href="settings.html"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""><span>Settings</span></a>
+      <a class="nav-item desktop-logout-item" href="login.html?logout=1"><img src="images/nav%20tools/logout_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Log Out</span></a>
+      <a class="sidebar-discover" href="explore.html"><span class="sidebar-discover-icon"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>Discover<br>Your Next Favorite</strong><small>Identify, then get personalized recommendations.</small></a>
     </nav>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -140,7 +194,9 @@
       </div>
     </dialog>
   </div>
+  <script src="auth.js" defer></script>
   <script src="home.js" defer></script>
+  <script src="app-menu.js" defer></script>
 
 </body>
 </html>

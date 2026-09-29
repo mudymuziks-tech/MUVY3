@@ -1,3 +1,4 @@
+// Recognition interactions: audio, timed screen capture, camera frames, and file selection.
 const toast = document.getElementById('recognize-toast');
 let toastTimer;
 function showToast(message) {
@@ -6,6 +7,24 @@ function showToast(message) {
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 3200);
 }
+
+// Tablet navigation menu and preview actions.
+const menuToggle = document.getElementById('recognize-menu-toggle');
+const menuPanel = document.getElementById('recognize-menu-panel');
+menuToggle.addEventListener('click', () => {
+  const willOpen = menuPanel.hidden;
+  menuPanel.hidden = !willOpen;
+  menuToggle.setAttribute('aria-expanded', String(willOpen));
+});
+document.addEventListener('click', (event) => {
+  if (!menuPanel.hidden && !menuPanel.contains(event.target) && !menuToggle.contains(event.target)) {
+    menuPanel.hidden = true;
+    menuToggle.setAttribute('aria-expanded', 'false');
+  }
+});
+document.querySelectorAll('[data-message]').forEach((button) => {
+  button.addEventListener('click', () => showToast(button.dataset.message));
+});
 
 const clipPicker = document.getElementById('clip-picker');
 document.getElementById('upload-choice').addEventListener('click', () => clipPicker.click());
@@ -17,10 +36,22 @@ clipPicker.addEventListener('change', () => {
 const audioFeedback = document.getElementById('audio-feedback');
 const audioStatus = document.getElementById('audio-status');
 const stopAudioButton = document.getElementById('stop-audio');
+const audioRecognitionButton = document.getElementById('audio-recognition-button');
+const audioButtonLabel = document.getElementById('audio-button-label');
+const audioButtonEqIcon = audioRecognitionButton.querySelector('.audio-button-eq');
+const audioButtonStopIcon = audioRecognitionButton.querySelector('.audio-button-stop');
 let audioStream = null;
 let audioRecorder = null;
 let audioTimer = null;
 let audioChunks = [];
+
+function setAudioButtonListening(isListening) {
+  audioRecognitionButton.classList.toggle('is-listening', isListening);
+  audioRecognitionButton.setAttribute('aria-pressed', String(isListening));
+  audioButtonEqIcon.hidden = isListening;
+  audioButtonStopIcon.hidden = !isListening;
+  audioButtonLabel.textContent = isListening ? 'Stop audio recognition' : 'Start audio recognition';
+}
 
 function stopAudioCapture() {
   window.clearTimeout(audioTimer);
@@ -28,9 +59,14 @@ function stopAudioCapture() {
   if (audioStream) audioStream.getTracks().forEach((track) => track.stop());
   audioStream = null;
   stopAudioButton.hidden = true;
+  setAudioButtonListening(false);
 }
 
-document.getElementById('audio-choice').addEventListener('click', async () => {
+const startAudioRecognition = async () => {
+  if (audioRecorder?.state === 'recording') {
+    stopAudioCapture();
+    return;
+  }
   if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
     audioFeedback.hidden = false;
     audioStatus.textContent = 'Audio recording is not supported in this browser.';
@@ -45,12 +81,14 @@ document.getElementById('audio-choice').addEventListener('click', async () => {
       if (audioStream) audioStream.getTracks().forEach((track) => track.stop());
       audioStream = null;
       stopAudioButton.hidden = true;
+      setAudioButtonListening(false);
       audioStatus.textContent = 'Audio captured. Movie identification is not connected yet.';
     };
     audioFeedback.hidden = false;
     audioStatus.textContent = 'Listening for up to 10 seconds. Play the movie audio now.';
     stopAudioButton.hidden = false;
     audioRecorder.start();
+    setAudioButtonListening(true);
     audioTimer = window.setTimeout(stopAudioCapture, 10000);
   } catch (error) {
     audioFeedback.hidden = false;
@@ -58,6 +96,11 @@ document.getElementById('audio-choice').addEventListener('click', async () => {
       ? 'Microphone permission was not granted.'
       : 'Could not access the microphone.';
   }
+};
+document.getElementById('audio-choice').addEventListener('click', startAudioRecognition);
+audioRecognitionButton.addEventListener('click', () => {
+  if (audioRecorder?.state === 'recording') stopAudioCapture();
+  else startAudioRecognition();
 });
 stopAudioButton.addEventListener('click', stopAudioCapture);
 
@@ -153,7 +196,7 @@ document.getElementById('screen-record-option').addEventListener('click', async 
       if (recorder.state === 'recording') recorder.stop();
     }, { once: true });
     recorder.start(1000);
-    stopCaptureButton.textContent = 'Stop recording';
+    stopCaptureButton.querySelector('span').textContent = 'Stop recording';
     stopCaptureButton.hidden = false;
     captureStatus.textContent = 'Recording your selected screen. Stop after 10 to 15 seconds.';
     captureTimer = window.setTimeout(() => {
@@ -177,7 +220,7 @@ document.getElementById('back-camera-option').addEventListener('click', async ()
     showCaptureSession();
     captureVideo.srcObject = captureStream;
     await captureVideo.play();
-    stopCaptureButton.textContent = 'Close camera';
+    stopCaptureButton.querySelector('span').textContent = 'Close camera';
     stopCaptureButton.hidden = false;
     captureFrameButton.hidden = false;
     captureStatus.textContent = 'Point the back camera at the movie, then capture a frame.';

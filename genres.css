@@ -1,3 +1,4 @@
+/* Genre picker reuses Recognize option cards for a consistent selection pattern. */
 .genres-main { padding-bottom: max(34px, env(safe-area-inset-bottom)); }
 .genres-main > h2 { margin-left: 0; }
 .genre-list { gap: 11px; }

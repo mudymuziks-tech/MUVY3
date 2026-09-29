@@ -1,0 +1,79 @@
+<!doctype html>
+<!-- Watchlist page for saved titles and recently viewed movies and shows. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101b">
+  <meta name="description" content="Keep your saved movies and shows together with MUVY.">
+  <title>Watchlist | MUVY</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="watchlist.css">
+</head>
+<body class="watchlist-body">
+  <div class="watchlist-shell">
+    <header class="watchlist-header">
+      <button class="watchlist-menu-button" id="watchlist-menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="watchlist-mobile-menu">
+        <img src="images/nav%20tools/menu_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt="">
+      </button>
+      <a class="watchlist-brand" href="home.html" aria-label="MUVY home">MU<span>V</span>Y</a>
+      <div class="watchlist-header-actions">
+        <button type="button" aria-label="Notifications" data-message="You are all caught up."><img src="images/nav%20tools/notifications_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></button>
+        <a class="watchlist-avatar" href="profile.html" aria-label="Profile"><img src="images/0f3cef7f-cca3-482f-bbc7-264b839abbe5.jpg" alt=""></a>
+      </div>
+    </header>
+
+    <nav class="watchlist-mobile-menu" id="watchlist-mobile-menu" hidden aria-label="App navigation">
+      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html">Recognize</a><a href="genres.html">Browse</a><a href="watchlist.html" aria-current="page">Watchlist</a><a href="profile.html">Profile</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
+    </nav>
+
+    <aside class="watchlist-sidebar" aria-label="Main navigation">
+      <a class="watchlist-sidebar-brand" href="home.html">MU<span>V</span>Y<small>MOVIE APP</small></a>
+      <nav>
+        <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+        <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Discover</span></a>
+        <a href="genres.html"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Browse</span></a>
+        <a class="active" href="watchlist.html" aria-current="page"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
+        <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
+        <a href="settings.html"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""><span>Settings</span></a>
+      </nav>
+      <a class="watchlist-premium" href="login.html"><span>Go Premium</span><span aria-hidden="true">&gt;</span></a>
+      <a class="watchlist-desktop-logout" href="login.html?logout=1">Log Out</a>
+    </aside>
+
+    <main class="watchlist-main">
+      <div class="watchlist-page-heading">
+        <div><p class="watchlist-eyebrow">Your library</p><h1>Watchlist</h1><p>Your saved movies and shows</p></div>
+      </div>
+      <div class="watchlist-tabs" role="tablist" aria-label="Watchlist views">
+        <button class="selected" id="my-list-tab" type="button" role="tab" aria-selected="true" aria-controls="my-list">My List</button>
+        <button id="recent-tab" type="button" role="tab" aria-selected="false" aria-controls="recent-list">Recently Viewed</button>
+      </div>
+
+      <section class="watchlist-items" id="my-list" role="tabpanel" aria-labelledby="my-list-tab">
+        <article class="watchlist-item"><img src="images/6a25f44e-59f5-4c21-b903-0172a0dd2059%20-%20Copy.jfif" alt="Wakanda Forever poster"><div class="watchlist-item-copy"><h2>Black Panther: Wakanda Forever</h2><p>2022</p><span>Action · Adventure</span></div><button class="item-more" type="button" aria-label="More options for Wakanda Forever" data-message="More options will be available soon.">•••</button></article>
+        <article class="watchlist-item"><img src="images/11db61d7-6216-493c-9be0-2c440a9c0ec6.jfif" alt="The Pursuit of Happyness poster"><div class="watchlist-item-copy"><h2>The Pursuit of Happyness</h2><p>2006</p><span>Drama</span></div><button class="item-more" type="button" aria-label="More options for The Pursuit of Happyness" data-message="More options will be available soon.">•••</button></article>
+        <article class="watchlist-item"><img src="images/5c889bc9-4494-4ccf-a19f-640a40ddfd2b.jfif" alt="John Wick poster"><div class="watchlist-item-copy"><h2>John Wick</h2><p>2014</p><span>Action · Thriller</span></div><button class="item-more" type="button" aria-label="More options for John Wick" data-message="More options will be available soon.">•••</button></article>
+        <article class="watchlist-item"><img src="images/268a8853-9600-4764-a7ee-4a80a453b72c%20-%20Copy.jfif" alt="Jumanji: The Next Level poster"><div class="watchlist-item-copy"><h2>Jumanji: The Next Level</h2><p>2019</p><span>Adventure · Comedy</span></div><button class="item-more" type="button" aria-label="More options for Jumanji: The Next Level" data-message="More options will be available soon.">•••</button></article>
+        <article class="watchlist-item"><img src="images/abfe304084030f02faf0a61095f620d7.jpg" alt="The Last of Us poster"><div class="watchlist-item-copy"><h2>The Last of Us</h2><p>2023</p><span>Drama · Science fiction</span></div><button class="item-more" type="button" aria-label="More options for The Last of Us" data-message="More options will be available soon.">•••</button></article>
+      </section>
+
+      <section class="watchlist-items" id="recent-list" role="tabpanel" aria-labelledby="recent-tab" hidden>
+        <article class="watchlist-item"><img src="images/5c889bc9-4494-4ccf-a19f-640a40ddfd2b.jfif" alt="John Wick poster"><div class="watchlist-item-copy"><h2>John Wick</h2><p>2014</p><span>Action · Thriller</span></div><button class="item-more" type="button" aria-label="More options for John Wick" data-message="More options will be available soon.">•••</button></article>
+        <article class="watchlist-item"><img src="images/6a25f44e-59f5-4c21-b903-0172a0dd2059%20-%20Copy.jfif" alt="Wakanda Forever poster"><div class="watchlist-item-copy"><h2>Black Panther: Wakanda Forever</h2><p>2022</p><span>Action · Adventure</span></div><button class="item-more" type="button" aria-label="More options for Wakanda Forever" data-message="More options will be available soon.">•••</button></article>
+        <article class="watchlist-item"><img src="images/11db61d7-6216-493c-9be0-2c440a9c0ec6.jfif" alt="The Pursuit of Happyness poster"><div class="watchlist-item-copy"><h2>The Pursuit of Happyness</h2><p>2006</p><span>Drama</span></div><button class="item-more" type="button" aria-label="More options for The Pursuit of Happyness" data-message="More options will be available soon.">•••</button></article>
+      </section>
+    </main>
+
+    <nav class="watchlist-bottom-nav" aria-label="Main navigation">
+      <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+      <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Discover</span></a>
+      <a class="active" href="watchlist.html" aria-current="page"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
+      <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
+    </nav>
+    <div class="watchlist-toast" id="watchlist-toast" role="status" aria-live="polite"></div>
+  </div>
+  <script src="auth.js" defer></script>
+  <script src="watchlist.js" defer></script>
+</body>
+</html>

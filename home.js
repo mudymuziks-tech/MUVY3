@@ -1,3 +1,4 @@
+// Home interactions: feedback, uploads, navigation state, search, and screen or camera capture.
 const toast = document.getElementById('toast');
 let toastTimer;
 
@@ -33,6 +34,7 @@ document.querySelectorAll('.movie-card').forEach((card) => {
 const navItems = document.querySelectorAll('.nav-item');
 let savedNav = '';
 try { savedNav = sessionStorage.getItem('muvyActiveNav') || ''; } catch {}
+if (!savedNav) savedNav = 'home';
 navItems.forEach((item) => {
   if (item.dataset.nav === savedNav) {
     item.classList.add('is-active');
@@ -41,6 +43,7 @@ navItems.forEach((item) => {
 });
 navItems.forEach((item) => {
   item.addEventListener('click', () => {
+    if (!item.dataset.nav) return;
     try { sessionStorage.setItem('muvyActiveNav', item.dataset.nav); } catch {}
     navItems.forEach((navItem) => {
       navItem.classList.remove('is-active');
@@ -54,6 +57,7 @@ navItems.forEach((item) => {
 const searchToggle = document.getElementById('search-toggle');
 const searchRow = document.getElementById('search-row');
 const searchInput = document.getElementById('movie-search');
+if (window.matchMedia('(min-width: 1000px)').matches) searchRow.hidden = false;
 searchToggle.addEventListener('click', () => {
   const opening = searchRow.hidden;
   searchRow.hidden = !opening;
@@ -65,7 +69,8 @@ searchRow.addEventListener('submit', (event) => {
   const query = searchInput.value.trim();
   if (query) showToast(`Search for ${query} will be available soon.`);
 });
-document.getElementById('profile-button').addEventListener('click', () => showToast('Profile settings are coming soon.'));
+const currentAccount = window.MUVYAuth?.getSession();
+if (currentAccount?.name) document.getElementById('greeting-title').textContent = `Good morning, ${currentAccount.name}`;
 
 const captureDialog = document.getElementById('capture-dialog');
 const captureOptions = document.getElementById('capture-options');

@@ -1,3 +1,4 @@
+// Explore interactions: preserve nav state, filter and search the local catalog, and show feedback.
 const toast = document.getElementById('explore-toast');
 let toastTimer;
 function showToast(message) {
@@ -10,12 +11,14 @@ function showToast(message) {
 const navItems = document.querySelectorAll('.nav-item');
 let savedNav = '';
 try { savedNav = sessionStorage.getItem('muvyActiveNav') || ''; } catch {}
+if (!savedNav) savedNav = 'explore';
 navItems.forEach((item) => {
   if (item.dataset.nav === savedNav) {
     item.classList.add('is-active');
     if (item.tagName === 'A') item.setAttribute('aria-current', 'page');
   }
   item.addEventListener('click', () => {
+    if (!item.dataset.nav) return;
     navItems.forEach((navItem) => {
       navItem.classList.remove('is-active');
       navItem.removeAttribute('aria-current');

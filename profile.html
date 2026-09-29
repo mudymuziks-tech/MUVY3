@@ -1,0 +1,71 @@
+<!doctype html>
+<!-- User profile, library summary, and account preference shortcuts. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101b">
+  <title>Profile | MUVY</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body class="profile-body">
+  <div class="profile-shell">
+    <header class="profile-header">
+      <button class="profile-menu-button" id="profile-menu-button" type="button" aria-label="Open app menu" aria-expanded="false" aria-controls="profile-menu-panel"><img src="images/nav%20tools/menu_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></button>
+      <a class="profile-brand" href="home.html">MU<span>V</span>Y</a>
+      <div class="profile-header-actions">
+        <a class="profile-settings-icon" href="settings.html" aria-label="Settings"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></a>
+        <a class="profile-header-avatar" href="profile.html" aria-label="Profile"><img src="images/0f3cef7f-cca3-482f-bbc7-264b839abbe5.jpg" alt=""></a>
+      </div>
+    </header>
+    <nav class="profile-menu-panel" id="profile-menu-panel" hidden aria-label="App menu">
+      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html">Recognize</a><a href="genres.html">Browse</a><a href="watchlist.html">Watchlist</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
+    </nav>
+
+    <aside class="profile-sidebar" aria-label="Main navigation">
+      <a class="profile-sidebar-brand" href="home.html"><span class="profile-play-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z"/></svg></span>MU<span>V</span>Y</a>
+      <nav>
+        <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+        <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Discover</span></a>
+        <a href="genres.html"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Movies</span></a>
+        <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
+        <a href="recognize.html"><img src="images/nav%20tools/resume_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Identified</span></a>
+        <a class="active" href="profile.html" aria-current="page"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
+        <a href="settings.html"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""><span>Settings</span></a>
+      </nav>
+      <a class="profile-sidebar-logout" href="login.html?logout=1">Log Out</a>
+    </aside>
+
+    <main class="profile-main">
+      <section class="profile-identity" aria-label="Profile details">
+        <img class="profile-portrait" src="images/0f3cef7f-cca3-482f-bbc7-264b839abbe5.jpg" alt="Profile portrait">
+        <div class="profile-identity-copy"><h1 id="profile-name">MUVY Member</h1><p id="profile-email">Sign in to see your account</p></div>
+      </section>
+      <section class="profile-stats" aria-label="MUVY activity summary">
+        <div><strong>12</strong><span>Movies Identified</span></div>
+        <div><strong>8</strong><span>Watchlist</span></div>
+        <div><strong>3</strong><span>Recommendations</span></div>
+      </section>
+      <section class="profile-options" aria-label="Profile settings">
+        <a class="profile-option" href="settings.html#preferences"><span class="profile-option-icon"><img src="images/nav%20tools/tune_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></span><span class="profile-option-copy"><strong>My Preferences</strong><small>Manage your movie tastes and preferences</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
+        <a class="profile-option" href="settings.html#notifications"><span class="profile-option-icon"><img src="images/nav%20tools/notifications_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><span class="profile-option-copy"><strong>Notifications</strong><small>Choose what you want to be notified about</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
+        <a class="profile-option" href="settings.html#language"><span class="profile-option-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18m0-18a15 15 0 0 0 0 18" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="profile-option-copy"><strong>Language</strong><small>English</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
+        <a class="profile-option" href="settings.html"><span class="profile-option-icon"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></span><span class="profile-option-copy"><strong>App Settings</strong><small>Appearance, data, and privacy</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
+        <a class="profile-option" href="settings.html#help"><span class="profile-option-icon"><img src="images/nav%20tools/help_center_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><span class="profile-option-copy"><strong>Help &amp; Support</strong><small>FAQs and contact support</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
+      </section>
+      <footer class="profile-copyright">© 2026 MUVY. All rights reserved.</footer>
+    </main>
+
+    <nav class="profile-bottom-nav" aria-label="Main navigation">
+      <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+      <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Explore</span></a>
+      <a href="recognize.html"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
+      <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
+      <a class="active" href="profile.html" aria-current="page"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
+    </nav>
+  </div>
+  <script src="auth.js" defer></script>
+  <script src="profile.js" defer></script>
+</body>
+</html>

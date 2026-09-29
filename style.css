@@ -1,4 +1,5 @@
-﻿:root {
+﻿/* Shared palette and typography, followed by welcome-loader and account-page components. */
+:root {
       color-scheme: dark;
       --ink: #f7f5ff;
       --muted: #aaa5bd;
@@ -240,9 +241,10 @@
         #080611;
     }
     .auth-card { width: min(100%, 440px); }
-    .auth-back { display: inline-block; margin-bottom: 34px; color: #c1bbd0; font-size: .88rem; text-decoration: none; }
+    .auth-back { display: grid; width: 38px; height: 38px; place-items: center; margin-bottom: 24px; border: 1px solid rgba(255,255,255,.11); border-radius: 50%; color: #c1bbd0; text-decoration: none; }
+    .auth-back svg { width: 21px; height: 21px; }
     .auth-back:hover { color: white; }
-    .auth-brand { margin-bottom: 34px; }
+    .splash-wordmark.auth-brand { justify-content: flex-start; margin-bottom: 34px; font-size: 1.55rem; letter-spacing: -.075em; line-height: .9; text-decoration: none; }
     .auth-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -377,5 +379,18 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .splash-progress-track span { animation: none; width: 100%; opacity: .75; }
+    }
+
+    /* Shared account actions: hamburger on mobile and Settings or Log Out in desktop rails. */
+    .app-menu-button { display: grid; width: 36px; height: 38px; flex: 0 0 36px; place-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; }
+    .app-menu-button img { width: 22px; height: 22px; }
+    .app-menu-panel { display: none; }
+    .app-menu-panel:not([hidden]) { position: fixed; z-index: 22; top: 61px; right: 12px; display: grid; min-width: 190px; gap: 3px; padding: 9px; border: 1px solid rgba(216,226,241,.14); border-radius: 12px; background: rgba(13,22,36,.97); box-shadow: 0 16px 40px #0008; }
+    .app-menu-panel a { padding: 11px; border-radius: 7px; color: #edf0f6; font-size: .82rem; text-decoration: none; }
+    .app-menu-panel a:hover { background: rgba(143,91,235,.2); }
+    .desktop-settings-item, .desktop-logout-item { display: none !important; }
+    @media (min-width: 1000px) {
+      .app-menu-button, .app-menu-panel { display: none !important; }
+      .desktop-settings-item, .desktop-logout-item { display: flex !important; }
     }
 

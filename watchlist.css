@@ -9,8 +9,8 @@
 .watchlist-header-actions { display: flex; grid-column: 3; align-items: center; justify-content: flex-end; gap: 13px; }
 .watchlist-header-actions button { display: grid; width: 38px; height: 38px; place-items: center; border: 0; background: transparent; }
 .watchlist-header-actions button img { width: 22px; height: 22px; }
-.watchlist-avatar { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; background: #7942df; color: white; font-size: 1rem; font-weight: 700; text-decoration: none; }
-.watchlist-avatar img { width: 100%; height: 100%; border: 2px solid #a578ff; border-radius: 50%; object-fit: cover; }
+.watchlist-avatar { display: grid; width: 36px; height: 36px; flex: 0 0 36px; overflow: hidden; place-items: center; aspect-ratio: 1; border: 2px solid #a578ff; border-radius: 50%; background: #7942df; color: white; font-size: 1rem; font-weight: 700; text-decoration: none; }
+.watchlist-avatar img { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
 .watchlist-mobile-menu { display: none; }
 .watchlist-mobile-menu:not([hidden]) { position: fixed; z-index: 15; top: 62px; left: max(12px, calc((100% - 590px) / 2)); display: grid; min-width: 205px; gap: 3px; padding: 9px; border: 1px solid rgba(216,226,241,.14); border-radius: 12px; background: rgba(13,22,36,.97); box-shadow: 0 16px 40px #0008; }
 .watchlist-mobile-menu a { padding: 11px; border-radius: 7px; color: #edf0f6; font-size: .83rem; text-decoration: none; }

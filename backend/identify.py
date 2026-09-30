@@ -8,6 +8,11 @@ from matcher.matcher import FingerprintDB, match_clip
 
 DEFAULT_INTERVAL_MS = 500
 
+# Temporary diagnostic version.
+# This helps us confirm exactly which identification code
+# Render is running.
+IDENTIFIER_VERSION = "0.4.0-strict-matching"
+
 
 def identify_video(
     clip_path: str,
@@ -24,23 +29,75 @@ def identify_video(
         None otherwise.
     """
 
-    # Extract query frames from the clip.
+    # ---------------------------------------------------------
+    # Stage 1: Extract query frames
+    # ---------------------------------------------------------
+
     query_frames = clip_to_query_frames(
         clip_path,
         interval_ms=interval_ms,
     )
 
     if not query_frames:
+        print(
+            "[IDENTIFY] No query frames extracted.",
+            flush=True,
+        )
         return None
 
-    # Supabase-backed fingerprint database.
+    # ---------------------------------------------------------
+    # Stage 2: Create fingerprint database interface
+    # ---------------------------------------------------------
+
     db = FingerprintDB()
 
-    # Run the existing matcher.
-    return match_clip(
+    # ---------------------------------------------------------
+    # Diagnostic information
+    # ---------------------------------------------------------
+
+    print(
+        f"[IDENTIFY] version={IDENTIFIER_VERSION} "
+        f"frames={len(query_frames)} "
+        f"interval_ms={interval_ms}",
+        flush=True,
+    )
+
+    # ---------------------------------------------------------
+    # Stage 3: Run matcher
+    # ---------------------------------------------------------
+
+    result = match_clip(
         query_frames,
         db,
     )
+
+    # ---------------------------------------------------------
+    # Diagnostic result
+    # ---------------------------------------------------------
+
+    print(
+        f"[IDENTIFY] result={result}",
+        flush=True,
+    )
+
+    if result is None:
+        print(
+            "[IDENTIFY] No confident match returned by matcher.",
+            flush=True,
+        )
+    else:
+        print(
+            "[IDENTIFY] Match accepted: "
+            f"movie_id={result.movie_id}, "
+            f"confidence={result.confidence:.2f}, "
+            f"margin={result.margin:.2f}, "
+            f"votes={result.votes}, "
+            f"frames={result.total_frames}, "
+            f"offset_ms={result.offset_ms}",
+            flush=True,
+        )
+
+    return result
 
 
 def main():
@@ -72,11 +129,26 @@ def main():
         return
 
     print(f"Movie: {result.movie_id}")
-    print(f"Timestamp: {result.offset_ms / 1000:.2f}s")
-    print(f"Confidence: {result.confidence:.2f}")
-    print(f"Margin: {result.margin:.2f}")
-    print(f"Votes: {result.votes}")
-    print(f"Frames: {result.total_frames}")
+    print(
+        f"Timestamp: "
+        f"{result.offset_ms / 1000:.2f}s"
+    )
+    print(
+        f"Confidence: "
+        f"{result.confidence:.2f}"
+    )
+    print(
+        f"Margin: "
+        f"{result.margin:.2f}"
+    )
+    print(
+        f"Votes: "
+        f"{result.votes}"
+    )
+    print(
+        f"Frames: "
+        f"{result.total_frames}"
+    )
 
 
 if __name__ == "__main__":

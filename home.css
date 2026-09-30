@@ -31,7 +31,7 @@ body.home-body {
   align-items: center;
   justify-content: space-between;
   min-height: 70px;
-  padding: 0 26px;
+  padding: 0 26px 0 15px;
   border-bottom: 1px solid rgba(204, 219, 238, .1);
   background: rgba(7, 16, 27, .54);
   -webkit-backdrop-filter: blur(18px);
@@ -380,7 +380,7 @@ body.home-body {
 
 @media (min-width: 760px) {
   .app-shell { padding: 82px 42px calc(104px + env(safe-area-inset-bottom)); }
-  .app-header { min-height: 82px; padding-inline: 42px; }
+  .app-header { min-height: 82px; padding-right: 42px; padding-left: 15px; }
   .greeting { margin-top: 20px; margin-bottom: 25px; }
   .recognize-feature { min-height: 132px; padding-inline: 26px; }
   .recognize-actions { gap: 16px; }

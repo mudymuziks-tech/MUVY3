@@ -4,7 +4,7 @@
 .profile-header { position: fixed; z-index: 12; top: 0; left: 50%; display: grid; width: min(100%,640px); min-height: 62px; grid-template-columns: 42px 1fr 84px; align-items: center; padding: 0 15px; border-bottom: 1px solid rgba(207,221,242,.08); background: rgba(7,13,24,.72); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); transform: translateX(-50%); }
 .profile-menu-button { display: grid; width: 38px; height: 38px; place-items: center; border: 0; background: transparent; cursor: pointer; }
 .profile-menu-button img { width: 23px; height: 23px; }
-.profile-brand { grid-column: 2; justify-self: center; color: #f7f4ff; font-size: 1.2rem; font-weight: 850; letter-spacing: .09em; text-decoration: none; }
+.profile-brand { grid-column: 2; justify-self: start; margin-left: 15px; color: #f7f4ff; font-size: 1.55rem; font-weight: 800; letter-spacing: -.075em; text-decoration: none; }
 .profile-brand > span { color: #a778ff; }
 .profile-header-actions { display: flex; grid-column: 3; align-items: center; justify-content: flex-end; gap: 8px; }
 .profile-back { grid-column: 1; grid-row: 1; justify-self: center; }
@@ -49,7 +49,7 @@
 @media (min-width: 700px) and (max-width: 1099px) {
   .profile-shell { width: min(100%,820px); }
   .profile-header { width: min(100%,820px); min-height: 70px; grid-template-columns: 44px 1fr 84px; padding-inline: 23px; }
-  .profile-brand { font-size: 1.4rem; }
+  .profile-brand { font-size: 1.55rem; }
   .profile-settings-icon { display: none; }
   .profile-header-avatar { display: grid; width: 40px; height: 40px; overflow: hidden; place-items: center; border: 2px solid #a578ff; border-radius: 50%; }
   .profile-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -70,12 +70,16 @@
   .profile-bottom-nav img { width: 23px; height: 23px; }
 }
 
+@media (min-width: 760px) {
+  .profile-brand { font-size: 1.9rem; }
+}
+
 /* Desktop profile: left app navigation, centered identity, and broad preference rows. */
 @media (min-width: 1100px) {
   .profile-shell { width: min(100%,1540px); min-height: 100vh; }
   .profile-header, .profile-bottom-nav, .profile-menu-button, .profile-menu-panel { display: none !important; }
   .profile-sidebar { position: fixed; top: 26px; bottom: 26px; left: max(24px,calc((100% - 1540px)/2 + 24px)); display: flex; width: 194px; flex-direction: column; padding: 24px 12px 13px; border: 1px solid rgba(193,208,231,.15); border-radius: 17px 0 0 17px; background: rgba(6,12,23,.78); }
-  .profile-sidebar-brand { display: flex; align-items: center; gap: 6px; margin: 0 9px 28px; color: #f4f1ff; font-size: 1.38rem; font-weight: 850; letter-spacing: .08em; text-decoration: none; }
+  .profile-sidebar-brand { display: flex; align-items: center; gap: 6px; margin: 0 9px 28px; color: #f4f1ff; font-size: 2rem; font-weight: 800; letter-spacing: -.075em; text-decoration: none; }
   .profile-sidebar-brand > span:not(.profile-play-mark) { color: #a778ff; }
   .profile-play-mark { display: grid; width: 28px; height: 30px; place-items: center; }
   .profile-play-mark svg { width: 28px; height: 28px; fill: #a16bff; }

@@ -15,6 +15,7 @@
   border: 1px solid rgba(192, 211, 236, .07);
   border-radius: 9px;
   background: #142132;
+  cursor: text;
 }
 .explore-search > img { width: 17px; height: 17px; opacity: .7; }
 .explore-search input { width: 100%; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; color: #edf1f7; font: inherit; font-size: .69rem; }

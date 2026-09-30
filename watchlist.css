@@ -4,7 +4,7 @@
 .watchlist-header { position: fixed; z-index: 10; top: 0; left: 50%; display: grid; width: min(100%, 620px); min-height: 64px; grid-template-columns: 42px 1fr 84px; align-items: center; padding: 0 18px; border-bottom: 1px solid rgba(207,221,242,.08); background: rgba(7,13,24,.75); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); transform: translateX(-50%); }
 .watchlist-menu-button { display: grid; width: 40px; height: 40px; place-items: center; border: 0; background: transparent; cursor: pointer; }
 .watchlist-menu-button img { width: 23px; height: 23px; }
-.watchlist-brand { grid-column: 2; justify-self: center; color: #f7f4ff; font-size: 1.25rem; font-weight: 850; letter-spacing: .09em; text-decoration: none; }
+.watchlist-brand { grid-column: 2; justify-self: start; margin-left: 15px; color: #f7f4ff; font-size: 1.55rem; font-weight: 800; letter-spacing: -.075em; text-decoration: none; }
 .watchlist-brand span, .watchlist-sidebar-brand span { color: #a778ff; }
 .watchlist-header-actions { display: flex; grid-column: 3; align-items: center; justify-content: flex-end; gap: 13px; }
 .watchlist-header-actions button { display: grid; width: 38px; height: 38px; place-items: center; border: 0; background: transparent; }
@@ -47,7 +47,7 @@
   .watchlist-shell { width: min(100%,820px); }
   .watchlist-header { width: min(100%,820px); min-height: 70px; grid-template-columns: 44px 1fr 92px; padding: 0 25px; }
   .watchlist-menu-button { display: grid; grid-column: 1; grid-row: 1; cursor: pointer; }
-  .watchlist-brand { grid-column: 2; grid-row: 1; font-size: 1.4rem; }
+  .watchlist-brand { grid-column: 2; grid-row: 1; font-size: 1.55rem; }
   .watchlist-main { width: min(100%,720px); margin: 0 auto; padding: 108px 25px 105px; }
   .watchlist-page-heading { margin-bottom: 22px; }
   .watchlist-page-heading h1 { font-size: 1.85rem; }
@@ -62,6 +62,10 @@
   .watchlist-bottom-nav { right: max(18px,calc((100% - 780px)/2)); bottom: 16px; left: max(18px,calc((100% - 780px)/2)); padding: 11px 12px calc(11px + env(safe-area-inset-bottom)); border: 1px solid rgba(203,218,239,.11); border-radius: 17px; }
   .watchlist-bottom-nav a { font-size: .68rem; }
   .watchlist-bottom-nav img { width: 23px; height: 23px; }
+}
+
+@media (min-width: 760px) and (max-width: 1099px) {
+  .watchlist-brand { font-size: 1.9rem; }
 }
 
 /* Desktop layout: left navigation rail and roomy saved-title rows. */

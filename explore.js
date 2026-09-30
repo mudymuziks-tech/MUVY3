@@ -21,6 +21,10 @@ const emptyMessage = document.getElementById('explore-empty');
 let activeCategory = 'for-you';
 let activeGenre = 'all';
 
+searchForm.addEventListener('click', (event) => {
+  if (event.target !== searchInput) searchInput.focus();
+});
+
 function setCategory(category) {
   activeCategory = category;
   categoryChips.forEach((chip) => {

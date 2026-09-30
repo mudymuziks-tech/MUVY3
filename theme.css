@@ -27,12 +27,12 @@ html[data-theme="light"] :is(.app-header,.recognize-header,.watchlist-header,.pr
   color: #282638 !important;
 }
 html[data-theme="light"] :is(.recognize-main,.watchlist-main,.profile-main,.settings-main,.explore-main) {
-  background: rgba(250, 248, 243, .66) !important;
+  background: transparent !important;
   color: #282638 !important;
 }
 html[data-theme="light"] :is(.movie-card,.explore-card,.recognize-choice,.watchlist-item,.profile-options,.profile-stats,.profile-option,.settings-group,.settings-row,.action-card,.capture-option,.capture-dialog,.capture-options,.category-chip:not(.is-selected),.watchlist-tabs,.genre-list) {
   border-color: rgba(45, 42, 59, .14) !important;
-  background: #e9e5dd !important;
+  background: #f3f0e9 !important;
   color: #282638 !important;
 }
 html[data-theme="light"] :is(.search-row input,.explore-search,.auth-field input,.capture-option,.capture-preview,.watchlist-tabs) {
@@ -72,12 +72,18 @@ html[data-theme="light"] .menu-theme-option img { filter: brightness(0) saturate
 html[data-theme="light"] .menu-theme-option:hover, html[data-theme="light"] .menu-theme-option:focus-visible { border-color: rgba(126,79,199,.42); background: rgba(126,79,199,.12); color: #6841a6; }
 /* White SVG assets become dark when inactive on warm light surfaces. */
 html[data-theme="light"] :is(.app-header .icon-button,.app-header .app-menu-button,.recognize-header .recognize-menu,.watchlist-header .watchlist-menu-button,.profile-header .profile-menu-button,.settings-header .settings-menu-button) img { filter: brightness(0) saturate(100%) !important; }
+html[data-theme="light"] .profile-header .profile-settings-icon img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%) !important; opacity: 1 !important; }
+html[data-theme="light"] .watchlist-header-actions button img { filter: brightness(0) saturate(100%) !important; opacity: 1 !important; }
 html[data-theme="light"] :is(.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) img { filter: brightness(0) saturate(100%) !important; opacity: 1 !important; }
 html[data-theme="light"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.settings-bottom-nav .active) img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%) !important; }
 html[data-theme="light"] :is(.watchlist-sidebar nav,.profile-sidebar nav,.recognize-sidebar nav,.settings-sidebar nav) img { filter: brightness(0) saturate(100%) !important; opacity: 1 !important; }
 html[data-theme="light"] :is(.watchlist-sidebar nav,.profile-sidebar nav,.recognize-sidebar nav,.settings-sidebar nav) a.active img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%) !important; }
 html[data-theme="light"] :is(.recognize-choice-icon,.profile-option-icon) img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%); }
+html[data-theme="light"] .explore-search > img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%); opacity: 1; }
+html[data-theme="light"] .explore-filter-button { border-color: rgba(45,42,59,.16) !important; background: transparent !important; }
+html[data-theme="light"] .explore-filter-button img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%); opacity: 1; }
 html[data-theme="light"] :is(.app-wordmark,.sidebar-wordmark,.recognize-sidebar-brand,.watchlist-sidebar-brand,.settings-side-brand,.profile-brand,.settings-brand) { color: #292737 !important; }
+html[data-theme="light"] :is(.watchlist-brand,.watchlist-sidebar-brand) > span { color: #7240cb !important; }
 html[data-theme="light"] .page-shell { background: radial-gradient(ellipse at 80% 14%, rgba(139, 98, 211, .12), transparent 40%), #f3f0e9; }
 html[data-theme="light"] .page-shell::before { display: none; }
 html[data-theme="light"] .home-body { background: #f3f0e9 !important; }
@@ -104,6 +110,71 @@ html[data-theme="light"] .home-body .recognize-action:hover { border-color: #967
 html[data-theme="light"] .home-body .recognize-action :is(.action-title,.action-caption) { color: #393548 !important; }
 html[data-theme="light"] .home-body .recognize-action .action-icon { border-radius: 50%; background: #e9def8; }
 html[data-theme="light"] .home-body .recognize-action .action-icon img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%) !important; opacity: 1; }
+html[data-theme="light"] .recognize-tip { border-color: rgba(45,42,59,.14) !important; background: #f3f0e9 !important; color: #555365 !important; }
+html[data-theme="light"] .recognize-tip p, html[data-theme="light"] .recognize-tip strong { color: #3c394b !important; }
+html[data-theme="light"] .recognize-tip .tip-info { border-color: #7042c1; color: #7042c1; }
+html[data-theme="light"] .recognize-choice-icon { background: #e8def7 !important; }
+
+/* Keep filled navigation glyphs unmistakable: violet on light, white on dark. */
+html[data-theme="light"] :is(.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) img { width: 23px; height: 23px; }
+html[data-theme="light"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.settings-bottom-nav .active) img { transform: scale(1.08); }
+html[data-theme="dark"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.settings-bottom-nav .active) img { filter: brightness(0) invert(1) !important; opacity: 1 !important; }
+html[data-theme="dark"] :is(.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) img { opacity: 1; }
+
+/* Color only the active SVG glyph; keep its transparent canvas transparent. */
+html[data-theme="light"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.settings-bottom-nav .active) img {
+  background: transparent !important;
+  filter: brightness(0) saturate(100%) invert(31%) sepia(57%) saturate(2007%) hue-rotate(238deg) brightness(91%) contrast(96%) !important;
+  opacity: 1 !important;
+  transform: scale(1.08);
+}
+html[data-theme="dark"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.settings-bottom-nav .active) img {
+  background: transparent !important;
+  filter: brightness(0) invert(1) !important;
+  padding: 0;
+  border-radius: 0;
+  transform: scale(1.08);
+}
+html[data-theme="light"] .recognize-choice-icon { background: #e6daf8 !important; color: #783bd5 !important; }
+html[data-theme="light"] .recognize-choice-icon img { filter: brightness(0) saturate(100%) invert(31%) sepia(57%) saturate(2007%) hue-rotate(238deg) brightness(91%) contrast(96%) !important; opacity: 1 !important; }
+html[data-theme="light"] .recognize-choice-icon svg { color: #783bd5 !important; }
+html[data-theme="dark"] .recognize-choice-icon { background: rgba(117,68,205,.28) !important; color: #bc91ff !important; }
+html[data-theme="dark"] .recognize-choice-icon img { filter: brightness(0) saturate(100%) invert(68%) sepia(50%) saturate(1358%) hue-rotate(219deg) brightness(103%) contrast(101%) !important; opacity: 1 !important; }
+html[data-theme="dark"] .recognize-choice-icon svg { color: #bc91ff !important; }
+
+/* The login and sign-up selector stays clearly purple in either color mode. */
+.auth-tabs { border-color: rgba(158,112,231,.42) !important; }
+.auth-tab.is-active { background: linear-gradient(110deg,#8950eb,#632fc6) !important; color: #fff !important; box-shadow: 0 3px 12px rgba(102,53,191,.28), inset 0 0 0 1px rgba(220,197,255,.28) !important; }
+html[data-theme="light"] .auth-tab:not(.is-active) { color: #5a5269 !important; }
+
+/* Desktop sidebar selection keeps its icon and label in the same active accent. */
+@media (min-width: 1000px) {
+  html[data-theme="light"] :is(.bottom-nav .nav-item.is-active,.watchlist-sidebar nav a.active,.profile-sidebar nav a.active,.recognize-sidebar nav a.is-active,.settings-sidebar nav a.active) {
+    border-color: rgba(114,64,203,.22) !important;
+    background: rgba(114,64,203,.1) !important;
+    color: #7240cb !important;
+  }
+  html[data-theme="light"] :is(.bottom-nav .nav-item.is-active,.watchlist-sidebar nav a.active,.profile-sidebar nav a.active,.recognize-sidebar nav a.is-active,.settings-sidebar nav a.active) img {
+    filter: brightness(0) saturate(100%) invert(31%) sepia(57%) saturate(2007%) hue-rotate(238deg) brightness(91%) contrast(96%) !important;
+    opacity: 1 !important;
+  }
+  html[data-theme="dark"] :is(.bottom-nav .nav-item.is-active,.watchlist-sidebar nav a.active,.profile-sidebar nav a.active,.recognize-sidebar nav a.is-active,.settings-sidebar nav a.active) {
+    color: #c5a4ff !important;
+  }
+  html[data-theme="dark"] :is(.bottom-nav .nav-item.is-active,.watchlist-sidebar nav a.active,.profile-sidebar nav a.active,.recognize-sidebar nav a.is-active,.settings-sidebar nav a.active) img {
+    filter: brightness(0) saturate(100%) invert(75%) sepia(23%) saturate(1047%) hue-rotate(212deg) brightness(101%) contrast(101%) !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Phone and tablet bottom bars: active glyphs follow the active label in purple. */
+@media (max-width: 999px) {
+  html[data-theme="light"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.profile-bottom-nav .is-active,.settings-bottom-nav .active,.settings-bottom-nav .is-active) img,
+  html[data-theme="dark"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.profile-bottom-nav .is-active,.settings-bottom-nav .active,.settings-bottom-nav .is-active) img {
+    filter: brightness(0) saturate(100%) invert(58%) sepia(43%) saturate(1817%) hue-rotate(218deg) brightness(102%) contrast(101%) !important;
+    opacity: 1 !important;
+  }
+}
 
 /* Settings theme switch control. */
 .theme-control { display: flex; align-items: center; gap: 10px; }

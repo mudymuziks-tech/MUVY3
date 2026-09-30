@@ -133,8 +133,11 @@ def match_clip(
     db: FingerprintDB,
     hash_distance_threshold: int = 14,
     offset_bucket_ms: int = 500,
-    min_votes: int = 5,
+    min_votes: int = 8,
     min_margin: float = 1.5,
+    min_support_ratio: float = 0.60,
+    min_temporal_span_ms: int = 1500,
+    max_average_distance: float = 10.0,
 ) -> Optional[MatchResult]:
     """
     Match a query clip against the fingerprint database.

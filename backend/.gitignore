@@ -1,0 +1,33 @@
+# Python
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test media
+tests/fixtures/clips/*.mp4
+tests/fixtures/clips/*.mov
+tests/fixtures/clips/*.avi
+
+# Local data
+*.sqlite
+*.db
+
+# Logs
+*.log

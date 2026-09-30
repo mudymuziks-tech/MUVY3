@@ -5,7 +5,6 @@ import argparse
 import cv2
 import numpy as np
 
-from app.db.supabase import supabase
 from matcher.matcher import FingerprintDB, QueryFrame
 
 
@@ -15,18 +14,26 @@ FINGERPRINT_BATCH_SIZE = 500
 
 def phash(frame_bgr: np.ndarray) -> int:
     """
-    63-bit perceptual hash:
-    grayscale -> 32x32 -> DCT -> keep the 8x8 low-frequency block,
-    drop the DC term -> compare each coefficient to the median.
+    63-bit perceptual hash.
+
+    grayscale -> 32x32 -> DCT -> 8x8 low-frequency block,
+    drop the DC term -> compare coefficients against median.
     """
-    gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(
+        frame_bgr,
+        cv2.COLOR_BGR2GRAY,
+    )
+
     small = cv2.resize(
         gray,
         (32, 32),
         interpolation=cv2.INTER_AREA,
     )
 
-    dct = cv2.dct(np.float32(small))
+    dct = cv2.dct(
+        np.float32(small)
+    )
+
     block = dct[:8, :8].flatten()[1:]
 
     bits = block > np.median(block)
@@ -39,8 +46,17 @@ def phash(frame_bgr: np.ndarray) -> int:
     return h
 
 
-def _sample_frames(path: str, interval_ms: int):
-    """Yield (timestamp_ms, frame) roughly every interval_ms."""
+def _sample_frames(
+    path: str,
+    interval_ms: int,
+):
+    """
+    Yield:
+
+        (timestamp_ms, frame)
+
+    roughly every interval_ms.
+    """
 
     cap = cv2.VideoCapture(path)
 
@@ -49,21 +65,34 @@ def _sample_frames(path: str, interval_ms: int):
             f"Could not open video: {path}"
         )
 
-    fps = cap.get(cv2.CAP_PROP_FPS) or 25.0
-    step = max(1, round(fps * interval_ms / 1000))
+    fps = cap.get(
+        cv2.CAP_PROP_FPS
+    ) or 25.0
+
+    step = max(
+        1,
+        round(
+            fps * interval_ms / 1000
+        ),
+    )
 
     idx = 0
 
     try:
         while True:
+
             if not cap.grab():
                 break
 
             if idx % step == 0:
+
                 ok, frame = cap.retrieve()
 
                 if ok:
-                    yield int(idx / fps * 1000), frame
+                    yield (
+                        int(idx / fps * 1000),
+                        frame,
+                    )
 
             idx += 1
 
@@ -71,13 +100,38 @@ def _sample_frames(path: str, interval_ms: int):
         cap.release()
 
 
-def ensure_movie(movie_id: str) -> None:
+def clip_to_query_frames(
+    path: str,
+    interval_ms: int = FRAME_INTERVAL_MS,
+) -> list[QueryFrame]:
     """
-    Create the movie record if it doesn't already exist.
+    Extract perceptual hashes from a query video clip.
+    """
 
-    TMDB metadata will be added later.
-    For now, movie_id is also used as the initial title.
+    return [
+        QueryFrame(
+            hash=phash(frame),
+            capture_time_ms=timestamp_ms,
+        )
+        for timestamp_ms, frame
+        in _sample_frames(
+            path,
+            interval_ms,
+        )
+    ]
+
+
+def ensure_movie(
+    movie_id: str,
+) -> None:
     """
+    Create a movie record if it does not already exist.
+
+    This function is kept here for compatibility with
+    the existing ingestion workflow.
+    """
+
+    from app.db.supabase import supabase
 
     response = (
         supabase
@@ -105,7 +159,8 @@ def ingest_movie(
     interval_ms: int = FRAME_INTERVAL_MS,
 ) -> int:
     """
-    Extract fingerprints from a movie and store them in Supabase.
+    Extract fingerprints from a movie
+    and store them in Supabase.
     """
 
     batch: list[dict] = []
@@ -115,6 +170,7 @@ def ingest_movie(
         path,
         interval_ms,
     ):
+
         batch.append(
             {
                 "hash": phash(frame),
@@ -126,7 +182,9 @@ def ingest_movie(
         count += 1
 
         if len(batch) >= FINGERPRINT_BATCH_SIZE:
+
             db.add_many(batch)
+
             batch.clear()
 
             print(
@@ -143,23 +201,6 @@ def ingest_movie(
     )
 
     return count
-
-
-def clip_to_query_frames(
-    path: str,
-    interval_ms: int = FRAME_INTERVAL_MS,
-) -> list[QueryFrame]:
-
-    return [
-        QueryFrame(
-            hash=phash(frame),
-            capture_time_ms=timestamp_ms,
-        )
-        for timestamp_ms, frame in _sample_frames(
-            path,
-            interval_ms,
-        )
-    ]
 
 
 def main():

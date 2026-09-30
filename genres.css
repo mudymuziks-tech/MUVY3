@@ -9,3 +9,6 @@
 @media (max-width: 380px) {
   .genre-choice { min-height: 78px; }
 }
+@media (max-width: 699px) {
+  .genres-main { padding-bottom: 110px; }
+}

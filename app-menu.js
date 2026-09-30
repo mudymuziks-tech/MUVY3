@@ -1,14 +1,30 @@
-// Shared small-screen account menu for Home and Explore.
+// Home menu opens directly below the hamburger that controls it.
 const appMenuButton = document.getElementById('app-menu-button');
 const appMenuPanel = document.getElementById('app-menu-panel');
+const appMenuClose = document.getElementById('app-menu-close');
+
+function positionAppMenu() {
+  if (!appMenuButton || !appMenuPanel || appMenuPanel.hidden) return;
+  const buttonBounds = appMenuButton.getBoundingClientRect();
+  appMenuPanel.style.left = '0px';
+  appMenuPanel.style.right = 'auto';
+  appMenuPanel.style.top = `${buttonBounds.bottom + 8}px`;
+}
+
 appMenuButton?.addEventListener('click', () => {
   const opening = appMenuPanel.hidden;
   appMenuPanel.hidden = !opening;
   appMenuButton.setAttribute('aria-expanded', String(opening));
+  if (opening) positionAppMenu();
+});
+appMenuClose?.addEventListener('click', () => {
+  appMenuPanel.hidden = true;
+  appMenuButton?.setAttribute('aria-expanded', 'false');
 });
 document.addEventListener('click', (event) => {
-  if (appMenuPanel && !appMenuPanel.hidden && !appMenuPanel.contains(event.target) && !appMenuButton.contains(event.target)) {
+  if (appMenuPanel && appMenuButton && !appMenuPanel.hidden && !appMenuPanel.contains(event.target) && !appMenuButton.contains(event.target)) {
     appMenuPanel.hidden = true;
     appMenuButton.setAttribute('aria-expanded', 'false');
   }
 });
+window.addEventListener('resize', positionAppMenu);

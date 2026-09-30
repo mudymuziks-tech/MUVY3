@@ -46,6 +46,7 @@ body.home-body {
   text-decoration: none;
 }
 .app-wordmark span { color: #a878ff; }
+.home-brand-lockup { display: flex; flex: 0 0 auto; align-items: center; gap: 16px; }
 .header-actions { display: flex; align-items: center; gap: 18px; }
 .icon-button, .avatar-button {
   display: grid;
@@ -185,7 +186,7 @@ body.home-body {
   display: grid; 
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px; 
-  margin-top: 12px; 
+  margin-top: 30px; 
 }
 .recognize-action {
   display: flex;
@@ -665,7 +666,7 @@ body.home-body {
   .action-title, .action-caption { grid-column: 2; justify-self: start; text-align: left; }
   .action-title { align-self: end; font-size: .76rem; }
   .action-caption { align-self: start; font-size: .61rem; }
-  .recognize-action::after { grid-column: 3; grid-row: 1/span 2; color: #d8def0; content: "›"; font-size: 1.2rem; }
+  .recognize-action::after { grid-column: 3; grid-row: 1/span 2; color: #d8def0; content: "ï¿½"; font-size: 1.2rem; }
   .movie-section, .movie-section + .movie-section { min-width: 0; margin-top: 0; }
   .trending-section { order: 2; }
   #for-you { order: 3; }

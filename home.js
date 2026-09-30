@@ -31,29 +31,6 @@ document.querySelectorAll('.movie-card').forEach((card) => {
   });
 });
 
-const navItems = document.querySelectorAll('.nav-item');
-let savedNav = '';
-try { savedNav = sessionStorage.getItem('muvyActiveNav') || ''; } catch {}
-if (!savedNav) savedNav = 'home';
-navItems.forEach((item) => {
-  if (item.dataset.nav === savedNav) {
-    item.classList.add('is-active');
-    if (item.tagName === 'A') item.setAttribute('aria-current', 'page');
-  }
-});
-navItems.forEach((item) => {
-  item.addEventListener('click', () => {
-    if (!item.dataset.nav) return;
-    try { sessionStorage.setItem('muvyActiveNav', item.dataset.nav); } catch {}
-    navItems.forEach((navItem) => {
-      navItem.classList.remove('is-active');
-      navItem.removeAttribute('aria-current');
-    });
-    item.classList.add('is-active');
-    if (item.tagName === 'A') item.setAttribute('aria-current', 'page');
-  });
-});
-
 const searchToggle = document.getElementById('search-toggle');
 const searchRow = document.getElementById('search-row');
 const searchInput = document.getElementById('movie-search');
@@ -70,7 +47,11 @@ searchRow.addEventListener('submit', (event) => {
   if (query) showToast(`Search for ${query} will be available soon.`);
 });
 const currentAccount = window.MUVYAuth?.getSession();
-if (currentAccount?.name) document.getElementById('greeting-title').textContent = `Good morning, ${currentAccount.name}`;
+const greetingTitle = document.getElementById('greeting-title');
+const currentHour = new Date().getHours();
+const timeGreeting = currentHour < 12 ? 'Good morning' : currentHour < 17 ? 'Good afternoon' : 'Good evening';
+const firstName = currentAccount?.name?.trim().split(/\s+/)[0] || 'there';
+greetingTitle.textContent = `${timeGreeting}, ${firstName}`;
 
 const captureDialog = document.getElementById('capture-dialog');
 const captureOptions = document.getElementById('capture-options');

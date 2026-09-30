@@ -7,14 +7,16 @@
   <meta name="theme-color" content="#07101b">
   <meta name="description" content="Choose a movie or show genre to explore with MUVY.">
   <title>Genres | MUVY</title>
+  <script src="theme-init.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="recognize.css">
   <link rel="stylesheet" href="genres.css">
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body class="recognize-body genres-body">
   <div class="recognize-shell genres-shell">
     <header class="recognize-header">
-      <a class="recognize-back" href="explore.html" aria-label="Back to Explore">
+      <a class="recognize-back" href="explore.html" data-app-back aria-label="Go back to previous page">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
       <button class="recognize-menu" id="genres-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="genres-menu-panel"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
@@ -25,6 +27,9 @@
       <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html">Recognize</a><a href="watchlist.html">Watchlist</a><a href="profile.html">Profile</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
     </nav>
     <main class="recognize-main genres-main">
+      <a class="page-back genres-desktop-back" href="explore.html" data-app-back aria-label="Go back to previous page" title="Go back">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
       <h2>What are you in the mood for?</h2>
       <div class="recognize-list genre-list" aria-label="Movie and show genres">
         <button class="recognize-choice genre-choice" type="button" data-genre="all"><span class="recognize-choice-icon"><span class="genre-mark">A</span></span><span class="recognize-choice-copy"><strong>All genres</strong><small>Browse every kind of story.</small></span><span class="choice-arrow" aria-hidden="true">›</span></button>
@@ -54,8 +59,18 @@
       </nav>
       <a class="recognize-logout" href="login.html?logout=1">Log Out</a>
     </aside>
+    <nav class="recognize-bottom-nav" aria-label="Main navigation">
+      <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
+      <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Discover</span></a>
+      <a href="recognize.html"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
+      <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
+      <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
+    </nav>
   </div>
   <script src="auth.js" defer></script>
   <script src="genres.js" defer></script>
+  <script src="navigation.js" defer></script>
+  <script src="back.js" defer></script>
+  <script src="theme.js" defer></script>
 </body>
 </html>

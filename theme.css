@@ -1,0 +1,116 @@
+/* Warm light mode: preserve the existing violet brand while replacing dark surfaces. */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+html[data-theme="light"] body,
+html[data-theme="light"] .home-body,
+html[data-theme="light"] .explore-body,
+html[data-theme="light"] .recognize-body,
+html[data-theme="light"] .watchlist-body,
+html[data-theme="light"] .profile-body,
+html[data-theme="light"] .settings-body,
+html[data-theme="light"] .auth-body {
+  background: #f3f0e9 !important;
+  color: #242332 !important;
+}
+
+html[data-theme="light"] :is(.app-shell,.explore-shell,.recognize-shell,.watchlist-shell,.profile-shell,.settings-shell,.page-shell,.auth-card,.auth-panel,.auth-card-inner) {
+  background-color: #f3f0e9;
+  color: #242332;
+}
+html[data-theme="light"] .auth-shell { background: radial-gradient(ellipse at 78% 16%, rgba(142, 97, 208, .13), transparent 42%), #f3f0e9; }
+html[data-theme="light"] .auth-tabs { border-color: rgba(45,42,59,.14); background: #e7e3db; }
+html[data-theme="light"] .auth-tab.is-active { background: #ddd2ee; color: #4c2e79 !important; box-shadow: inset 0 0 0 1px rgba(114,64,203,.2); }
+html[data-theme="light"] :is(.app-header,.recognize-header,.watchlist-header,.profile-header,.settings-header,.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) {
+  border-color: rgba(42, 39, 58, .12) !important;
+  background: rgba(250, 248, 243, .84) !important;
+  color: #282638 !important;
+}
+html[data-theme="light"] :is(.recognize-main,.watchlist-main,.profile-main,.settings-main,.explore-main) {
+  background: rgba(250, 248, 243, .66) !important;
+  color: #282638 !important;
+}
+html[data-theme="light"] :is(.movie-card,.explore-card,.recognize-choice,.watchlist-item,.profile-options,.profile-stats,.profile-option,.settings-group,.settings-row,.action-card,.capture-option,.capture-dialog,.capture-options,.category-chip:not(.is-selected),.watchlist-tabs,.genre-list) {
+  border-color: rgba(45, 42, 59, .14) !important;
+  background: #e9e5dd !important;
+  color: #282638 !important;
+}
+html[data-theme="light"] :is(.search-row input,.explore-search,.auth-field input,.capture-option,.capture-preview,.watchlist-tabs) {
+  border-color: rgba(45, 42, 59, .18) !important;
+  background-color: #e7e3db !important;
+  color: #252433 !important;
+}
+html[data-theme="light"] :is(.search-row input,.explore-search input,.auth-field input)::placeholder { color: #777585 !important; }
+
+/* Base text uses dark ink; muted copy and branded controls keep their hierarchy. */
+html[data-theme="light"] :is(h1,h2,h3,p,label,strong,small,span,a,button,li,.movie-title,.watchlist-item h2,.profile-option-copy strong,.settings-row strong) {
+  color: #282638;
+}
+html[data-theme="light"] :is(.greeting p,.action-caption,.movie-year,.section-heading h2 span,.watchlist-page-heading p:not(.watchlist-eyebrow),.watchlist-item p,.profile-identity p,.profile-option-copy small,.settings-row small,.settings-subtitle,.explore-empty,.explore-card .movie-year,.auth-description,.account-prompt,.text-link) {
+  color: #686778 !important;
+}
+html[data-theme="light"] :is(.app-wordmark span,.sidebar-wordmark span,.recognize-sidebar-brand span,.watchlist-sidebar-brand span,.settings-side-brand span,.profile-brand span,.settings-brand span,.section-heading a,.profile-stats strong,.profile-option-icon,.settings-eyebrow,.watchlist-eyebrow,.genre-mark,.explore-filter-button,.nav-item.is-active,.bottom-nav a.active,.recognize-bottom-nav a.active,.watchlist-bottom-nav a.active,.profile-bottom-nav a.active,.settings-bottom-nav a.active) {
+  color: #7240cb !important;
+}
+html[data-theme="light"] :is(.capture-primary,.category-chip.is-selected,.auth-submit,.auth-tab.is-active,.watchlist-tabs button.selected,.nav-item.is-active,.settings-sidebar nav a.active) {
+  color: #fff !important;
+}
+html[data-theme="light"] :is(.bottom-nav a.active,.recognize-bottom-nav a.active,.watchlist-bottom-nav a.active,.profile-bottom-nav a.active,.settings-bottom-nav a.active) { color: #7240cb !important; }
+html[data-theme="light"] :is(.sidebar-nav a,.nav-item,.bottom-nav a,.recognize-bottom-nav a,.watchlist-bottom-nav a,.profile-bottom-nav a,.settings-bottom-nav a,.watchlist-sidebar nav a,.recognize-sidebar nav a,.settings-sidebar nav a) { color: #555466; }
+html[data-theme="light"] :is(.app-menu-panel,.recognize-menu-panel,.watchlist-mobile-menu,.profile-menu-panel,.settings-menu-panel) {
+  border-color: rgba(45, 42, 59, .16) !important;
+  background: rgba(250, 248, 243, .98) !important;
+  color: #282638 !important;
+}
+html[data-theme="light"] :is(.app-menu-panel a,.recognize-menu-panel a,.watchlist-mobile-menu a,.profile-menu-panel a,.settings-menu-panel a) { color: #282638 !important; }
+html[data-theme="light"] .app-menu-panel:not([hidden]) { border-color: rgba(55,48,73,.16) !important; border-left: 0 !important; background: rgba(250,248,243,.7) !important; box-shadow: 0 16px 40px rgba(39,32,53,.17); -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); }
+html[data-theme="light"] .app-menu-panel a:hover, html[data-theme="light"] .app-menu-panel a:focus-visible { background: rgba(126,79,199,.12); color: #6841a6 !important; }
+html[data-theme="light"] .app-menu-heading { color: #282638; }
+html[data-theme="light"] .app-menu-close:hover, html[data-theme="light"] .app-menu-close:focus-visible { background: rgba(126,79,199,.12); color: #6841a6; }
+html[data-theme="light"] .menu-theme-option { border-color: rgba(55,48,73,.18); color: #282638; }
+html[data-theme="light"] .menu-theme-option img { filter: brightness(0) saturate(100%) !important; }
+html[data-theme="light"] .menu-theme-option:hover, html[data-theme="light"] .menu-theme-option:focus-visible { border-color: rgba(126,79,199,.42); background: rgba(126,79,199,.12); color: #6841a6; }
+/* White SVG assets become dark when inactive on warm light surfaces. */
+html[data-theme="light"] :is(.app-header .icon-button,.app-header .app-menu-button,.recognize-header .recognize-menu,.watchlist-header .watchlist-menu-button,.profile-header .profile-menu-button,.settings-header .settings-menu-button) img { filter: brightness(0) saturate(100%) !important; }
+html[data-theme="light"] :is(.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) img { filter: brightness(0) saturate(100%) !important; opacity: 1 !important; }
+html[data-theme="light"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.settings-bottom-nav .active) img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%) !important; }
+html[data-theme="light"] :is(.watchlist-sidebar nav,.profile-sidebar nav,.recognize-sidebar nav,.settings-sidebar nav) img { filter: brightness(0) saturate(100%) !important; opacity: 1 !important; }
+html[data-theme="light"] :is(.watchlist-sidebar nav,.profile-sidebar nav,.recognize-sidebar nav,.settings-sidebar nav) a.active img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%) !important; }
+html[data-theme="light"] :is(.recognize-choice-icon,.profile-option-icon) img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%); }
+html[data-theme="light"] :is(.app-wordmark,.sidebar-wordmark,.recognize-sidebar-brand,.watchlist-sidebar-brand,.settings-side-brand,.profile-brand,.settings-brand) { color: #292737 !important; }
+html[data-theme="light"] .page-shell { background: radial-gradient(ellipse at 80% 14%, rgba(139, 98, 211, .12), transparent 40%), #f3f0e9; }
+html[data-theme="light"] .page-shell::before { display: none; }
+html[data-theme="light"] .home-body { background: #f3f0e9 !important; }
+html[data-theme="light"] .home-body .app-header { background: rgba(250, 248, 243, .84) !important; }
+html[data-theme="light"] .home-body .recognize-feature { background: linear-gradient(120deg, #7342c8, #8d59dc) !important; color: #fff !important; }
+html[data-theme="light"] .home-body .recognize-feature :is(h1,p,span,button,strong,small) { color: #fff !important; }
+html[data-theme="light"] .home-body .sidebar-discover { background: #e8e0f5 !important; color: #32274a !important; }
+html[data-theme="light"] .home-body .recognize-mic-orbit { color: #7140ca !important; }
+html[data-theme="light"] :is(.avatar-button,.profile-header-avatar,.profile-portrait,.watchlist-avatar,.settings-avatar) {
+  border: 2px solid #7845cd !important;
+  background: #e7dcf7 !important;
+  box-shadow: 0 0 0 3px rgba(120,69,205,.16), 0 2px 8px rgba(35,29,52,.2) !important;
+}
+html[data-theme="light"] :is(.avatar-button,.profile-header-avatar,.profile-portrait,.watchlist-avatar,.settings-avatar) img { filter: none !important; }
+
+/* Home recognition shortcuts use light cards and clear violet icon wells. */
+html[data-theme="light"] .home-body .recognize-action {
+  border-color: #d8d0e5 !important;
+  background: #fffdf9 !important;
+  box-shadow: 0 3px 12px rgba(42,34,58,.08);
+  color: #292637 !important;
+}
+html[data-theme="light"] .home-body .recognize-action:hover { border-color: #9670d4 !important; background: #f7f2ff !important; }
+html[data-theme="light"] .home-body .recognize-action :is(.action-title,.action-caption) { color: #393548 !important; }
+html[data-theme="light"] .home-body .recognize-action .action-icon { border-radius: 50%; background: #e9def8; }
+html[data-theme="light"] .home-body .recognize-action .action-icon img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%) !important; opacity: 1; }
+
+/* Settings theme switch control. */
+.theme-control { display: flex; align-items: center; gap: 10px; }
+.theme-control input { width: 42px; height: 24px; margin: 0; appearance: none; border: 1px solid rgba(196,211,233,.3); border-radius: 20px; background: #253148; cursor: pointer; transition: background .18s ease; }
+.theme-control input::before { display: block; width: 18px; height: 18px; margin: 2px; border-radius: 50%; background: #f6f2ff; content: ""; transition: transform .18s ease; }
+.theme-control input:checked { border-color: #8852df; background: #8852df; }
+.theme-control input:checked::before { transform: translateX(18px); }
+.theme-control input:focus-visible { outline: 2px solid #a97cff; outline-offset: 3px; }
+html[data-theme="light"] .theme-control input { background: #d8d3ca; }
+html[data-theme="light"] .theme-control input:checked { background: #8050cf; }

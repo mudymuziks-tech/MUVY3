@@ -6,13 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07101b">
   <title>Recognize | MUVY</title>
+  <script src="theme-init.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="recognize.css">
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body class="recognize-body">
   <div class="recognize-shell">
     <header class="recognize-header">
-      <a class="recognize-back" href="home.html" aria-label="Back to home">
+      <a class="recognize-back" href="home.html" data-app-back aria-label="Go back to previous page">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
       <button class="recognize-menu" id="recognize-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="recognize-menu-panel">
@@ -30,6 +32,9 @@
 
     <main class="recognize-main">
       <div class="recognize-intro">
+        <a class="page-back recognize-desktop-back" href="home.html" data-app-back aria-label="Go back to previous page" title="Go back">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
         <p class="recognize-eyebrow">Recognize</p>
         <h2>How do you want to recognize?</h2>
         <p class="recognize-description">MUVY listens, watches, or identifies from your clip.</p>
@@ -139,5 +144,8 @@
   </div>
   <script src="auth.js" defer></script>
   <script src="recognize.js" defer></script>
+  <script src="navigation.js" defer></script>
+  <script src="back.js" defer></script>
+  <script src="theme.js" defer></script>
 </body>
 </html>

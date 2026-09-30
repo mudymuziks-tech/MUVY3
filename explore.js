@@ -8,37 +8,13 @@ function showToast(message) {
   toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 3000);
 }
 
-const navItems = document.querySelectorAll('.nav-item');
-let savedNav = '';
-try { savedNav = sessionStorage.getItem('muvyActiveNav') || ''; } catch {}
-if (!savedNav) savedNav = 'explore';
-navItems.forEach((item) => {
-  if (item.dataset.nav === savedNav) {
-    item.classList.add('is-active');
-    if (item.tagName === 'A') item.setAttribute('aria-current', 'page');
-  }
-  item.addEventListener('click', () => {
-    if (!item.dataset.nav) return;
-    navItems.forEach((navItem) => {
-      navItem.classList.remove('is-active');
-      navItem.removeAttribute('aria-current');
-    });
-    item.classList.add('is-active');
-    if (item.tagName === 'A') item.setAttribute('aria-current', 'page');
-    try { sessionStorage.setItem('muvyActiveNav', item.dataset.nav); } catch {}
-  });
-});
 document.querySelectorAll('[data-message]').forEach((button) => {
   button.addEventListener('click', () => showToast(button.dataset.message));
 });
 
 const searchForm = document.getElementById('explore-search');
 const searchInput = document.getElementById('explore-query');
-const filterToggle = document.getElementById('filter-toggle');
-const genrePanel = document.getElementById('genre-filter-panel');
-const genresChip = document.getElementById('genres-chip');
 const categoryChips = [...document.querySelectorAll('.category-chip')];
-const genreButtons = [...genrePanel.querySelectorAll('[data-genre]')];
 const cards = [...document.querySelectorAll('.explore-card')];
 const sections = [...document.querySelectorAll('.explore-section')];
 const emptyMessage = document.getElementById('explore-empty');
@@ -52,11 +28,6 @@ function setCategory(category) {
     chip.classList.toggle('is-selected', active);
     chip.setAttribute('aria-pressed', String(active));
   });
-  if (category !== 'genres') {
-    genrePanel.hidden = true;
-    filterToggle.dataset.open = 'false';
-    filterToggle.setAttribute('aria-expanded', 'false');
-  }
 }
 
 function filterCards() {
@@ -90,25 +61,6 @@ categoryChips.forEach((chip) => {
   });
 });
 
-filterToggle.addEventListener('click', () => {
-  const opening = genrePanel.hidden;
-  genrePanel.hidden = !opening;
-  filterToggle.dataset.open = String(opening);
-  filterToggle.setAttribute('aria-expanded', String(opening));
-  if (opening) setCategory('genres');
-  genrePanel.hidden = !opening;
-  filterCards();
-});
-
-genreButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    activeGenre = button.dataset.genre;
-    genreButtons.forEach((genreButton) => genreButton.classList.toggle('is-selected', genreButton === button));
-    setCategory('genres');
-    filterCards();
-  });
-});
-
 searchInput.addEventListener('input', filterCards);
 searchForm.addEventListener('submit', (event) => { event.preventDefault(); filterCards(); });
 cards.forEach((card) => card.addEventListener('click', (event) => {
@@ -120,6 +72,5 @@ const requestedGenre = new URLSearchParams(window.location.search).get('genre');
 if (requestedGenre) {
   activeGenre = requestedGenre;
   setCategory('genres');
-  genreButtons.forEach((button) => button.classList.toggle('is-selected', button.dataset.genre === requestedGenre));
 }
 filterCards();

@@ -1,11 +1,10 @@
 <!doctype html>
-<!-- MUVY entry loader: shows the brand briefly, then routes visitors to login.html. -->
+<!-- MUVY app-entry loader; other app pages do not link back here. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080611">
-  <meta http-equiv="refresh" content="10; url=login.html">
   <title>MUVY</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -21,8 +20,6 @@
     </div>
     <noscript><a class="splash-fallback" href="login.html">Continue to MUVY</a></noscript>
   </main>
-  <script>
-    window.setTimeout(() => window.location.replace('login.html'), 10000);
-  </script>
+  <script src="loader.js" defer></script>
 </body>
 </html>

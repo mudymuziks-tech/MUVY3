@@ -31,6 +31,7 @@ body.recognize-body {
 .recognize-header h1 { max-width: none; justify-self: center; margin: 0; color: #f4f6fa; font-size: 1rem; font-weight: 700; letter-spacing: -.015em; line-height: 1; text-align: center; white-space: nowrap; }
 .header-spacer { width: 36px; height: 36px; }
 .recognize-main { display: flex; min-height: 100svh; flex-direction: column; padding: 90px 20px 50px; }
+.recognize-desktop-back, .genres-desktop-back { display: none; }
 
 .recognize-intro h2 {
   width: 100%; 
@@ -45,7 +46,7 @@ body.recognize-body {
 
 .recognize-list { display: grid; gap: 12px; }
 .audio-start-button {
-  display: flex;
+  display: none;
   width: 100%;
   max-width: none;
   min-height: 62px;
@@ -180,14 +181,16 @@ body.recognize-body {
   .recognize-choice { min-height: 88px; gap: 10px; padding-inline: 10px; }
 }
 
-/* Phone account menu gives Settings and Log Out a home outside the bottom bar. */
+/* Phone navigation keeps the back action in the header and the five app destinations below. */
 @media (max-width: 699px) {
-  .recognize-back { display: none; }
-  .recognize-menu { display: grid; grid-column: 1; grid-row: 1; width: 36px; height: 40px; place-items: center; border: 0; background: transparent; color: #f4f6fa; }
-  .recognize-menu svg { width: 22px; height: 22px; }
-  .recognize-menu-panel:not([hidden]) { position: fixed; z-index: 15; top: 58px; left: 12px; display: grid; min-width: 210px; gap: 3px; padding: 9px; border: 1px solid rgba(216,226,241,.14); border-radius: 12px; background: rgba(13,22,36,.97); box-shadow: 0 16px 40px #0008; }
-  .recognize-menu-panel a { padding: 11px; border-radius: 7px; color: #edf0f6; font-size: .82rem; text-decoration: none; }
-  .recognize-menu-panel a[aria-current="page"] { background: rgba(143,91,235,.24); color: #d2b3ff; }
+  .recognize-back { display: grid; }
+  .genres-body .recognize-back { display: grid; }
+  .recognize-main { padding-bottom: 110px; }
+  .recognize-bottom-nav { position: fixed; z-index: 12; right: 0; bottom: 0; left: 0; display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); padding: 9px 10px calc(9px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(203,218,239,.1); background: rgba(7,13,24,.78); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+  .recognize-bottom-nav a { display: grid; justify-items: center; gap: 3px; color: #aeb8c8; font-size: .62rem; text-decoration: none; }
+  .recognize-bottom-nav img { width: 21px; height: 21px; opacity: .76; }
+  .recognize-bottom-nav .is-active { color: #bd8dff; }
+  .recognize-bottom-nav .is-active img { filter: brightness(0) saturate(100%) invert(63%) sepia(44%) saturate(1852%) hue-rotate(218deg) brightness(101%) contrast(101%); opacity: 1; }
 }
 
 /* iPad layout: app bar, full-width recognition choices, result preview, and bottom navigation. */
@@ -197,7 +200,8 @@ body.recognize-body {
     width: min(100%, 900px); min-height: 72px; grid-template-columns: 42px 1fr 42px;
     padding: 0 26px; background: rgba(7, 16, 27, .74);
   }
-  .recognize-back, .recognize-header h1, .header-spacer { display: none; }
+  .recognize-back { display: grid; }
+  .recognize-header h1, .header-spacer { display: none; }
   .recognize-menu, .recognize-search { display: grid; width: 40px; height: 40px; place-items: center; border: 0; background: none; color: #f4f6fa; }
   .recognize-menu { grid-column: 1; grid-row: 1; cursor: pointer; }
   .recognize-menu svg { width: 23px; height: 23px; }
@@ -211,7 +215,7 @@ body.recognize-body {
   .recognize-intro h2 { margin: 0 0 7px; font-size: clamp(1.55rem, 4vw, 2rem); }
   .recognize-description { display: block; margin: 0; color: #aab4c3; font-size: .94rem; }
   .recognize-list { gap: 12px; }
-  .audio-start-button { min-height: 54px; margin-top: 15px; }
+  .audio-start-button { display: none; }
   .recognize-choice { min-height: 91px; grid-template-columns: 48px 1fr 22px; padding: 14px 16px; border-radius: 14px; }
   .recognize-choice-copy strong { font-size: .94rem; }
   .recognize-choice-copy small { font-size: .77rem; }
@@ -260,12 +264,14 @@ body.recognize-body {
   .recognize-premium a { display: block; padding: 8px; border-radius: 7px; background: #7544df; color: white; font-size: .68rem; text-align: center; text-decoration: none; }
   .recognize-logout { margin-top: 12px; padding: 12px 8px; border-top: 1px solid rgba(196, 212, 236, .1); color: #c9d1df; font-size: .7rem; text-decoration: none; }
   .recognize-main { display: grid; width: 100%; min-height: 100vh; grid-template-columns: minmax(0, 1fr) 230px; grid-template-rows: auto 1fr auto; align-content: start; gap: 20px 16px; padding: 50px 34px 38px 158px; }
-  .recognize-intro { grid-column: 1; grid-row: 1; align-self: end; padding-left: 4px; }
+  .recognize-intro { position: relative; grid-column: 1; grid-row: 1; align-self: end; padding-left: 4px; }
+  .recognize-desktop-back { position: absolute; top: -41px; left: 4px; display: grid; }
+  .genres-desktop-back { position: absolute; top: 13px; left: 158px; display: grid; }
   .recognize-eyebrow { display: block; margin: 0 0 8px; color: #bb8aff; font-size: .9rem; font-weight: 650; }
   .recognize-intro h2 { margin: 0 0 8px; font-size: clamp(2rem, 3vw, 2.7rem); }
   .recognize-description { display: block; margin: 0; color: #aab5c5; font-size: 1rem; }
   .recognize-list { grid-column: 1; grid-row: 2; grid-template-columns: repeat(3, minmax(0, 1fr)); align-self: start; gap: 12px; margin-top: 25px; }
-  .audio-start-button { grid-column: 1; grid-row: 3; width: 100%; min-height: 68px; justify-self: stretch; margin-top: 0; font-size: 1rem; }
+  .audio-start-button { display: flex; grid-column: 1; grid-row: 3; width: 100%; min-height: 68px; justify-self: stretch; margin-top: 0; font-size: 1rem; }
   .recognize-choice { min-height: 276px; grid-template-columns: 1fr; grid-template-rows: 1fr auto auto; justify-items: center; gap: 12px; padding: 28px 15px 14px; border-color: rgba(193, 204, 226, .14); border-radius: 15px; background: linear-gradient(145deg, rgba(21, 27, 43, .9), rgba(12, 18, 31, .93)); text-align: center; }
   .recognize-choice-icon { width: 82px; height: 82px; align-self: end; }
   .recognize-choice-icon img, .recognize-choice-icon svg { width: 43px; height: 43px; }

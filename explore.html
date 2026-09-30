@@ -7,13 +7,18 @@
   <meta name="theme-color" content="#07101b">
   <meta name="description" content="Explore movies and shows with MUVY.">
   <title>Explore | MUVY</title>
+  <script src="theme-init.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="explore.css">
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body class="home-body explore-body">
   <div class="app-shell explore-shell" id="explore">
     <header class="app-header explore-header">
+      <a class="page-back explore-back" href="home.html" data-app-back aria-label="Go back to previous page" title="Go back">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
       <a class="app-wordmark explore-wordmark" href="home.html" aria-label="MUVY home">MU<span>V</span>Y</a>
       <h1>Explore</h1>
       <button class="app-menu-button" id="app-menu-button" type="button" aria-label="Open app menu" aria-expanded="false" aria-controls="app-menu-panel">
@@ -25,9 +30,9 @@
           <label class="visually-hidden" for="explore-query">Search movies, actors, genres</label>
           <input id="explore-query" type="search" placeholder="Search movies, actors, genres..." autocomplete="off">
         </form>
-        <button class="explore-filter-button" id="filter-toggle" type="button" aria-label="Open genre filters" aria-expanded="false">
+        <a class="explore-filter-button" href="genres.html" aria-label="Browse genres" title="Browse genres">
           <img src="images/nav%20tools/tune_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt="">
-        </button>
+        </a>
       </div>
       <div class="header-actions explore-header-actions">
         <button class="icon-button explore-notification" type="button" aria-label="Notifications" data-message="You are all caught up.">
@@ -42,14 +47,6 @@
 
     <main class="explore-main">
       <h1 class="explore-page-title">Explore</h1>
-
-      <div class="genre-filter-panel" id="genre-filter-panel" hidden aria-label="Filter by genre">
-        <button type="button" data-genre="all">All genres</button>
-        <button type="button" data-genre="action">Action</button>
-        <button type="button" data-genre="drama">Drama</button>
-        <button type="button" data-genre="sci-fi">Sci-Fi</button>
-        <button type="button" data-genre="adventure">Adventure</button>
-      </div>
 
       <nav class="explore-categories" aria-label="Explore categories">
         <button class="category-chip is-selected" type="button" data-category="for-you" aria-pressed="true">For You</button>
@@ -148,5 +145,8 @@
   <script src="auth.js" defer></script>
   <script src="explore.js" defer></script>
   <script src="app-menu.js" defer></script>
+  <script src="navigation.js" defer></script>
+  <script src="back.js" defer></script>
+  <script src="theme.js" defer></script>
 </body>
 </html>

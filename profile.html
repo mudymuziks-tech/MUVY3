@@ -6,12 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07101b">
   <title>Profile | MUVY</title>
+  <script src="theme-init.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="profile.css">
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body class="profile-body">
   <div class="profile-shell">
     <header class="profile-header">
+      <a class="page-back profile-back" href="home.html" data-app-back aria-label="Go back to previous page" title="Go back">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
       <button class="profile-menu-button" id="profile-menu-button" type="button" aria-label="Open app menu" aria-expanded="false" aria-controls="profile-menu-panel"><img src="images/nav%20tools/menu_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></button>
       <a class="profile-brand" href="home.html">MU<span>V</span>Y</a>
       <div class="profile-header-actions">
@@ -38,6 +43,9 @@
     </aside>
 
     <main class="profile-main">
+      <a class="page-back profile-main-back" href="home.html" data-app-back aria-label="Go back to previous page" title="Go back">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
       <section class="profile-identity" aria-label="Profile details">
         <img class="profile-portrait" src="images/0f3cef7f-cca3-482f-bbc7-264b839abbe5.jpg" alt="Profile portrait">
         <div class="profile-identity-copy"><h1 id="profile-name">MUVY Member</h1><p id="profile-email">Sign in to see your account</p></div>
@@ -48,11 +56,11 @@
         <div><strong>3</strong><span>Recommendations</span></div>
       </section>
       <section class="profile-options" aria-label="Profile settings">
-        <a class="profile-option" href="settings.html#preferences"><span class="profile-option-icon"><img src="images/nav%20tools/tune_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></span><span class="profile-option-copy"><strong>My Preferences</strong><small>Manage your movie tastes and preferences</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
-        <a class="profile-option" href="settings.html#notifications"><span class="profile-option-icon"><img src="images/nav%20tools/notifications_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><span class="profile-option-copy"><strong>Notifications</strong><small>Choose what you want to be notified about</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
-        <a class="profile-option" href="settings.html#language"><span class="profile-option-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18m0-18a15 15 0 0 0 0 18" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="profile-option-copy"><strong>Language</strong><small>English</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
-        <a class="profile-option" href="settings.html"><span class="profile-option-icon"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></span><span class="profile-option-copy"><strong>App Settings</strong><small>Appearance, data, and privacy</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
-        <a class="profile-option" href="settings.html#help"><span class="profile-option-icon"><img src="images/nav%20tools/help_center_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><span class="profile-option-copy"><strong>Help &amp; Support</strong><small>FAQs and contact support</small></span><span class="profile-option-arrow" aria-hidden="true">›</span></a>
+        <div class="profile-option"><span class="profile-option-icon"><img src="images/nav%20tools/tune_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></span><span class="profile-option-copy"><strong>My Preferences</strong><small>Manage your movie tastes and preferences</small></span><a class="profile-option-arrow" href="settings.html#preferences" aria-label="Open My Preferences">›</a></div>
+        <div class="profile-option"><span class="profile-option-icon"><img src="images/nav%20tools/notifications_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><span class="profile-option-copy"><strong>Notifications</strong><small>Choose what you want to be notified about</small></span><a class="profile-option-arrow" href="settings.html#notifications" aria-label="Open Notifications">›</a></div>
+        <div class="profile-option"><span class="profile-option-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18m0-18a15 15 0 0 0 0 18" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="profile-option-copy"><strong>Language</strong><small>English</small></span><a class="profile-option-arrow" href="settings.html#language" aria-label="Open Language settings">›</a></div>
+        <div class="profile-option"><span class="profile-option-icon"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></span><span class="profile-option-copy"><strong>App Settings</strong><small>Appearance, data, and privacy</small></span><a class="profile-option-arrow" href="settings.html" aria-label="Open App Settings">›</a></div>
+        <div class="profile-option"><span class="profile-option-icon"><img src="images/nav%20tools/help_center_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><span class="profile-option-copy"><strong>Help &amp; Support</strong><small>FAQs and contact support</small></span><a class="profile-option-arrow" href="settings.html#help" aria-label="Open Help and Support">›</a></div>
       </section>
       <footer class="profile-copyright">© 2026 MUVY. All rights reserved.</footer>
     </main>
@@ -67,5 +75,8 @@
   </div>
   <script src="auth.js" defer></script>
   <script src="profile.js" defer></script>
+  <script src="navigation.js" defer></script>
+  <script src="back.js" defer></script>
+  <script src="theme.js" defer></script>
 </body>
 </html>

@@ -6,14 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080611">
   <title>Log in to MUVY</title>
+  <script src="theme-init.js"></script>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body>
   <main class="auth-shell">
     <div class="auth-card">
-      <a class="auth-back" href="index.html" aria-label="Back to welcome page" title="Back to welcome page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <button class="page-back auth-back" type="button" data-app-back aria-label="Go back to previous page" title="Go back" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
       <section class="auth-panel" aria-labelledby="auth-title">
-        <a class="splash-wordmark auth-brand" href="index.html" aria-label="MUVY welcome page"><span>M</span><span>U</span><span class="splash-v">V</span><span>Y</span></a>
+        <div class="splash-wordmark auth-brand" aria-label="MUVY"><span>M</span><span>U</span><span class="splash-v">V</span><span>Y</span></div>
         <div class="auth-tabs" role="group" aria-label="Account access">
           <button class="auth-tab is-active" type="button" aria-pressed="true" data-mode="login">Log in</button>
           <button class="auth-tab" type="button" aria-pressed="false" data-mode="signup">Sign up</button>
@@ -41,5 +45,7 @@
     </div>
   </main>
   <script src="auth.js" defer></script>
+  <script src="back.js" defer></script>
+  <script src="theme.js" defer></script>
 </body>
 </html>

@@ -8,6 +8,14 @@
     }
 
     * { box-sizing: border-box; }
+    .sidebar-theme-toggle { display: flex; align-items: center; gap: 11px; padding: 0 12px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+    .sidebar-theme-toggle img { width: 20px; height: 20px; flex: 0 0 auto; opacity: .88; }
+    .sidebar-premium { display: flex; min-height: 49px; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding: 0 13px; border: 1px solid rgba(193,208,231,.18); border-radius: 10px; background: rgba(112,57,201,.12); color: #f1f3f7; font-size: .81rem; text-decoration: none; }
+    .sidebar-premium span + span { font-size: 1.5rem; }
+    .sidebar-premium:hover, .sidebar-premium:focus-visible { border-color: rgba(166,107,255,.55); background: rgba(112,57,201,.25); }
+    .sidebar-premium[hidden] { display: none !important; }
+    .sidebar-premium[hidden] + .sidebar-logout { margin-top: auto !important; }
+    .sidebar-logout img { width: 20px; height: 20px; flex: 0 0 auto; opacity: 1; }
     /* Keep the viewport width steady between pages with different content heights,
        so fixed headers and bottom navigation do not jump when a scrollbar appears. */
     html { scroll-behavior: smooth; scrollbar-gutter: stable; }

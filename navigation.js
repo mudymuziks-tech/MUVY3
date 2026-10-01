@@ -1,9 +1,10 @@
-// Keep each app navigation indicator synced with the page, including browser Back/Forward restores.
+// NAVIGATION: collect sidebar and bottom-bar links that need an active-page indicator.
 const appNavigationLinks = document.querySelectorAll(
   '.bottom-nav .nav-item, .recognize-bottom-nav a, .watchlist-bottom-nav a, .profile-bottom-nav a, .settings-bottom-nav a, ' +
   '.recognize-sidebar nav a, .watchlist-sidebar nav a, .profile-sidebar nav a, .settings-sidebar nav a'
 );
 
+// NAVIGATION ROUTING: map the current page and each link to a shared page key.
 function navigationKeyFromPath(pathname) {
   const file = pathname.split('/').filter(Boolean).pop() || 'home.html';
   if (file === 'genres.html') return 'browse';
@@ -18,6 +19,7 @@ function navigationKeyFromLink(link) {
   return navigationKeyFromPath(path);
 }
 
+// ACTIVE INDICATOR: sync all navigation styles with the current page.
 function syncAppNavigation() {
   const pageKey = navigationKeyFromPath(window.location.pathname);
 
@@ -40,6 +42,7 @@ function syncAppNavigation() {
   });
 }
 
+// NAVIGATION LIFECYCLE: sync on entry, history restoration, and link activation.
 syncAppNavigation();
 window.addEventListener('pageshow', syncAppNavigation);
 appNavigationLinks.forEach((link) => link.addEventListener('click', syncAppNavigation));

@@ -1,10 +1,11 @@
-// Profile name from the temporary local sign-in plus the small-screen app menu.
+// PROFILE DETAILS: show the name and email from the temporary signed-in session.
 const account = window.MUVYAuth?.getSession();
 if (account) {
   document.getElementById('profile-name').textContent = account.name || 'MUVY Member';
   document.getElementById('profile-email').textContent = account.email || '';
 }
 
+// PROFILE MENU: toggle the small-screen menu and close it on outside click.
 const profileMenuButton = document.getElementById('profile-menu-button');
 const profileMenuPanel = document.getElementById('profile-menu-panel');
 profileMenuButton.addEventListener('click', () => {

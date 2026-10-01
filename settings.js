@@ -1,4 +1,4 @@
-// Settings navigation menu for phone and tablet headers.
+// SETTINGS MENU: toggle the compact header menu and close it on outside click.
 const menuButton = document.getElementById('settings-menu-button');
 const menuPanel = document.getElementById('settings-menu-panel');
 menuButton.addEventListener('click', () => {

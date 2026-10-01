@@ -39,7 +39,7 @@
     </header>
     <nav class="app-menu-panel" id="app-menu-panel" hidden aria-label="App menu">
       <div class="app-menu-heading"><span>Menu</span><button class="app-menu-close" id="app-menu-close" type="button" aria-label="Close app menu"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
-      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html">Recognize</a><a href="genres.html">Browse</a><a href="watchlist.html">Watchlist</a><a href="profile.html">Profile</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
+      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html">Recognize</a><a href="genres.html">Browse</a><a href="watchlist.html">Watchlist</a><a href="profile.html">Profile</a><a href="settings.html#premium" data-premium-upsell>Go Premium</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
       <button class="menu-theme-option" id="theme-toggle-home" data-theme-toggle type="button" aria-label="Switch to light mode" aria-pressed="false"><img src="images/nav%20tools/light_mode_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></button>
     </nav>
 
@@ -163,12 +163,14 @@
       <a class="sidebar-wordmark" href="#home" aria-label="MUVY home">MU<span>V</span>Y</a>
       <a class="nav-item" href="#home" data-nav="home"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
       <a class="nav-item" href="explore.html" data-nav="explore"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Explore</span></a>
+      <a class="nav-item" href="genres.html"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Browse</span></a>
       <a class="nav-item" href="recognize.html" data-nav="recognize"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
       <a class="nav-item" href="watchlist.html" data-nav="watchlist"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
       <a class="nav-item" href="profile.html" data-nav="profile"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
       <a class="nav-item desktop-settings-item" href="settings.html"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""><span>Settings</span></a>
-      <a class="nav-item desktop-logout-item" href="login.html?logout=1"><img src="images/nav%20tools/logout_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Log Out</span></a>
-      <a class="sidebar-discover" href="explore.html"><span class="sidebar-discover-icon"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>Discover<br>Your Next Favorite</strong><small>Identify, then get personalized recommendations.</small></a>
+      <button class="nav-item sidebar-theme-toggle" id="theme-toggle-sidebar" data-theme-toggle type="button" aria-label="Switch to light mode" aria-pressed="false"><img src="images/nav%20tools/light_mode_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Theme</span></button>
+      <a class="sidebar-premium" href="settings.html#premium" data-premium-upsell><span>Go Premium</span><span aria-hidden="true">›</span></a>
+      <a class="nav-item desktop-logout-item sidebar-logout" href="login.html?logout=1"><img src="images/nav%20tools/logout_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Log Out</span></a>
     </nav>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 

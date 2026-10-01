@@ -117,7 +117,7 @@
       radial-gradient(ellipse at 0% 100%, rgba(61,25,143,.22), transparent 38%),
       #070d20;
   }
-  .app-shell.explore-shell { width: min(100%,1600px); padding: 72px 34px 54px 194px; }
+  .app-shell.explore-shell { width: min(100%,1600px); padding: 72px 34px 54px 236px; }
   .app-header.explore-header {
     top: 0; left: 50%; width: min(calc(100% - 64px),1600px); min-height: 72px;
     justify-content: flex-start; gap: 17px; padding: 0 18px; border: 1px solid rgba(173,190,229,.1);
@@ -149,7 +149,7 @@
   .trending-explore .movie-year { padding: 4px 10px 10px; font-size: .62rem; }
   .bottom-nav {
     position: fixed; z-index: 18; top: 94px; right: auto; bottom: 24px;
-    left: max(22px,calc((100% - 1600px)/2 + 22px)); display: flex; width: 146px;
+    left: max(22px,calc((100% - 1600px)/2 + 22px)); display: flex; width: 188px;
     height: calc(100svh - 118px); max-height: 850px; flex-direction: column; align-items: stretch;
     justify-content: flex-start; gap: 7px; margin: 0; padding: 16px 10px; border: 1px solid rgba(120,144,201,.16);
     border-radius: 17px; background: linear-gradient(180deg,rgba(8,17,41,.94),rgba(7,13,31,.9));
@@ -166,7 +166,11 @@
   .sidebar-discover-icon img { width: 17px; height: 17px; }
   .sidebar-discover strong { font-size: .73rem; line-height: 1.4; }
   .sidebar-discover small { color: #abb1c8; font-size: .59rem; line-height: 1.5; }
-  .toast { bottom: 24px; left: 194px; }
+  .toast { bottom: 24px; left: 236px; }
+}
+
+@media (min-width: 1100px) and (max-width: 1199px) {
+  .app-shell.explore-shell { padding-left: 226px; }
 }
 
 @media (min-width: 1000px) and (max-width: 1099px) {

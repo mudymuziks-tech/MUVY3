@@ -1,4 +1,4 @@
-// Send the selected genre back to Explore in the URL query string.
+// GENRES MENU: show and dismiss the compact genre selector.
 const genresMenuButton = document.getElementById('genres-menu-toggle');
 const genresMenuPanel = document.getElementById('genres-menu-panel');
 genresMenuButton.addEventListener('click', () => {
@@ -13,6 +13,7 @@ document.addEventListener('click', (event) => {
   }
 });
 
+// GENRE NAVIGATION: return the chosen genre to Explore through its URL query.
 document.querySelectorAll('.genre-choice').forEach((choice) => {
   choice.addEventListener('click', () => {
     const genre = choice.dataset.genre;

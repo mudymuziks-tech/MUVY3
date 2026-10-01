@@ -1,4 +1,4 @@
-// Explore interactions: preserve nav state, filter and search the local catalog, and show feedback.
+// EXPLORE PAGE: toast feedback for placeholder actions.
 const toast = document.getElementById('explore-toast');
 let toastTimer;
 function showToast(message) {
@@ -12,6 +12,7 @@ document.querySelectorAll('[data-message]').forEach((button) => {
   button.addEventListener('click', () => showToast(button.dataset.message));
 });
 
+// CATALOG FILTERS: keep category, genre, and search state for the visible cards.
 const searchForm = document.getElementById('explore-search');
 const searchInput = document.getElementById('explore-query');
 const categoryChips = [...document.querySelectorAll('.category-chip')];
@@ -25,6 +26,7 @@ searchForm.addEventListener('click', (event) => {
   if (event.target !== searchInput) searchInput.focus();
 });
 
+// CATEGORY SELECTION: update the selected chip and its accessibility state.
 function setCategory(category) {
   activeCategory = category;
   categoryChips.forEach((chip) => {
@@ -34,6 +36,7 @@ function setCategory(category) {
   });
 }
 
+// CARD FILTERING: match the query and filters, then show empty-state feedback.
 function filterCards() {
   const query = searchInput.value.trim().toLowerCase();
   let visibleCount = 0;
@@ -52,6 +55,7 @@ function filterCards() {
   emptyMessage.hidden = visibleCount > 0;
 }
 
+// EXPLORE CONTROLS: navigate to Genres or apply a category and search.
 categoryChips.forEach((chip) => {
   chip.addEventListener('click', () => {
     const category = chip.dataset.category;
@@ -72,6 +76,7 @@ cards.forEach((card) => card.addEventListener('click', (event) => {
   showToast(`${card.dataset.title} details are coming soon.`);
 }));
 
+// DEEP LINK: restore a selected genre when arriving from the Genres page.
 const requestedGenre = new URLSearchParams(window.location.search).get('genre');
 if (requestedGenre) {
   activeGenre = requestedGenre;

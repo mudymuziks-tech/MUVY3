@@ -27,7 +27,7 @@
     </header>
 
     <nav class="recognize-menu-panel" id="recognize-menu-panel" hidden aria-label="App navigation">
-      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html" aria-current="page">Recognize</a><a href="watchlist.html">Watchlist</a><a href="genres.html">Browse</a><a href="profile.html">Profile</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
+      <a href="home.html">Home</a><a href="explore.html">Explore</a><a href="recognize.html" aria-current="page">Recognize</a><a href="watchlist.html">Watchlist</a><a href="genres.html">Browse</a><a href="profile.html">Profile</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
     </nav>
 
     <main class="recognize-main">
@@ -69,18 +69,18 @@
         <button id="stop-audio" type="button" hidden>Stop listening</button>
       </div>
 
-      <aside class="match-preview" aria-label="Example movie identification result">
-        <div class="match-preview-heading"><span class="match-success-mark" aria-hidden="true">✓</span><strong>Example result</strong><button type="button" aria-label="More result options">•••</button></div>
+      <aside class="match-preview" id="match-preview" aria-label="Movie identification result" hidden>
+        <div class="match-preview-heading"><span class="match-success-mark" aria-hidden="true">✓</span><strong>Identified result</strong><button type="button" aria-label="More result options">•••</button></div>
         <div class="match-preview-title">
-          <img src="images/6b65c239-aa8a-4105-a81b-e0ef9cfa503d%20-%20Copy.jfif" alt="Sinners poster">
-          <div><h3>Sinners</h3><p>2025 · Drama, Horror</p><span>Sample match preview</span></div>
+          <img id="match-poster" alt="" hidden>
+          <div><h3 id="match-title"></h3><p id="match-metadata" hidden></p><span id="match-timestamp" hidden></span></div>
         </div>
-        <p class="match-preview-copy">A recognized title, scene timestamp, and streaming options will appear here.</p>
+        <p class="match-preview-copy" id="match-summary" hidden></p>
         <div class="match-preview-actions">
           <button type="button" data-message="Watchlist saving will be available soon.">Save to Watchlist</button>
           <button type="button" data-message="Sharing will be available soon.">Share</button>
         </div>
-        <div class="match-providers"><strong>Where to watch</strong><div><span>Netflix</span><span>Apple TV</span><span>Prime Video</span></div></div>
+        <div class="match-providers" id="match-providers" hidden><strong>Where to watch</strong><div id="match-provider-list"></div></div>
       </aside>
 
       <aside class="recognize-tip">
@@ -95,20 +95,22 @@
       <a class="recognize-sidebar-brand" href="home.html">MU<span>V</span>Y</a>
       <nav>
         <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
-        <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Discover</span></a>
-        <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>My Watchlist</span></a>
+        <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Explore</span></a>
+        <a href="genres.html"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Browse</span></a>
         <a class="is-active" href="recognize.html" aria-current="page"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
-        <a href="home.html#recognitions"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognitions</span></a>
+        <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
+        <!-- <a href="home.html#recognitions"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognitions</span></a> -->
         <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
         <a href="settings.html"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""><span>Settings</span></a>
+        <button class="sidebar-theme-toggle" data-theme-toggle type="button" aria-label="Switch to light mode" aria-pressed="false"><img src="images/nav%20tools/light_mode_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Theme</span></button>
       </nav>
-      <div class="recognize-premium"><strong>MUVY Premium</strong><p>Unlimited recognition and more</p><a href="login.html">Upgrade</a></div>
-      <a class="recognize-logout" href="login.html?logout=1">Log Out</a>
+      <a class="sidebar-premium" href="settings.html#premium" data-premium-upsell><span>Go Premium</span><span aria-hidden="true">›</span></a>
+      <a class="recognize-logout sidebar-logout" href="login.html?logout=1"><img src="images/nav%20tools/logout_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true"><span>Log Out</span></a>
     </aside>
 
     <nav class="recognize-bottom-nav" aria-label="Main navigation">
       <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
-      <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Discover</span></a>
+      <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Explore</span></a>
       <a class="is-active" href="recognize.html" aria-current="page"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
       <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
       <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>

@@ -1,4 +1,4 @@
-// Keep the chosen color theme across every MUVY page.
+// THEME STORAGE: read the saved preference, defaulting to dark mode.
 let savedTheme = 'dark';
 try {
   savedTheme = localStorage.getItem('muvy-theme') === 'light' ? 'light' : 'dark';
@@ -7,6 +7,7 @@ try {
 }
 document.documentElement.dataset.theme = savedTheme;
 
+// THEME CONTROLS: keep each toggle's state, label, and icon in sync.
 const themeToggles = document.querySelectorAll('#theme-toggle, [data-theme-toggle]');
 function updateThemeControls(theme) {
   themeToggles.forEach((toggle) => {
@@ -24,6 +25,7 @@ function updateThemeControls(theme) {
   });
 }
 updateThemeControls(savedTheme);
+// APPLY THEME: update the page immediately and persist the preference.
 function setTheme(theme) {
   document.documentElement.dataset.theme = theme;
   updateThemeControls(theme);
@@ -34,6 +36,7 @@ function setTheme(theme) {
   }
 }
 
+// THEME EVENTS: support both switch controls and icon buttons.
 themeToggles.forEach((themeToggle) => {
   if (themeToggle.type === 'checkbox') {
     themeToggle.addEventListener('change', () => setTheme(themeToggle.checked ? 'light' : 'dark'));

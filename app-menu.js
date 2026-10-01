@@ -1,4 +1,4 @@
-// Home menu opens directly below the hamburger that controls it.
+// HOME MENU: position the panel beneath the hamburger that controls it.
 const appMenuButton = document.getElementById('app-menu-button');
 const appMenuPanel = document.getElementById('app-menu-panel');
 const appMenuClose = document.getElementById('app-menu-close');
@@ -11,6 +11,7 @@ function positionAppMenu() {
   appMenuPanel.style.top = `${buttonBounds.bottom + 8}px`;
 }
 
+// HOME MENU CONTROLS: toggle, close on outside click, and reposition after resize.
 appMenuButton?.addEventListener('click', () => {
   const opening = appMenuPanel.hidden;
   appMenuPanel.hidden = !opening;

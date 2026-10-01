@@ -1,4 +1,4 @@
-// Home interactions: feedback, uploads, navigation state, search, and screen or camera capture.
+// HOME PAGE: shared toast and action feedback.
 const toast = document.getElementById('toast');
 let toastTimer;
 
@@ -13,6 +13,7 @@ document.querySelectorAll('[data-message]').forEach((button) => {
   button.addEventListener('click', () => showToast(button.dataset.message));
 });
 
+// HOME PAGE: open file pickers and report selected uploads.
 document.querySelectorAll('[data-picker]').forEach((button) => {
   button.addEventListener('click', () => document.getElementById(button.dataset.picker).click());
 });
@@ -24,6 +25,7 @@ document.querySelectorAll('input[type="file"]').forEach((input) => {
   });
 });
 
+// HOME PAGE: movie card placeholder actions.
 document.querySelectorAll('.movie-card').forEach((card) => {
   card.addEventListener('click', (event) => {
     event.preventDefault();
@@ -31,6 +33,7 @@ document.querySelectorAll('.movie-card').forEach((card) => {
   });
 });
 
+// HOME PAGE: expandable movie search and account-based greeting.
 const searchToggle = document.getElementById('search-toggle');
 const searchRow = document.getElementById('search-row');
 const searchInput = document.getElementById('movie-search');
@@ -53,6 +56,7 @@ const timeGreeting = currentHour < 12 ? 'Good morning' : currentHour < 17 ? 'Goo
 const firstName = currentAccount?.name?.trim().split(/\s+/)[0] || 'there';
 greetingTitle.textContent = `${timeGreeting}, ${firstName}`;
 
+// HOME CAPTURE: shared dialog, preview, and stream cleanup helpers.
 const captureDialog = document.getElementById('capture-dialog');
 const captureOptions = document.getElementById('capture-options');
 const captureLive = document.getElementById('capture-live');
@@ -117,6 +121,7 @@ captureDialog.addEventListener('click', (event) => {
 });
 captureDialog.addEventListener('close', resetCaptureDialog);
 
+// HOME CAPTURE: screen recording flow.
 document.getElementById('screen-record-option').addEventListener('click', async () => {
   if (!navigator.mediaDevices?.getDisplayMedia || !window.MediaRecorder) {
     showCaptureError('Screen recording is not supported in this browser. Try uploading a clip instead.');
@@ -160,6 +165,7 @@ document.getElementById('screen-record-option').addEventListener('click', async 
   }
 });
 
+// HOME CAPTURE: back-camera flow and still-frame capture.
 document.getElementById('back-camera-option').addEventListener('click', async () => {
   if (!navigator.mediaDevices?.getUserMedia) {
     showCaptureError('Camera access is not available in this browser.');

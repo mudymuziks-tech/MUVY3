@@ -1,14 +1,46 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import logging
 from collections import defaultdict
+from dataclasses import dataclass
 from typing import Optional
 
 from app.db.supabase import supabase
 
 
+logger = logging.getLogger(__name__)
+
+
+# ============================================================
+# VERIFIED MATCHING BASELINE
+#
+# Do not change these values casually.
+#
+# These thresholds were verified against:
+#   - Reckless
+#   - Interstellar
+#   - Michael
+#   - Enola Holmes 3
+#   - Unknown movie rejection test
+#
+# Any threshold change should be accompanied by regression
+# testing against both known and unknown clips.
+# ============================================================
+
+DEFAULT_HASH_DISTANCE_THRESHOLD = 14
+DEFAULT_OFFSET_BUCKET_MS = 500
+DEFAULT_MIN_VOTES = 8
+DEFAULT_MIN_MARGIN = 1.5
+DEFAULT_MIN_SUPPORT_RATIO = 0.60
+DEFAULT_MIN_TEMPORAL_SPAN_MS = 1500
+
+DEFAULT_RELAXED_SUPPORT_RATIO = 0.50
+DEFAULT_RELAXED_MARGIN = 3.0
+DEFAULT_RELAXED_TEMPORAL_SPAN_MS = 5000
+
+
 def hamming_distance(a: int, b: int) -> int:
-    """Bit difference between two 64-bit hashes. 0 = identical."""
+    """Return the number of differing bits between two hashes."""
     return bin(a ^ b).count("1")
 
 
@@ -33,7 +65,7 @@ class FingerprintDB:
     Supabase-backed fingerprint store.
 
     Keeps the same interface that the matcher expects,
-    but uses PostgreSQL through Supabase instead of SQLite.
+    while using PostgreSQL through Supabase.
     """
 
     def add(
@@ -82,14 +114,11 @@ class FingerprintDB:
     def find_candidates(
         self,
         query_hashes: list[int],
-        distance_threshold: int = 14,
-    ):
+        distance_threshold: int = DEFAULT_HASH_DISTANCE_THRESHOLD,
+    ) -> list[tuple[int, str, int]]:
         """
-        Ask PostgreSQL to find fingerprints that are within
-        the Hamming-distance threshold.
-
-        This avoids downloading the entire fingerprint table
-        into Python for every identification request.
+        Ask PostgreSQL to find fingerprints within
+        the configured Hamming-distance threshold.
         """
 
         if not query_hashes:
@@ -122,8 +151,7 @@ class FingerprintDB:
         """
         Kept for compatibility with the old SQLite interface.
 
-        Supabase writes are committed automatically by
-        the API, so there is nothing to do here.
+        Supabase writes are committed automatically.
         """
         pass
 
@@ -131,37 +159,57 @@ class FingerprintDB:
 def match_clip(
     query_frames: list[QueryFrame],
     db: FingerprintDB,
-    hash_distance_threshold: int = 14,
-    offset_bucket_ms: int = 500,
-    min_votes: int = 8,
-    min_margin: float = 1.5,
-    min_support_ratio: float = 0.60,
-    min_temporal_span_ms: int = 1500,
-    max_average_distance: float = 10.0,
+    hash_distance_threshold: int = DEFAULT_HASH_DISTANCE_THRESHOLD,
+    offset_bucket_ms: int = DEFAULT_OFFSET_BUCKET_MS,
+    min_votes: int = DEFAULT_MIN_VOTES,
+    min_margin: float = DEFAULT_MIN_MARGIN,
+    min_support_ratio: float = DEFAULT_MIN_SUPPORT_RATIO,
+    min_temporal_span_ms: int = DEFAULT_MIN_TEMPORAL_SPAN_MS,
+    relaxed_support_ratio: float = DEFAULT_RELAXED_SUPPORT_RATIO,
+    relaxed_margin: float = DEFAULT_RELAXED_MARGIN,
+    relaxed_temporal_span_ms: int = DEFAULT_RELAXED_TEMPORAL_SPAN_MS,
 ) -> Optional[MatchResult]:
     """
     Match a query clip against the fingerprint database.
 
-    The matcher uses:
+    The matching baseline is intentionally kept stable.
 
-    1. PostgreSQL candidate retrieval.
-    2. Hamming-distance filtering.
-    3. Timestamp-offset voting.
-    4. Neighboring timestamp bucket smoothing.
-    5. Query-frame support as the main confidence signal.
-    6. Movie-level support margin to reject ambiguous matches.
+    Normal acceptance requires:
+        - minimum votes
+        - support ratio >= 0.60
+        - margin >= 1.5
+        - temporal span >= 1500 ms
+
+    Relaxed acceptance requires:
+        - minimum votes
+        - support ratio >= 0.50
+        - margin >= 3.0
+        - temporal span >= 5000 ms
+
+    These thresholds are the currently verified Muvy baseline.
     """
+
+    if hash_distance_threshold <= 0:
+        raise ValueError(
+            "hash_distance_threshold must be greater than 0"
+        )
+
+    if offset_bucket_ms <= 0:
+        raise ValueError(
+            "offset_bucket_ms must be greater than 0"
+        )
+
+    if min_votes <= 0:
+        raise ValueError(
+            "min_votes must be greater than 0"
+        )
 
     if not query_frames:
         return None
 
-    # ---------------------------------------------------------
-    # Stage 1: retrieve candidate fingerprints
-    # ---------------------------------------------------------
-
     query_hashes = [
-        qf.hash
-        for qf in query_frames
+        query_frame.hash
+        for query_frame in query_frames
     ]
 
     rows = db.find_candidates(
@@ -170,46 +218,39 @@ def match_clip(
     )
 
     if not rows:
+        logger.info(
+            "[MATCHER] No fingerprint candidates found."
+        )
         return None
 
-    # ---------------------------------------------------------
-    # Stage 2: collect votes
-    # ---------------------------------------------------------
-
-    votes: dict[
-        tuple[str, int],
-        float,
-    ] = defaultdict(float)
+    votes: dict[tuple[str, int], float] = defaultdict(float)
 
     frame_support: dict[
         tuple[str, int],
         set[int],
     ] = defaultdict(set)
 
-    for query_index, qf in enumerate(query_frames):
+    for query_index, query_frame in enumerate(query_frames):
 
-        for stored_hash, movie_id, stored_ts in rows:
+        for stored_hash, movie_id, stored_timestamp in rows:
 
             distance = hamming_distance(
-                qf.hash,
+                query_frame.hash,
                 stored_hash,
             )
 
             if distance > hash_distance_threshold:
                 continue
 
-            # Closer perceptual hashes receive more weight.
             weight = (
                 hash_distance_threshold - distance
             ) / hash_distance_threshold
 
-            weight = max(
-                weight,
-                0.05,
-            )
+            weight = max(weight, 0.05)
 
             implied_offset = (
-                stored_ts - qf.capture_time_ms
+                stored_timestamp
+                - query_frame.capture_time_ms
             )
 
             bucket = (
@@ -225,17 +266,13 @@ def match_clip(
             )
 
             votes[key] += weight
-
-            frame_support[key].add(
-                query_index
-            )
+            frame_support[key].add(query_index)
 
     if not votes:
+        logger.info(
+            "[MATCHER] No valid fingerprint votes."
+        )
         return None
-
-    # ---------------------------------------------------------
-    # Stage 3: smooth neighboring timestamp buckets
-    # ---------------------------------------------------------
 
     smoothed: dict[
         tuple[str, int],
@@ -247,21 +284,18 @@ def match_clip(
         set[int],
     ] = defaultdict(set)
 
-    for (
-        movie_id,
-        bucket,
-    ) in votes:
+    for movie_id, bucket in votes:
 
         key = (
             movie_id,
             bucket,
         )
 
-        for k in (-1, 0, 1):
+        for neighbor in (-1, 0, 1):
 
             neighbor_bucket = (
                 bucket
-                + k * offset_bucket_ms
+                + neighbor * offset_bucket_ms
             )
 
             neighbor_key = (
@@ -282,11 +316,10 @@ def match_clip(
             )
 
     if not smoothed:
+        logger.info(
+            "[MATCHER] No smoothed fingerprint votes."
+        )
         return None
-
-    # ---------------------------------------------------------
-    # Stage 4: find strongest temporal cluster per movie
-    # ---------------------------------------------------------
 
     movie_best: dict[
         str,
@@ -304,9 +337,7 @@ def match_clip(
             ]
         )
 
-        current = movie_best.get(
-            movie_id
-        )
+        current = movie_best.get(movie_id)
 
         if (
             current is None
@@ -323,14 +354,10 @@ def match_clip(
             )
 
     if not movie_best:
+        logger.info(
+            "[MATCHER] No movie-level candidates."
+        )
         return None
-
-    # ---------------------------------------------------------
-    # Stage 5: select strongest movie
-    #
-    # Frame support is the primary signal.
-    # Weighted score breaks ties.
-    # ---------------------------------------------------------
 
     top_movie, (
         top_offset,
@@ -343,10 +370,6 @@ def match_clip(
             item[1][1],
         ),
     )
-
-    # ---------------------------------------------------------
-    # Stage 6: find strongest competing movie
-    # ---------------------------------------------------------
 
     rival_support = [
         support_count
@@ -364,52 +387,163 @@ def match_clip(
         else 0
     )
 
-    # ---------------------------------------------------------
-    # Stage 7: calculate support margin
-    # ---------------------------------------------------------
-
     margin = (
         top_support / second_support
         if second_support > 0
         else float("inf")
     )
 
-    # ---------------------------------------------------------
-    # Stage 8: calculate confidence
-    # ---------------------------------------------------------
+    total_frames = len(query_frames)
 
-    total_frames = len(
-        query_frames
-    )
-
-    confidence = (
-        min(
-            1.0,
-            top_support / total_frames,
-        )
+    support_ratio = (
+        top_support / total_frames
         if total_frames
         else 0.0
     )
 
-    # ---------------------------------------------------------
-    # Stage 9: confidence requirements
-    # ---------------------------------------------------------
+    winning_support_frames = smoothed_support.get(
+        (top_movie, top_offset),
+        set(),
+    )
+
+    if len(winning_support_frames) >= 2:
+
+        support_times = [
+            query_frames[index].capture_time_ms
+            for index in winning_support_frames
+        ]
+
+        temporal_span_ms = (
+            max(support_times)
+            - min(support_times)
+        )
+
+    else:
+        temporal_span_ms = 0
+
+    logger.info(
+        "[MATCHER] verification: "
+        "movie=%s support=%d/%d "
+        "support_ratio=%.4f required_ratio=%.4f "
+        "temporal_span=%dms required_span=%dms "
+        "margin=%.4f required_margin=%.4f "
+        "votes=%d required_votes=%d",
+        top_movie,
+        top_support,
+        total_frames,
+        support_ratio,
+        min_support_ratio,
+        temporal_span_ms,
+        min_temporal_span_ms,
+        margin,
+        min_margin,
+        top_support,
+        min_votes,
+    )
 
     if top_support < min_votes:
+
+        logger.warning(
+            "[MATCHER] REJECTED: insufficient votes. "
+            "votes=%d required=%d",
+            top_support,
+            min_votes,
+        )
+
         return None
 
-    if margin < min_margin:
-        return None
-
-    # ---------------------------------------------------------
-    # Return result
-    # ---------------------------------------------------------
-
-    return MatchResult(
-        movie_id=top_movie,
-        offset_ms=top_offset,
-        confidence=confidence,
-        margin=margin,
-        votes=top_support,
-        total_frames=total_frames,
+    normal_match = (
+        support_ratio >= min_support_ratio
+        and margin >= min_margin
+        and temporal_span_ms >= min_temporal_span_ms
     )
+
+    if normal_match:
+
+        logger.info(
+            "[MATCHER] ACCEPTED: normal verification "
+            "movie=%s support=%d/%d "
+            "confidence=%.4f margin=%.4f "
+            "offset=%dms",
+            top_movie,
+            top_support,
+            total_frames,
+            support_ratio,
+            margin,
+            top_offset,
+        )
+
+        return MatchResult(
+            movie_id=top_movie,
+            offset_ms=top_offset,
+            confidence=support_ratio,
+            margin=margin,
+            votes=top_support,
+            total_frames=total_frames,
+        )
+
+    relaxed_match = (
+        support_ratio >= relaxed_support_ratio
+        and margin >= relaxed_margin
+        and temporal_span_ms >= relaxed_temporal_span_ms
+    )
+
+    if relaxed_match:
+
+        logger.info(
+            "[MATCHER] ACCEPTED: relaxed verification "
+            "movie=%s support=%d/%d "
+            "confidence=%.4f margin=%.4f "
+            "temporal_span=%dms offset=%dms",
+            top_movie,
+            top_support,
+            total_frames,
+            support_ratio,
+            margin,
+            temporal_span_ms,
+            top_offset,
+        )
+
+        return MatchResult(
+            movie_id=top_movie,
+            offset_ms=top_offset,
+            confidence=support_ratio,
+            margin=margin,
+            votes=top_support,
+            total_frames=total_frames,
+        )
+
+    if support_ratio < relaxed_support_ratio:
+
+        logger.warning(
+            "[MATCHER] REJECTED: support ratio too low. "
+            "%.4f < %.4f",
+            support_ratio,
+            relaxed_support_ratio,
+        )
+
+    elif margin < relaxed_margin:
+
+        logger.warning(
+            "[MATCHER] REJECTED: match margin too weak. "
+            "%.4f < %.4f",
+            margin,
+            relaxed_margin,
+        )
+
+    elif temporal_span_ms < relaxed_temporal_span_ms:
+
+        logger.warning(
+            "[MATCHER] REJECTED: temporal span too short. "
+            "%dms < %dms",
+            temporal_span_ms,
+            relaxed_temporal_span_ms,
+        )
+
+    else:
+
+        logger.warning(
+            "[MATCHER] REJECTED: verification failed."
+        )
+
+    return None

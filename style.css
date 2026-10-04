@@ -433,9 +433,9 @@
     .menu-theme-option img { width: 22px; height: 22px; }
     .menu-theme-option:hover, .menu-theme-option:focus-visible { border-color: rgba(181,143,255,.52); background: rgba(143,91,235,.22); color: #e6d6ff; transform: rotate(-12deg); }
     .menu-theme-option:focus-visible { outline: 2px solid rgba(186,146,255,.75); outline-offset: 2px; }
-    .desktop-settings-item, .desktop-logout-item { display: none !important; }
+    .desktop-settings-item, .desktop-logout-item, .desktop-sidebar-item { display: none !important; }
     @media (min-width: 1000px) {
       .app-menu-button, .app-menu-panel { display: none !important; }
-      .desktop-settings-item, .desktop-logout-item { display: flex !important; }
+      .desktop-settings-item, .desktop-logout-item, .desktop-sidebar-item { display: flex !important; }
     }
 

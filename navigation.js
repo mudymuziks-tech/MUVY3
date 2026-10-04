@@ -1,8 +1,13 @@
 // NAVIGATION: collect sidebar and bottom-bar links that need an active-page indicator.
 const appNavigationLinks = document.querySelectorAll(
-  '.bottom-nav .nav-item, .recognize-bottom-nav a, .watchlist-bottom-nav a, .profile-bottom-nav a, .settings-bottom-nav a, ' +
+  '.bottom-nav a.nav-item, .recognize-bottom-nav a, .watchlist-bottom-nav a, .profile-bottom-nav a, .settings-bottom-nav a, ' +
   '.recognize-sidebar nav a, .watchlist-sidebar nav a, .profile-sidebar nav a, .settings-sidebar nav a'
 );
+
+document.querySelectorAll('.bottom-nav [data-theme-toggle]').forEach((toggle) => {
+  toggle.classList.remove('is-active', 'active');
+  toggle.removeAttribute('aria-current');
+});
 
 // NAVIGATION ROUTING: map the current page and each link to a shared page key.
 function navigationKeyFromPath(pathname) {

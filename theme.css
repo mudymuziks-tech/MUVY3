@@ -2,6 +2,10 @@
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 
+html[data-theme="dark"] :is(body.home-body, body.explore-body) {
+  background: #070d18 !important;
+}
+
 html[data-theme="light"] body,
 html[data-theme="light"] .home-body,
 html[data-theme="light"] .explore-body,
@@ -297,6 +301,42 @@ html[data-theme="light"] .auth-tab:not(.is-active) { color: #5a5269 !important; 
 
 /* Desktop sidebar selection keeps its icon and label in the same active accent. */
 @media (min-width: 1000px) {
+  :is(.bottom-nav,.recognize-sidebar,.watchlist-sidebar,.profile-sidebar,.settings-sidebar) {
+    padding: 25px 12px 13px;
+  }
+  :is(.sidebar-wordmark,.recognize-sidebar-brand,.watchlist-sidebar-brand,.profile-sidebar-brand,.settings-side-brand) {
+    margin: 0 12px 27px;
+    font-size: 2rem;
+    font-weight: 850;
+    letter-spacing: .06em;
+  }
+  :is(.bottom-nav .nav-item,.recognize-sidebar nav :is(a,button),.watchlist-sidebar nav :is(a,button),.profile-sidebar nav :is(a,button),.settings-sidebar nav :is(a,button)) {
+    min-height: 44px;
+    align-items: center;
+    gap: 11px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    color: #e3e7ef;
+    font-size: .86rem;
+  }
+  :is(.bottom-nav .nav-item img,.recognize-sidebar nav img,.watchlist-sidebar nav img,.profile-sidebar nav img,.settings-sidebar nav img) {
+    width: 20px;
+    height: 20px;
+  }
+  :is(.recognize-logout,.watchlist-desktop-logout,.profile-sidebar-logout,.settings-logout,.bottom-nav .desktop-logout-item) {
+    min-height: 44px;
+    align-items: center;
+    gap: 11px;
+    padding: 0 12px;
+    color: #e3e7ef;
+    font-size: .86rem;
+  }
+  :is(.bottom-nav .nav-item.is-active,.recognize-sidebar nav a.is-active,.watchlist-sidebar nav a.active,.profile-sidebar nav a.active,.settings-sidebar nav a.active) {
+    border: 1px solid rgba(166,107,255,.42);
+    background: rgba(112,57,201,.28);
+    color: #ceadff;
+  }
   html[data-theme="light"] :is(.bottom-nav .nav-item.is-active,.watchlist-sidebar nav a.active,.profile-sidebar nav a.active,.recognize-sidebar nav a.is-active,.settings-sidebar nav a.active) {
     border-color: rgba(114,64,203,.22) !important;
     background: rgba(114,64,203,.1) !important;

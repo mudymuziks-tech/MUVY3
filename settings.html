@@ -52,7 +52,7 @@
         <h2 id="app-settings-title">App preferences</h2>
         <div class="settings-row"><span><strong>Recognition access</strong><small>MUVY asks before using your microphone or camera.</small></span></div>
         <div class="settings-row" id="notifications"><span><strong>Notifications</strong><small>Notification preferences will be available here.</small></span></div>
-        <div class="settings-row" id="language"><span><strong>Language</strong><small>English</small></span></div>
+        <div class="settings-row" id="language"><span><strong>Language</strong><small id="settings-language-name" data-l10n-skip>English</small></span></div>
         <label class="settings-row theme-setting" for="theme-toggle"><span><strong>Appearance</strong><small>Switch between light and dark mode.</small></span><span class="theme-control"><input id="theme-toggle" type="checkbox" role="switch" aria-label="Use light mode"></span></label>
         <div class="settings-row"><span><strong>Privacy</strong><small>Your captures stay on your device until you choose to identify them.</small></span></div>
       </section>
@@ -70,6 +70,7 @@
       <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
     </nav>
   </div>
+  <script src="i18n.js" defer></script>
   <script src="auth.js" defer></script>
   <script src="settings.js" defer></script>
   <script src="navigation.js" defer></script>

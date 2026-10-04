@@ -2,7 +2,7 @@
 const toast = document.getElementById('watchlist-toast');
 let toastTimeout;
 function showToast(message) {
-  toast.textContent = message;
+  toast.textContent = window.MUVYLocale?.t(message) ?? message;
   toast.classList.add('visible');
   window.clearTimeout(toastTimeout);
   toastTimeout = window.setTimeout(() => toast.classList.remove('visible'), 3000);

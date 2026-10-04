@@ -28,7 +28,7 @@ body.recognize-body {
 }
 .recognize-back { display: grid; width: 36px; height: 40px; place-items: center; color: #e9edf4; text-decoration: none; }
 .recognize-back svg { width: 21px; height: 21px; }
-.recognize-header h1 { max-width: none; justify-self: center; margin: 0; color: #f4f6fa; font-size: 1rem; font-weight: 700; letter-spacing: -.015em; line-height: 1; text-align: center; white-space: nowrap; }
+.recognize-header h1 { max-width: none; justify-self: start; margin: 0 0 0 15px; color: #f4f6fa; font-size: 1rem; font-weight: 700; letter-spacing: -.015em; line-height: 1; text-align: left; white-space: nowrap; }
 .header-spacer { width: 36px; height: 36px; }
 .recognize-main { display: flex; min-height: 100svh; flex-direction: column; padding: 90px 20px 50px; }
 .recognize-desktop-back, .genres-desktop-back { display: none; }

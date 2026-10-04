@@ -18,7 +18,8 @@ function updateThemeControls(theme) {
     const useLight = theme !== 'light';
     const icon = toggle.querySelector('img');
     toggle.setAttribute('aria-pressed', String(!useLight));
-    toggle.setAttribute('aria-label', useLight ? 'Switch to light mode' : 'Switch to dark mode');
+    const label = useLight ? 'Switch to light mode' : 'Switch to dark mode';
+    toggle.setAttribute('aria-label', window.MUVYLocale?.t(label) ?? label);
     if (icon) icon.src = useLight
       ? 'images/nav%20tools/light_mode_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg'
       : 'images/nav%20tools/dark_mode_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg';

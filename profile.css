@@ -4,7 +4,7 @@
 .profile-header { position: fixed; z-index: 12; top: 0; left: 50%; display: grid; width: min(100%,640px); min-height: 62px; grid-template-columns: 42px 1fr 84px; align-items: center; padding: 0 15px; border-bottom: 1px solid rgba(207,221,242,.08); background: rgba(7,13,24,.72); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); transform: translateX(-50%); }
 .profile-menu-button { display: grid; width: 38px; height: 38px; place-items: center; border: 0; background: transparent; cursor: pointer; }
 .profile-menu-button img { width: 23px; height: 23px; }
-.profile-brand { grid-column: 2; justify-self: start; margin-left: 15px; color: #c9d1df; font-size: .84rem; font-weight: 500; letter-spacing: 0; text-decoration: none; }
+.profile-brand { grid-column: 2; justify-self: start; margin-left: 15px; color: #c9d1df; font-size: 1rem; font-weight: 700; letter-spacing: -.015em; text-decoration: none; }
 .profile-header-actions { display: flex; grid-column: 3; align-items: center; justify-content: flex-end; gap: 8px; }
 .profile-back { grid-column: 1; grid-row: 1; justify-self: center; }
 .profile-settings-icon { display: grid; width: 34px; height: 36px; place-items: center; }
@@ -34,6 +34,11 @@
 .profile-option-copy { display: grid; min-width: 0; gap: 3px; }
 .profile-option-copy strong { overflow: hidden; font-size: .71rem; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
 .profile-option-copy small { overflow: hidden; color: #9eaabd; font-size: .59rem; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+.profile-options .language-option { color: inherit; text-decoration: none; cursor: pointer; }
+.profile-language-select { width: 100%; min-width: 0; padding: 0; border: 0; background: transparent; color: #9eaabd; font: inherit; font-size: .59rem; line-height: 1.3; }
+.profile-language-select option { background: #111b2b; color: #f4f6fa; }
+html[data-theme="light"] .profile-language-select { color: #686778; }
+html[data-theme="light"] .profile-language-select option { background: #f3f0e9; color: #282638; }
 .profile-option-arrow { display: grid; width: 100%; height: 100%; place-items: center; justify-self: end; color: #aab4c4; font-size: 1.15rem; text-decoration: none; cursor: pointer; }
 .profile-option-arrow:focus-visible, .profile-menu-button:focus-visible, .profile-settings-icon:focus-visible { outline: 2px solid #c4a2ff; outline-offset: 2px; }
 .profile-copyright { display: none; }

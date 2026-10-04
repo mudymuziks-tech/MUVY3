@@ -5,7 +5,7 @@ import tempfile
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from supabase import create_client
@@ -78,6 +78,7 @@ class MovieResponse(BaseModel):
     backdrop_path: Optional[str] = None
     overview: Optional[str] = None
     runtime: Optional[int] = None
+    genres: Optional[list[dict]] = None
     created_at: Optional[str] = None
 
 
@@ -147,6 +148,44 @@ def get_movie(movie_id: str) -> Optional[dict]:
     return response.data[0]
 
 
+SUPPORTED_TMDB_LANGUAGES = {
+    "en-US", "es-ES", "fr-FR", "de-DE", "pt-BR", "ar-SA",
+    "zh-CN", "hi-IN", "ja-JP", "ko-KR", "it-IT", "sw-KE",
+}
+
+
+def localize_movie(movie_data: dict, language: str) -> dict:
+    language = language if language in SUPPORTED_TMDB_LANGUAGES else "en-US"
+    tmdb_id = movie_data.get("tmdb_id")
+    if not tmdb_id:
+        return movie_data
+
+    try:
+        localized_movie = get_movie_details(int(tmdb_id), language=language)
+    except (TMDBError, TypeError, ValueError):
+        return movie_data
+
+    if not localized_movie:
+        return movie_data
+
+    localized_fields = (
+        "title",
+        "overview",
+        "release_date",
+        "poster_path",
+        "backdrop_path",
+        "runtime",
+        "genres",
+    )
+    return {
+        **movie_data,
+        **{
+            field: localized_movie.get(field) or movie_data.get(field)
+            for field in localized_fields
+        },
+    }
+
+
 # ---------------------------------------------------------
 # Movie endpoint
 # ---------------------------------------------------------
@@ -155,7 +194,10 @@ def get_movie(movie_id: str) -> Optional[dict]:
     "/movies/{movie_id}",
     response_model=MovieResponse,
 )
-def movie(movie_id: str):
+def movie(
+    movie_id: str,
+    language: str = Header(default="en-US", alias="Accept-Language"),
+):
     result = get_movie(movie_id)
 
     if result is None:
@@ -164,7 +206,7 @@ def movie(movie_id: str):
             detail="Movie not found.",
         )
 
-    return result
+    return localize_movie(result, language)
 
 
 # ---------------------------------------------------------
@@ -256,6 +298,7 @@ def refresh_movie(movie_id: str):
 )
 async def identify(
     file: UploadFile = File(...),
+    language: str = Header(default="en-US", alias="Accept-Language"),
 ):
 
     if not file.filename:
@@ -326,7 +369,6 @@ async def identify(
                 message="No confident match found.",
             )
 
-        # Fetch movie metadata from Supabase.
         movie_data = get_movie(
             result.movie_id
         )
@@ -339,6 +381,8 @@ async def identify(
                     "but its metadata was not found."
                 ),
             )
+
+        movie_data = localize_movie(movie_data, language)
 
         return IdentifySuccessResponse(
             matched=True,

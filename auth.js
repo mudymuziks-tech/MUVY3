@@ -83,18 +83,18 @@
     passwordInput.autocomplete = signingUp ? 'new-password' : 'current-password';
     confirmPasswordInput.autocomplete = 'new-password';
     confirmPasswordInput.setCustomValidity('');
-    title.textContent = signingUp ? 'Make yourself at home.' : 'Welcome back.';
-    description.textContent = signingUp
+    title.textContent = window.MUVYLocale?.t(signingUp ? 'Make yourself at home.' : 'Welcome back.');
+    description.textContent = window.MUVYLocale?.t(signingUp
       ? 'Create an account and keep every discovery close.'
-      : 'Log in to continue discovering what to watch.';
-    submit.textContent = signingUp ? 'Create account' : 'Log in';
+      : 'Log in to continue discovering what to watch.');
+    submit.textContent = window.MUVYLocale?.t(signingUp ? 'Create account' : 'Log in');
     message.textContent = '';
     tabs.forEach((tab) => {
       const active = tab.dataset.mode === mode;
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-pressed', String(active));
     });
-    document.title = signingUp ? 'Sign up for MUVY' : 'Log in to MUVY';
+    document.title = window.MUVYLocale?.t(signingUp ? 'Sign up for MUVY' : 'Log in to MUVY');
   }
 
   tabs.forEach((tab) => tab.addEventListener('click', () => setMode(tab.dataset.mode)));
@@ -105,7 +105,7 @@
       return;
     }
     confirmPasswordInput.setCustomValidity(
-      passwordInput.value === confirmPasswordInput.value ? '' : 'Passwords do not match.'
+      passwordInput.value === confirmPasswordInput.value ? '' : window.MUVYLocale?.t('Passwords do not match.')
     );
   }
   passwordInput.addEventListener('input', validatePasswordConfirmation);
@@ -128,10 +128,10 @@
     const session = { name, email, expiresAt: Date.now() + sessionDurationMs };
     try {
       store.setItem(sessionKey, JSON.stringify(session));
-      message.textContent = 'Signed in on this device. Opening MUVY…';
+      message.textContent = window.MUVYLocale?.t('Signed in on this device. Opening MUVY…');
       window.location.assign('home.html');
     } catch {
-      message.textContent = 'Browser storage is unavailable. Allow local storage, then try again.';
+      message.textContent = window.MUVYLocale?.t('Browser storage is unavailable. Allow local storage, then try again.');
     }
   });
 

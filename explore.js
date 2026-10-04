@@ -2,7 +2,7 @@
 const toast = document.getElementById('explore-toast');
 let toastTimer;
 function showToast(message) {
-  toast.textContent = message;
+  toast.textContent = window.MUVYLocale?.t(message) ?? message;
   toast.classList.add('is-visible');
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 3000);

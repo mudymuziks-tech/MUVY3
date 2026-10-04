@@ -5,7 +5,7 @@ let toastTimer;
 function showToast(message) {
   if (!toast) return;
 
-  toast.textContent = message;
+  toast.textContent = window.MUVYLocale?.t(message) ?? message;
   toast.classList.add('is-visible');
 
   window.clearTimeout(toastTimer);
@@ -74,6 +74,9 @@ async function identifyVideoFile(file) {
 
   const response = await fetch(`${apiBaseUrl.replace(/\/+$/, '')}/identify`, {
     method: 'POST',
+    headers: {
+      'Accept-Language': window.MUVYLocale?.getTMDBLanguage() || 'en-US',
+    },
     body: formData,
   });
 
@@ -307,9 +310,9 @@ function setAudioButtonListening(isListening) {
   }
 
   if (audioButtonLabel) {
-    audioButtonLabel.textContent = isListening
-      ? 'Stop audio recognition'
-      : 'Start audio recognition';
+    audioButtonLabel.textContent = window.MUVYLocale?.t(isListening
+      ? 'Stop listening'
+      : 'Start audio recognition');
   }
 }
 
@@ -359,7 +362,7 @@ const startAudioRecognition = async () => {
 
     if (audioStatus) {
       audioStatus.textContent =
-        'Audio recording is not supported in this browser.';
+        window.MUVYLocale?.t('Audio recording is not supported in this browser.');
     }
 
     return;
@@ -400,7 +403,7 @@ const startAudioRecognition = async () => {
 
       if (audioStatus) {
         audioStatus.textContent =
-          'Audio captured. Audio recognition will be connected when the MUVY audio fingerprint service is available.';
+          window.MUVYLocale?.t('Audio captured. Audio recognition will be connected when the MUVY audio fingerprint service is available.');
       }
     };
 
@@ -410,7 +413,7 @@ const startAudioRecognition = async () => {
 
     if (audioStatus) {
       audioStatus.textContent =
-        'Listening for up to 10 seconds. Play the movie audio now.';
+        window.MUVYLocale?.t('Listening for up to 10 seconds. Play the movie audio now.');
     }
 
     if (stopAudioButton) {
@@ -433,9 +436,9 @@ const startAudioRecognition = async () => {
 
     if (audioStatus) {
       audioStatus.textContent =
-        error.name === 'NotAllowedError'
+        window.MUVYLocale?.t(error.name === 'NotAllowedError'
           ? 'Microphone permission was not granted.'
-          : 'Could not access the microphone.';
+          : 'Could not access the microphone.');
     }
   }
 };
@@ -510,7 +513,7 @@ function showCaptureError(message) {
   }
 
   if (captureStatus) {
-    captureStatus.textContent = message;
+    captureStatus.textContent = window.MUVYLocale?.t(message) ?? message;
   }
 
   if (stopCaptureButton) {
@@ -647,15 +650,15 @@ document.getElementById('screen-record-option').addEventListener('click', async 
       stopCaptureStream();
       stopCaptureButton.hidden = true;
       identifyCaptureButton.hidden = false;
-      captureStatus.textContent = 'Screen clip captured. Movie identification is not connected yet.';
+      captureStatus.textContent = window.MUVYLocale?.t('Screen clip captured. Movie identification is not connected yet.');
     };
     captureStream.getVideoTracks()[0]?.addEventListener('ended', () => {
       if (recorder.state === 'recording') recorder.stop();
     }, { once: true });
     recorder.start(1000);
-    stopCaptureButton.querySelector('span').textContent = 'Stop recording';
+    stopCaptureButton.querySelector('span').textContent = window.MUVYLocale?.t('Stop capture');
     stopCaptureButton.hidden = false;
-    captureStatus.textContent = 'Recording your selected screen. Stop after 10 to 15 seconds.';
+    captureStatus.textContent = window.MUVYLocale?.t('Recording your selected screen. Stop after 10 to 15 seconds.');
     captureTimer = window.setTimeout(() => {
       if (recorder.state === 'recording') recorder.stop();
     }, 15000);
@@ -677,10 +680,10 @@ document.getElementById('back-camera-option').addEventListener('click', async ()
     showCaptureSession();
     captureVideo.srcObject = captureStream;
     await captureVideo.play();
-    stopCaptureButton.querySelector('span').textContent = 'Close camera';
+    stopCaptureButton.querySelector('span').textContent = window.MUVYLocale?.t('Close');
     stopCaptureButton.hidden = false;
     captureFrameButton.hidden = false;
-    captureStatus.textContent = 'Point the back camera at the movie, then capture a frame.';
+    captureStatus.textContent = window.MUVYLocale?.t('Point the back camera at the movie, then capture a frame.');
   } catch (error) {
     stopCaptureStream();
     showCaptureError(error.name === 'NotAllowedError'
@@ -698,7 +701,7 @@ stopCaptureButton.addEventListener('click', () => {
   stopCaptureStream();
   stopCaptureButton.hidden = true;
   captureFrameButton.hidden = true;
-  captureStatus.textContent = 'Camera closed.';
+  captureStatus.textContent = window.MUVYLocale?.t('Camera closed.');
 });
 
 captureFrameButton.addEventListener('click', () => {
@@ -713,9 +716,9 @@ captureFrameButton.addEventListener('click', () => {
     stopCaptureButton.hidden = true;
     captureFrameButton.hidden = true;
     identifyCaptureButton.hidden = false;
-    captureStatus.textContent = 'Frame captured. Movie identification is not connected yet.';
+    captureStatus.textContent = window.MUVYLocale?.t('Frame captured. Movie identification is not connected yet.');
   }, 'image/jpeg', .92);
 });
 identifyCaptureButton.addEventListener('click', () => {
-  if (captureBlob) captureStatus.textContent = 'Your capture is ready. Connect the MUVY identification service to identify it.';
+  if (captureBlob) captureStatus.textContent = window.MUVYLocale?.t('Your capture is ready. Connect the MUVY identification service to identify it.');
 });

@@ -39,6 +39,10 @@ DEFAULT_RELAXED_MARGIN = 3.0
 DEFAULT_RELAXED_TEMPORAL_SPAN_MS = 5000
 
 
+class FingerprintDatabaseError(RuntimeError):
+    """Raised when the fingerprint database cannot answer a match query."""
+
+
 def hamming_distance(a: int, b: int) -> int:
     """Return the number of differing bits between two hashes."""
     return bin(a ^ b).count("1")
@@ -124,17 +128,22 @@ class FingerprintDB:
         if not query_hashes:
             return []
 
-        response = (
-            supabase
-            .rpc(
-                "match_fingerprint_candidates",
-                {
-                    "query_hashes": query_hashes,
-                    "distance_threshold": distance_threshold,
-                },
+        try:
+            response = (
+                supabase
+                .rpc(
+                    "match_fingerprint_candidates",
+                    {
+                        "query_hashes": query_hashes,
+                        "distance_threshold": distance_threshold,
+                    },
+                )
+                .execute()
             )
-            .execute()
-        )
+        except Exception as exc:
+            raise FingerprintDatabaseError(
+                "Fingerprint database query failed."
+            ) from exc
 
         rows = response.data or []
 

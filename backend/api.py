@@ -1,17 +1,27 @@
 from __future__ import annotations
 
+import logging
 import os
 import tempfile
 from pathlib import Path
-from typing import Optional
+from typing import Literal, Optional
 
+import cv2
+from dotenv import load_dotenv
 from fastapi import FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from starlette.concurrency import run_in_threadpool
 from supabase import create_client
 
 from identify import identify_video
+from discovery.pipeline import DiscoveryOutcome, discover_image, discover_video
+from matcher.matcher import FingerprintDatabaseError
 from tmdb import TMDBError, get_movie_details
+
+load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------
@@ -25,6 +35,21 @@ if not SUPABASE_URL or not SUPABASE_KEY:
     raise RuntimeError(
         "SUPABASE_URL and SUPABASE_KEY must be set in the environment."
     )
+
+MAX_UPLOAD_SIZE_BYTES = int(
+    os.getenv("MAX_UPLOAD_SIZE_BYTES", str(100 * 1024 * 1024))
+)
+if MAX_UPLOAD_SIZE_BYTES <= 0:
+    raise RuntimeError("MAX_UPLOAD_SIZE_BYTES must be a positive integer.")
+
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "MUVY_ALLOWED_ORIGINS",
+        "https://mudymuziks-tech.github.io",
+    ).split(",")
+    if origin.strip()
+]
 
 supabase = create_client(
     SUPABASE_URL,
@@ -49,13 +74,11 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=(
-        r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$"
-        r"|^https://mudymuziks-tech\.github\.io$"
-    ),
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Accept-Language", "Content-Type"],
 )
 
 
@@ -77,22 +100,25 @@ class MovieResponse(BaseModel):
 
 
 class MatchResponse(BaseModel):
-    timestamp_seconds: float
-    confidence: float
-    margin: float
-    votes: int
-    frames: int
+    timestamp_seconds: Optional[float] = None
+    confidence: Optional[float] = None
+    margin: Optional[float] = None
+    votes: Optional[int] = None
+    frames: Optional[int] = None
 
 
 class IdentifySuccessResponse(BaseModel):
     matched: bool
+    status: Literal["verified"] = "verified"
     movie: MovieResponse
     match: MatchResponse
 
 
 class IdentifyFailureResponse(BaseModel):
     matched: bool
+    status: Literal["likely", "inconclusive"] = "inconclusive"
     message: str
+    candidate_title: Optional[str] = None
 
 
 # ---------------------------------------------------------
@@ -178,6 +204,44 @@ def localize_movie(movie_data: dict, language: str) -> dict:
             for field in localized_fields
         },
     }
+
+
+def save_verified_discovery(outcome: DiscoveryOutcome) -> Optional[dict]:
+    verification = outcome.verification
+    if outcome.status != "verified" or verification is None:
+        return None
+
+    match = verification.tmdb_match
+    movie_id = f"muvy-tmdb-{match.tmdb_id}"
+
+    try:
+        from app.services.movies import get_movie_by_tmdb_id, upsert_movie
+
+        existing = get_movie_by_tmdb_id(match.tmdb_id)
+        if existing:
+            return existing
+
+        tmdb_movie = match.tmdb_result
+        title = tmdb_movie.get("title") or tmdb_movie.get("original_title")
+        if not title:
+            raise ValueError("Verified TMDB movie has no title.")
+
+        return upsert_movie(
+            movie_id=movie_id,
+            tmdb_id=match.tmdb_id,
+            title=title,
+            release_date=tmdb_movie.get("release_date"),
+            poster_path=tmdb_movie.get("poster_path"),
+            backdrop_path=tmdb_movie.get("backdrop_path"),
+            overview=tmdb_movie.get("overview"),
+            runtime=tmdb_movie.get("runtime"),
+        )
+    except Exception as exc:
+        logger.warning("Could not save verified discovery to Supabase: %s", type(exc).__name__)
+        raise HTTPException(
+            status_code=503,
+            detail="The verified movie could not be saved. Please try again.",
+        ) from exc
 
 
 # ---------------------------------------------------------
@@ -311,7 +375,7 @@ async def identify(
             detail="The uploaded file must have a file extension.",
         )
 
-    allowed_extensions = {
+    video_extensions = {
         ".mp4",
         ".mov",
         ".mkv",
@@ -319,17 +383,20 @@ async def identify(
         ".webm",
         ".m4v",
     }
+    image_extensions = {".jpg", ".jpeg", ".png", ".webp"}
+    is_image = suffix in image_extensions
 
-    if suffix not in allowed_extensions:
+    if suffix not in video_extensions | image_extensions:
         raise HTTPException(
             status_code=415,
             detail=(
-                "Unsupported video format. "
-                "Supported formats: mp4, mov, mkv, avi, webm, m4v."
+                "Unsupported media format. Supported video formats: "
+                "mp4, mov, mkv, avi, webm, m4v; image formats: jpg, jpeg, png, webp."
             ),
         )
 
     temp_path = None
+    total_bytes = 0
 
     try:
 
@@ -350,21 +417,96 @@ async def identify(
                 if not chunk:
                     break
 
+                total_bytes += len(chunk)
+                if total_bytes > MAX_UPLOAD_SIZE_BYTES:
+                    raise HTTPException(
+                        status_code=413,
+                        detail="Uploaded video exceeds the configured size limit.",
+                    )
+
                 temp_file.write(chunk)
 
-        # Run the proven identification engine.
-        result = identify_video(
-            temp_path
-        )
-
-        if result is None:
-            return IdentifyFailureResponse(
-                matched=False,
-                message="No confident match found.",
+        if total_bytes == 0:
+            raise HTTPException(
+                status_code=400,
+                detail="The uploaded video is empty.",
             )
 
-        movie_data = get_movie(
-            result.movie_id
+        if is_image:
+            image = await run_in_threadpool(cv2.imread, temp_path)
+            if image is None:
+                raise HTTPException(
+                    status_code=400,
+                    detail="The uploaded image could not be decoded.",
+                )
+            result = None
+        else:
+            try:
+                result = await run_in_threadpool(identify_video, temp_path)
+            except FingerprintDatabaseError as exc:
+                logger.warning("Fingerprint service is unavailable.")
+                raise HTTPException(
+                    status_code=503,
+                    detail="Movie matching is temporarily unavailable. Please retry shortly.",
+                ) from exc
+            except (FileNotFoundError, cv2.error) as exc:
+                raise HTTPException(
+                    status_code=400,
+                    detail="The uploaded video could not be decoded.",
+                ) from exc
+
+        if result is None:
+            discovery: DiscoveryOutcome = await run_in_threadpool(
+                discover_image if is_image else discover_video,
+                temp_path,
+            )
+            if discovery.status != "verified":
+                verification = discovery.verification
+                title = (
+                    verification.tmdb_match.title
+                    if verification is not None
+                    else None
+                )
+                if discovery.status == "likely" and title:
+                    message = (
+                        f"MUVY found a likely match for {title}, but could not "
+                        "visually verify it. Try a clearer clip."
+                    )
+                else:
+                    message = "No confident match found. Try a clearer clip."
+                return IdentifyFailureResponse(
+                    matched=False,
+                    status=discovery.status,
+                    message=message,
+                    candidate_title=title,
+                )
+
+            movie_data = await run_in_threadpool(
+                save_verified_discovery,
+                discovery,
+            )
+            if movie_data is None:
+                raise HTTPException(
+                    status_code=503,
+                    detail="The verified movie could not be saved. Please try again.",
+                )
+            movie_data = await run_in_threadpool(
+                localize_movie,
+                movie_data,
+                language,
+            )
+            return IdentifySuccessResponse(
+                matched=True,
+                status="verified",
+                movie=movie_data,
+                match=MatchResponse(
+                    frames=discovery.verification.unique_frames,
+                ),
+            )
+
+        movie_data = await run_in_threadpool(
+            get_movie,
+            result.movie_id,
         )
 
         if movie_data is None:
@@ -376,7 +518,11 @@ async def identify(
                 ),
             )
 
-        movie_data = localize_movie(movie_data, language)
+        movie_data = await run_in_threadpool(
+            localize_movie,
+            movie_data,
+            language,
+        )
 
         return IdentifySuccessResponse(
             matched=True,
@@ -395,10 +541,11 @@ async def identify(
     except HTTPException:
         raise
 
-    except Exception as exc:
+    except Exception:
+        logger.exception("Video identification failed")
         raise HTTPException(
             status_code=500,
-            detail=f"Video identification failed: {exc}",
+            detail="Video identification failed. Please try again.",
         )
 
     finally:

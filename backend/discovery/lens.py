@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 
 import cv2
+import numpy as np
 import requests
 from dotenv import load_dotenv
 
@@ -104,6 +105,19 @@ def extract_frame(
 
     finally:
         capture.release()
+
+
+def discover_image(image_bytes: bytes) -> dict:
+    """Run Google Lens on an uploaded still image."""
+    image = cv2.imdecode(
+        np.frombuffer(image_bytes, dtype=np.uint8),
+        cv2.IMREAD_COLOR,
+    )
+    if image is None:
+        raise LensDiscoveryError("Uploaded image could not be decoded.")
+
+    image_id = upload_image(_encode_frame(image))
+    return search_lens(image_id, search_type="all")
 
 
 def upload_image(image_bytes: bytes) -> str:

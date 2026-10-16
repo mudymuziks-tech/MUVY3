@@ -2,15 +2,15 @@
 const toast = document.getElementById('toast');
 let toastTimer;
 
-window.MUVY_API_BASE_URL = window.MUVY_API_BASE_URL || 'http://localhost:8000';
-
 async function identifyVideoFile(file) {
   if (!file) throw new Error('No video file was provided.');
+  const apiBaseUrl = window.MUVY_API_BASE_URL;
+  if (!apiBaseUrl) throw new Error('Movie identification service is not configured.');
 
   const formData = new FormData();
   formData.append('file', file, file.name || 'muvy-video.webm');
 
-  const response = await fetch(`${window.MUVY_API_BASE_URL.replace(/\/+$/, '')}/identify`, {
+  const response = await fetch(`${apiBaseUrl.replace(/\/+$/, '')}/identify`, {
     method: 'POST',
     headers: {
       'Accept-Language': 'en-US',
@@ -103,10 +103,11 @@ const captureVideo = document.getElementById('capture-video');
 const capturePreview = document.querySelector('.capture-preview');
 const captureStatus = document.getElementById('capture-status');
 const stopCaptureButton = document.getElementById('stop-capture');
-const captureFrameButton = document.getElementById('capture-frame');
+const cameraRecordButton = document.getElementById('camera-record');
 const identifyCaptureButton = document.getElementById('identify-capture');
 let captureStream = null;
 let mediaRecorder = null;
+let captureTimer = null;
 let recordedChunks = [];
 let captureBlob = null;
 
@@ -122,11 +123,13 @@ function showCaptureError(message) {
   capturePreview.classList.remove('has-preview');
   captureStatus.textContent = window.MUVYLocale?.t(message) ?? message;
   stopCaptureButton.hidden = true;
-  captureFrameButton.hidden = true;
+  cameraRecordButton.hidden = true;
   identifyCaptureButton.hidden = true;
 }
 
 function stopCaptureStream() {
+  window.clearTimeout(captureTimer);
+  captureTimer = null;
   if (captureStream) captureStream.getTracks().forEach((track) => track.stop());
   captureStream = null;
   captureVideo.srcObject = null;
@@ -134,6 +137,8 @@ function stopCaptureStream() {
 }
 
 function resetCaptureDialog() {
+  window.clearTimeout(captureTimer);
+  captureTimer = null;
   if (mediaRecorder && mediaRecorder.state === 'recording') {
     mediaRecorder.onstop = null;
     mediaRecorder.stop();
@@ -146,8 +151,49 @@ function resetCaptureDialog() {
   captureLive.hidden = true;
   captureStatus.textContent = '';
   stopCaptureButton.hidden = true;
-  captureFrameButton.hidden = true;
+  cameraRecordButton.hidden = true;
   identifyCaptureButton.hidden = true;
+}
+
+function startCaptureRecording(statusMessage) {
+  if (!window.MediaRecorder) {
+    showCaptureError('Video recording is not supported in this browser.');
+    return;
+  }
+
+  recordedChunks = [];
+  captureBlob = null;
+  const mimeType = typeof MediaRecorder.isTypeSupported === 'function'
+    ? ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4']
+      .find((type) => MediaRecorder.isTypeSupported(type))
+    : undefined;
+  const recorder = new MediaRecorder(captureStream, mimeType ? { mimeType } : undefined);
+  mediaRecorder = recorder;
+  recorder.ondataavailable = (event) => {
+    if (event.data.size) recordedChunks.push(event.data);
+  };
+  recorder.onstop = () => {
+    if (mediaRecorder !== recorder) return;
+    window.clearTimeout(captureTimer);
+    captureTimer = null;
+    captureBlob = new Blob(recordedChunks, { type: recorder.mimeType || 'video/webm' });
+    stopCaptureStream();
+    stopCaptureButton.hidden = true;
+    cameraRecordButton.hidden = true;
+    identifyCaptureButton.hidden = false;
+    captureStatus.textContent = window.MUVYLocale?.t('Clip captured. It is ready to identify.');
+  };
+  captureStream.getVideoTracks()[0]?.addEventListener('ended', () => {
+    if (recorder.state === 'recording') recorder.stop();
+  }, { once: true });
+  recorder.start(1000);
+  stopCaptureButton.textContent = window.MUVYLocale?.t('Stop capture');
+  stopCaptureButton.hidden = false;
+  cameraRecordButton.hidden = true;
+  captureStatus.textContent = window.MUVYLocale?.t(statusMessage);
+  captureTimer = window.setTimeout(() => {
+    if (recorder.state === 'recording') recorder.stop();
+  }, 15000);
 }
 
 document.getElementById('camera-options-button').addEventListener('click', () => {
@@ -172,30 +218,7 @@ document.getElementById('screen-record-option').addEventListener('click', async 
     showCaptureSession();
     captureVideo.srcObject = captureStream;
     await captureVideo.play().catch(() => {});
-    recordedChunks = [];
-    captureBlob = null;
-    const mimeType = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm']
-      .find((type) => MediaRecorder.isTypeSupported(type));
-    const recorder = new MediaRecorder(captureStream, mimeType ? { mimeType } : undefined);
-    mediaRecorder = recorder;
-    recorder.ondataavailable = (event) => {
-      if (event.data.size) recordedChunks.push(event.data);
-    };
-    recorder.onstop = () => {
-      if (mediaRecorder !== recorder) return;
-      captureBlob = new Blob(recordedChunks, { type: recorder.mimeType || 'video/webm' });
-      stopCaptureStream();
-      stopCaptureButton.hidden = true;
-      identifyCaptureButton.hidden = false;
-      captureStatus.textContent = window.MUVYLocale?.t('Screen clip captured. It is ready to identify.');
-    };
-    captureStream.getVideoTracks()[0]?.addEventListener('ended', () => {
-      if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
-    }, { once: true });
-    recorder.start(1000);
-    stopCaptureButton.textContent = window.MUVYLocale?.t('Stop capture');
-    stopCaptureButton.hidden = false;
-    captureStatus.textContent = window.MUVYLocale?.t('Recording your selected screen. Stop when you have captured the scene.');
+    startCaptureRecording('Recording your selected screen. Stop when you have captured the scene.');
   } catch (error) {
     stopCaptureStream();
     showCaptureError(error.name === 'NotAllowedError'
@@ -220,8 +243,8 @@ document.getElementById('back-camera-option').addEventListener('click', async ()
     await captureVideo.play();
     stopCaptureButton.textContent = window.MUVYLocale?.t('Close');
     stopCaptureButton.hidden = false;
-    captureFrameButton.hidden = false;
-    captureStatus.textContent = window.MUVYLocale?.t('Point the back camera at the movie, then capture a frame.');
+    cameraRecordButton.hidden = false;
+    captureStatus.textContent = window.MUVYLocale?.t('Point the back camera at the movie, then record a short clip.');
   } catch (error) {
     stopCaptureStream();
     showCaptureError(error.name === 'NotAllowedError'
@@ -237,24 +260,12 @@ stopCaptureButton.addEventListener('click', () => {
   }
   stopCaptureStream();
   stopCaptureButton.hidden = true;
-  captureFrameButton.hidden = true;
+  cameraRecordButton.hidden = true;
   captureStatus.textContent = window.MUVYLocale?.t('Camera closed.');
 });
 
-captureFrameButton.addEventListener('click', () => {
-  if (!captureVideo.videoWidth || !captureVideo.videoHeight) return;
-  const canvas = document.createElement('canvas');
-  canvas.width = captureVideo.videoWidth;
-  canvas.height = captureVideo.videoHeight;
-  canvas.getContext('2d').drawImage(captureVideo, 0, 0);
-  canvas.toBlob((blob) => {
-    captureBlob = blob;
-    stopCaptureStream();
-    stopCaptureButton.hidden = true;
-    captureFrameButton.hidden = true;
-    identifyCaptureButton.hidden = false;
-    captureStatus.textContent = window.MUVYLocale?.t('Frame captured. It is ready to identify.');
-  }, 'image/jpeg', .92);
+cameraRecordButton.addEventListener('click', () => {
+  startCaptureRecording('Recording from the back camera. Keep the movie in frame for up to 15 seconds.');
 });
 
 identifyCaptureButton.addEventListener('click', async () => {
@@ -262,7 +273,8 @@ identifyCaptureButton.addEventListener('click', async () => {
 
   try {
     captureStatus.textContent = 'Sending your clip to MUVY for identification...';
-    const file = new File([captureBlob], 'muvy-capture.webm', { type: captureBlob.type || 'video/webm' });
+    const extension = captureBlob.type.includes('mp4') ? 'mp4' : 'webm';
+    const file = new File([captureBlob], `muvy-capture.${extension}`, { type: captureBlob.type || 'video/webm' });
     const result = await identifyVideoFile(file);
 
     if (result?.matched && result?.movie?.title) {

@@ -39,6 +39,7 @@ def stub_scoring(monkeypatch):
         year_score=20.0,
         visual_score=0.0,
         images_checked=4,
+        visual_comparisons=0,
         visual_matches=0,
     ):
         monkeypatch.setattr(
@@ -68,23 +69,52 @@ def stub_scoring(monkeypatch):
                 visual_score,
                 images_checked,
                 visual_matches,
+                visual_comparisons,
             ),
         )
 
     return configure
 
 
-def test_strong_evidence_without_visual_match_uses_fallback(
+def test_visual_mismatch_never_counts_as_verified(
     stub_scoring,
 ):
-    stub_scoring()
+    stub_scoring(images_checked=4, visual_comparisons=4)
     _, match = make_match()
 
     result = verifier.verify_candidate("unused.mp4", match)
 
-    assert result.verified is True
+    assert result.verified is False
+    assert result.status == "inconclusive"
     assert result.visual_matches == 0
-    assert "visual corroboration was unavailable" in result.reason
+    assert "did not corroborate" in result.reason
+
+
+def test_strong_evidence_without_visual_images_is_only_likely(
+    stub_scoring,
+):
+    stub_scoring(images_checked=0)
+    _, match = make_match()
+
+    result = verifier.verify_candidate("unused.mp4", match)
+
+    assert result.verified is False
+    assert result.status == "likely"
+    assert "not verified" in result.reason
+
+
+def test_failed_visual_download_is_likely_not_a_visual_mismatch(
+    stub_scoring,
+):
+    stub_scoring(images_checked=4, visual_comparisons=0)
+    _, match = make_match()
+
+    result = verifier.verify_candidate("unused.mp4", match)
+
+    assert result.verified is False
+    assert result.status == "likely"
+    assert result.images_checked == 4
+    assert result.visual_comparisons == 0
 
 
 def test_visual_match_can_support_candidate(stub_scoring):
@@ -245,9 +275,10 @@ def test_visual_similarity_uses_nearby_frames_for_known_clip(monkeypatch):
     monkeypatch.setattr(verifier, "_phash_from_image", fake_phash)
     monkeypatch.setattr(verifier, "_extract_frame", fake_extract)
 
-    matched, score = verifier._visual_similarity(str(clip_path), evidence)
+    matched, score, compared = verifier._visual_similarity(str(clip_path), evidence)
 
     assert matched is True
+    assert compared is True
     assert score > 0.0
 
 
@@ -274,7 +305,8 @@ def test_visual_similarity_rejects_unknown_clip(monkeypatch):
         lambda *_args, **_kwargs: b"other-frame",
     )
 
-    matched, score = verifier._visual_similarity(str(clip_path), evidence)
+    matched, score, compared = verifier._visual_similarity(str(clip_path), evidence)
 
     assert matched is False
+    assert compared is True
     assert score == 0.0

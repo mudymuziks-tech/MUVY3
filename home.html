@@ -73,13 +73,13 @@
           </button>
           <button class="recognize-action" type="button" data-picker="clip-picker">
             <span class="action-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="action-title">Upload Clip</span><span class="action-caption">Video or image</span>
+            <span class="action-title">Upload</span><span class="action-caption">Video or screenshot</span>
           </button>
         </div>
         <button class="recognize-orb" type="button" aria-label="Listen to identify a movie" data-message="Audio recognition will be available soon.">
           <span class="recognize-orb-core" aria-hidden="true"><svg viewBox="0 -960 960 960" focusable="false"><path d="M395-435q-35-35-35-85v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q0 50-35 85t-85 35Zm85-205Zm-40 520v-123q-104-14-172-93t-68-184h80q0 83 58.5 141.5T480-320q83 0 141.5-58.5T680-520h80q0 105-68 184t-172 93v123h-80Z"/></svg></span>
         </button>
-        <input class="visually-hidden" id="clip-picker" type="file" accept="video/*,image/*">
+        <input class="visually-hidden" id="clip-picker" type="file" accept="video/mp4,video/quicktime,video/x-matroska,video/x-msvideo,video/webm,video/x-m4v,image/jpeg,image/png,image/webp">
       </section>
 
       <section class="movie-section" id="for-you" aria-labelledby="for-you-title">
@@ -194,13 +194,14 @@
           <p class="capture-status" id="capture-status" role="status" aria-live="polite"></p>
           <div class="capture-controls">
             <button class="capture-secondary" id="stop-capture" type="button" hidden>Stop capture</button>
-            <button class="capture-secondary" id="capture-frame" type="button" hidden>Capture frame</button>
+            <button class="capture-secondary" id="camera-record" type="button" hidden>Record clip</button>
             <button class="capture-primary" id="identify-capture" type="button" hidden>Identify clip</button>
           </div>
         </div>
       </div>
     </dialog>
   </div>
+  <script src="api-config.js" defer></script>
   <script src="i18n.js" defer></script>
   <script src="auth.js" defer></script>
   <script src="home.js" defer></script>

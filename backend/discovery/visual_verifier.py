@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 from urllib.parse import parse_qsl, urlparse
 
 import cv2
@@ -18,6 +19,7 @@ class VerificationResult:
     candidate: MovieCandidate
     tmdb_match: TMDBMatch
 
+    status: Literal["verified", "likely", "inconclusive"]
     verified: bool
     score: float
 
@@ -30,6 +32,7 @@ class VerificationResult:
     unique_sources: int
     unique_links: int
     images_checked: int
+    visual_comparisons: int
     visual_matches: int
 
     reason: str
@@ -425,6 +428,13 @@ def _extract_frame(
     if not path.exists():
         return None
 
+    if path.suffix.casefold() in {".jpg", ".jpeg", ".png", ".webp"}:
+        image = cv2.imread(str(path), cv2.IMREAD_COLOR)
+        if image is None:
+            return None
+        success, encoded = cv2.imencode(".jpg", image)
+        return encoded.tobytes() if success else None
+
     try:
         timestamp = float(timestamp_ms)
     except (TypeError, ValueError, OverflowError):
@@ -470,7 +480,7 @@ def _extract_frame(
 def _visual_similarity(
     video_path: str,
     evidence: LensEvidence,
-) -> tuple[bool, float]:
+) -> tuple[bool, float, bool]:
     """
     Compare one Lens image against the corresponding video frame.
 
@@ -489,19 +499,19 @@ def _visual_similarity(
     )
 
     if not image_url:
-        return False, 0.0
+        return False, 0.0, False
 
     reference_bytes = _download_image(image_url)
 
     if not reference_bytes:
-        return False, 0.0
+        return False, 0.0, False
 
     reference_hash = _phash_from_image(
         reference_bytes
     )
 
     if reference_hash is None:
-        return False, 0.0
+        return False, 0.0, False
 
     candidate_timestamps = [
         evidence.frame_timestamp_ms,
@@ -546,24 +556,25 @@ def _visual_similarity(
             best_similarity = max(0.0, similarity)
 
     if best_distance is None:
-        return False, 0.0
+        return False, 0.0, False
 
     if best_distance <= VISUAL_HAMMING_THRESHOLD:
-        return True, best_similarity
+        return True, best_similarity, True
 
-    return False, 0.0
+    return False, 0.0, True
 
 
 def _calculate_visual_score(
     video_path: str,
     candidate: MovieCandidate,
-) -> tuple[float, int, int]:
+) -> tuple[float, int, int, int]:
     """
     Return:
 
         visual_score
         images_checked
         visual_matches
+        visual_comparisons
 
     Visual evidence is capped so that it cannot overpower strong
     evidence-diversity/title/year signals.
@@ -573,6 +584,7 @@ def _calculate_visual_score(
 
     images_checked = 0
     visual_matches = 0
+    visual_comparisons = 0
     similarity_total = 0.0
 
     # Avoid downloading the same image repeatedly.
@@ -592,19 +604,20 @@ def _calculate_visual_score(
 
         seen_images.add(image_url)
 
-        matched, similarity = _visual_similarity(
+        matched, similarity, compared = _visual_similarity(
             video_path,
             item,
         )
 
         images_checked += 1
+        visual_comparisons += int(compared)
 
         if matched:
             visual_matches += 1
             similarity_total += similarity
 
     if visual_matches == 0:
-        return 0.0, images_checked, 0
+        return 0.0, images_checked, 0, visual_comparisons
 
     average_similarity = (
         similarity_total / visual_matches
@@ -621,6 +634,7 @@ def _calculate_visual_score(
         visual_score,
         images_checked,
         visual_matches,
+        visual_comparisons,
     )
 
 
@@ -631,6 +645,8 @@ def _calculate_visual_score(
 def verify_candidate(
     video_path: str,
     tmdb_match: TMDBMatch,
+    *,
+    require_multiple_frames: bool = True,
 ) -> VerificationResult:
     candidate = tmdb_match.candidate
 
@@ -652,7 +668,7 @@ def verify_candidate(
         tmdb_match,
     )
 
-    visual_score, images_checked, visual_matches = (
+    visual_score, images_checked, visual_matches, visual_comparisons = (
         _calculate_visual_score(
             video_path,
             candidate,
@@ -670,10 +686,12 @@ def verify_candidate(
     # Hard evidence requirements
     # ---------------------------------------------------------
 
-    if frames < MIN_UNIQUE_FRAMES:
+    minimum_frames = MIN_UNIQUE_FRAMES if require_multiple_frames else 1
+    if frames < minimum_frames:
         return VerificationResult(
             candidate=candidate,
             tmdb_match=tmdb_match,
+            status="inconclusive",
             verified=False,
             score=total_score,
             evidence_score=evidence_score,
@@ -684,6 +702,7 @@ def verify_candidate(
             unique_sources=sources,
             unique_links=links,
             images_checked=images_checked,
+            visual_comparisons=visual_comparisons,
             visual_matches=visual_matches,
             reason=(
                 "Insufficient independent clip-frame evidence."
@@ -694,6 +713,7 @@ def verify_candidate(
         return VerificationResult(
             candidate=candidate,
             tmdb_match=tmdb_match,
+            status="inconclusive",
             verified=False,
             score=total_score,
             evidence_score=evidence_score,
@@ -704,6 +724,7 @@ def verify_candidate(
             unique_sources=sources,
             unique_links=links,
             images_checked=images_checked,
+            visual_comparisons=visual_comparisons,
             visual_matches=visual_matches,
             reason=(
                 "Evidence does not come from enough "
@@ -715,6 +736,7 @@ def verify_candidate(
         return VerificationResult(
             candidate=candidate,
             tmdb_match=tmdb_match,
+            status="inconclusive",
             verified=False,
             score=total_score,
             evidence_score=evidence_score,
@@ -725,6 +747,7 @@ def verify_candidate(
             unique_sources=sources,
             unique_links=links,
             images_checked=images_checked,
+            visual_comparisons=visual_comparisons,
             visual_matches=visual_matches,
             reason=(
                 "Not enough independent result links."
@@ -736,6 +759,7 @@ def verify_candidate(
         return VerificationResult(
             candidate=candidate,
             tmdb_match=tmdb_match,
+            status="inconclusive",
             verified=False,
             score=total_score,
             evidence_score=evidence_score,
@@ -746,6 +770,7 @@ def verify_candidate(
             unique_sources=sources,
             unique_links=links,
             images_checked=images_checked,
+            visual_comparisons=visual_comparisons,
             visual_matches=visual_matches,
             reason=(
                 "Lens candidate title does not sufficiently "
@@ -757,6 +782,7 @@ def verify_candidate(
         return VerificationResult(
             candidate=candidate,
             tmdb_match=tmdb_match,
+            status="inconclusive",
             verified=False,
             score=total_score,
             evidence_score=evidence_score,
@@ -767,6 +793,7 @@ def verify_candidate(
             unique_sources=sources,
             unique_links=links,
             images_checked=images_checked,
+            visual_comparisons=visual_comparisons,
             visual_matches=visual_matches,
             reason=(
                 "Lens year conflicts with the TMDB release year."
@@ -774,11 +801,8 @@ def verify_candidate(
         )
 
     
-    # A visual match is ideal. If none exists, require a much
-    # stronger combination of independent evidence.
-    visual_corroborated = visual_matches >= 1
-
-    strong_independent_fallback = (
+    visual_corroborated = visual_matches > 0
+    strong_independent_evidence = (
         frames >= 3
         and sources >= 3
         and links >= 4
@@ -790,23 +814,41 @@ def verify_candidate(
     verified = (
         evidence_score >= MIN_EVIDENCE_SCORE
         and total_score >= MIN_VERIFICATION_SCORE
-        and (
-            visual_corroborated
-            or strong_independent_fallback
-        )
+        and visual_corroborated
     )
 
-    if verified and visual_corroborated:
+    likely = (
+        not verified
+        and visual_comparisons == 0
+        and strong_independent_evidence
+        and evidence_score >= MIN_EVIDENCE_SCORE
+        and total_score >= MIN_VERIFICATION_SCORE
+    )
+    status: Literal["verified", "likely", "inconclusive"] = (
+        "verified" if verified else "likely" if likely else "inconclusive"
+    )
+
+    if status == "verified":
         reason = (
             "Verified using independent Lens evidence, "
             "TMDB title/year consistency, and visual "
             "corroboration."
         )
-    elif verified:
+    elif status == "likely":
         reason = (
-            "Verified using strong independent Lens evidence "
-            "and exact TMDB title/year agreement; "
-            "visual corroboration was unavailable."
+            "Strong independent Lens evidence and exact TMDB "
+            "title/year agreement suggest this match, but visual "
+            "evidence was unavailable, so it is not verified."
+        )
+    elif visual_comparisons > 0 and not visual_corroborated:
+        reason = (
+            "Visual evidence was checked but did not corroborate "
+            "the candidate; the result is inconclusive."
+        )
+    elif images_checked > 0:
+        reason = (
+            "Visual evidence could not be compared with the clip; "
+            "the result is not verified."
         )
     else:
         reason = (
@@ -817,6 +859,7 @@ def verify_candidate(
     return VerificationResult(
         candidate=candidate,
         tmdb_match=tmdb_match,
+        status=status,
         verified=verified,
         score=total_score,
         evidence_score=evidence_score,
@@ -827,6 +870,7 @@ def verify_candidate(
         unique_sources=sources,
         unique_links=links,
         images_checked=images_checked,
+        visual_comparisons=visual_comparisons,
         visual_matches=visual_matches,
         reason=reason,
     )
@@ -835,6 +879,8 @@ def verify_candidate(
 def verify_candidates(
     video_path: str,
     tmdb_matches: list[TMDBMatch],
+    *,
+    require_multiple_frames: bool = True,
 ) -> list[VerificationResult]:
     results = []
 
@@ -842,6 +888,7 @@ def verify_candidates(
         result = verify_candidate(
             video_path,
             match,
+            require_multiple_frames=require_multiple_frames,
         )
 
         results.append(result)
@@ -849,6 +896,7 @@ def verify_candidates(
     results.sort(
         key=lambda result: (
             result.verified,
+            result.status == "likely",
             result.score,
             result.evidence_score,
             result.title_score,

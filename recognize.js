@@ -2,6 +2,8 @@
 const toast = document.getElementById('recognize-toast');
 let toastTimer;
 
+window.MUVY_API_BASE_URL = window.MUVY_API_BASE_URL || 'http://localhost:8000';
+
 function showToast(message) {
   if (!toast) return;
 

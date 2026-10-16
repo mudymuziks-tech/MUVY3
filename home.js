@@ -2,6 +2,31 @@
 const toast = document.getElementById('toast');
 let toastTimer;
 
+window.MUVY_API_BASE_URL = window.MUVY_API_BASE_URL || 'http://localhost:8000';
+
+async function identifyVideoFile(file) {
+  if (!file) throw new Error('No video file was provided.');
+
+  const formData = new FormData();
+  formData.append('file', file, file.name || 'muvy-video.webm');
+
+  const response = await fetch(`${window.MUVY_API_BASE_URL.replace(/\/+$/, '')}/identify`, {
+    method: 'POST',
+    headers: {
+      'Accept-Language': 'en-US',
+    },
+    body: formData,
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(typeof data?.detail === 'string' ? data.detail : `MUVY API request failed (${response.status}).`);
+  }
+
+  return data;
+}
+
 function showToast(message) {
   toast.textContent = window.MUVYLocale?.t(message) ?? message;
   toast.classList.add('is-visible');
@@ -19,9 +44,23 @@ document.querySelectorAll('[data-picker]').forEach((button) => {
 });
 
 document.querySelectorAll('input[type="file"]').forEach((input) => {
-  input.addEventListener('change', () => {
+  input.addEventListener('change', async () => {
     const file = input.files && input.files[0];
-    if (file) showToast(`${file.name} selected. Movie recognition is not connected yet.`);
+    if (!file) return;
+
+    try {
+      showToast(`Uploading ${file.name}...`);
+      const result = await identifyVideoFile(file);
+
+      if (result?.matched && result?.movie?.title) {
+        showToast(`Identified: ${result.movie.title}`);
+      } else {
+        showToast(result?.message || 'No confident match found.');
+      }
+    } catch (error) {
+      console.error('MUVY identification failed:', error);
+      showToast(error.message || 'Movie identification failed.');
+    }
   });
 });
 
@@ -218,7 +257,24 @@ captureFrameButton.addEventListener('click', () => {
   }, 'image/jpeg', .92);
 });
 
-identifyCaptureButton.addEventListener('click', () => {
+identifyCaptureButton.addEventListener('click', async () => {
   if (!captureBlob) return;
-  captureStatus.textContent = window.MUVYLocale?.t('The capture is ready, but movie identification is not connected yet.');
+
+  try {
+    captureStatus.textContent = 'Sending your clip to MUVY for identification...';
+    const file = new File([captureBlob], 'muvy-capture.webm', { type: captureBlob.type || 'video/webm' });
+    const result = await identifyVideoFile(file);
+
+    if (result?.matched && result?.movie?.title) {
+      showToast(`Identified: ${result.movie.title}`);
+      captureStatus.textContent = `Identified: ${result.movie.title}`;
+    } else {
+      showToast(result?.message || 'No confident match found.');
+      captureStatus.textContent = result?.message || 'No confident match found.';
+    }
+  } catch (error) {
+    console.error('Capture identification failed:', error);
+    showToast(error.message || 'Movie identification failed.');
+    captureStatus.textContent = error.message || 'Movie identification failed.';
+  }
 });

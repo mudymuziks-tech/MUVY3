@@ -1,9 +1,10 @@
-// Temporary browser-only sign-in for the static MUVY prototype. Passwords are never stored.
+// AUTH: temporary browser-only sign-in for the static prototype; passwords are never stored.
 (() => {
   const sessionKey = 'muvyLocalSession';
   const sessionDurationMs = 8 * 60 * 60 * 1000;
   const protectedPages = new Set(['home.html', 'explore.html', 'recognize.html', 'watchlist.html', 'genres.html', 'settings.html', 'profile.html']);
 
+  // STORAGE: prefer local storage, with session storage as a fallback.
   function getStore() {
     try {
       localStorage.setItem('__muvy_storage_check__', '1');
@@ -14,6 +15,7 @@
     }
   }
 
+  // SESSION: read, expire, and clear the signed-in account details.
   const store = getStore();
   function getSession() {
     try {
@@ -34,6 +36,7 @@
     try { sessionStorage.removeItem('muvyActiveNav'); } catch {}
   }
 
+  // ACCESS CONTROL: process logout and protect app pages from signed-out visits.
   const url = new URL(window.location.href);
   if (url.searchParams.has('logout')) {
     clearSession();
@@ -48,7 +51,12 @@
   }
 
   window.MUVYAuth = { getSession, clearSession };
+  const session = getSession();
+  document.querySelectorAll('[data-premium-upsell]').forEach((upsell) => {
+    upsell.hidden = session?.isPremium === true;
+  });
 
+  // LOGIN AND SIGN-UP FORM: switch modes and update the matching fields and copy.
   const form = document.getElementById('auth-form');
   if (!form) return;
 
@@ -75,32 +83,34 @@
     passwordInput.autocomplete = signingUp ? 'new-password' : 'current-password';
     confirmPasswordInput.autocomplete = 'new-password';
     confirmPasswordInput.setCustomValidity('');
-    title.textContent = signingUp ? 'Make yourself at home.' : 'Welcome back.';
-    description.textContent = signingUp
+    title.textContent = window.MUVYLocale?.t(signingUp ? 'Make yourself at home.' : 'Welcome back.');
+    description.textContent = window.MUVYLocale?.t(signingUp
       ? 'Create an account and keep every discovery close.'
-      : 'Log in to continue discovering what to watch.';
-    submit.textContent = signingUp ? 'Create account' : 'Log in';
+      : 'Log in to continue discovering what to watch.');
+    submit.textContent = window.MUVYLocale?.t(signingUp ? 'Create account' : 'Log in');
     message.textContent = '';
     tabs.forEach((tab) => {
       const active = tab.dataset.mode === mode;
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-pressed', String(active));
     });
-    document.title = signingUp ? 'Sign up for MUVY' : 'Log in to MUVY';
+    document.title = window.MUVYLocale?.t(signingUp ? 'Sign up for MUVY' : 'Log in to MUVY');
   }
 
   tabs.forEach((tab) => tab.addEventListener('click', () => setMode(tab.dataset.mode)));
+  // SIGN-UP VALIDATION: confirm password is required only in account creation mode.
   function validatePasswordConfirmation() {
     if (mode !== 'signup' || !confirmPasswordInput.value) {
       confirmPasswordInput.setCustomValidity('');
       return;
     }
     confirmPasswordInput.setCustomValidity(
-      passwordInput.value === confirmPasswordInput.value ? '' : 'Passwords do not match.'
+      passwordInput.value === confirmPasswordInput.value ? '' : window.MUVYLocale?.t('Passwords do not match.')
     );
   }
   passwordInput.addEventListener('input', validatePasswordConfirmation);
   confirmPasswordInput.addEventListener('input', validatePasswordConfirmation);
+  // FORM SUBMISSION: validate credentials, create the temporary session, then open Home.
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     validatePasswordConfirmation();
@@ -118,10 +128,10 @@
     const session = { name, email, expiresAt: Date.now() + sessionDurationMs };
     try {
       store.setItem(sessionKey, JSON.stringify(session));
-      message.textContent = 'Signed in on this device. Opening MUVY…';
+      message.textContent = window.MUVYLocale?.t('Signed in on this device. Opening MUVY…');
       window.location.assign('home.html');
     } catch {
-      message.textContent = 'Browser storage is unavailable. Allow local storage, then try again.';
+      message.textContent = window.MUVYLocale?.t('Browser storage is unavailable. Allow local storage, then try again.');
     }
   });
 

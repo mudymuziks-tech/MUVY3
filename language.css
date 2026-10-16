@@ -1,0 +1,26 @@
+.language-body { min-width: 320px; min-height: 100vh; background: #070d18; color: #f4f6fa; }
+.language-shell { width: min(100%, 760px); min-height: 100svh; margin: 0 auto; padding: 88px 22px 36px; }
+.language-header { position: fixed; z-index: 10; top: 0; left: 50%; display: flex; width: min(100%,760px); min-height: 64px; align-items: center; gap: 15px; padding: 0 18px; border-bottom: 1px solid rgba(207,221,242,.08); background: rgba(7,13,24,.78); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); transform: translateX(-50%); }
+.language-header h1 { margin: 0; color: #f4f6fa; font-size: 1rem; font-weight: 700; }
+.language-content h2 { margin: 0 0 7px; color: #f4f6fa; font-size: 1.35rem; }
+.language-content > p { margin: 0 0 22px; color: #aeb8c8; font-size: .86rem; }
+.language-list { display: grid; gap: 8px; }
+.language-choice { display: grid; min-height: 62px; grid-template-columns: minmax(0,1fr) minmax(0,1fr) 24px; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid rgba(193,208,231,.12); border-radius: 10px; background: rgba(17,27,43,.68); color: #e8ecf3; font: inherit; text-align: left; cursor: pointer; }
+.language-choice[aria-pressed="true"] { border-color: rgba(166,107,255,.55); background: rgba(112,57,201,.22); }
+.language-name { font-size: .9rem; font-weight: 650; }
+.language-native { color: #9eaabd; font-size: .78rem; }
+.language-check { color: #c69aff; font-size: 1.1rem; opacity: 0; }
+.language-choice[aria-pressed="true"] .language-check { opacity: 1; }
+.language-choice:focus-visible { outline: 2px solid #c4a2ff; outline-offset: 2px; }
+html[data-theme="light"] .language-body { background: #f3f0e9 !important; color: #282638 !important; }
+html[data-theme="light"] .language-header { border-color: rgba(42,39,58,.12); background: rgba(250,248,243,.9); }
+html[data-theme="light"] .language-header h1, html[data-theme="light"] .language-content h2 { color: #282638; }
+html[data-theme="light"] .language-content > p, html[data-theme="light"] .language-native { color: #686778; }
+html[data-theme="light"] .language-choice { border-color: rgba(45,42,59,.14); background: #e7e3db; color: #282638; }
+html[data-theme="light"] .language-choice[aria-pressed="true"] { border-color: rgba(114,64,203,.4); background: #ddd2ee; }
+@media (min-width: 760px) {
+  .language-shell { padding: 112px 30px 48px; }
+  .language-header { min-height: 72px; padding-inline: 24px; }
+  .language-list { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+  .language-choice { min-height: 70px; }
+}

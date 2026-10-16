@@ -18,7 +18,10 @@ class TMDBError(Exception):
     """Raised when a TMDB request fails."""
 
 
-def get_movie_details(tmdb_id: int) -> Optional[dict]:
+def get_movie_details(
+    tmdb_id: int,
+    language: str = "en-US",
+) -> Optional[dict]:
     """
     Fetch full movie details from TMDB using a movie ID.
 
@@ -40,7 +43,7 @@ def get_movie_details(tmdb_id: int) -> Optional[dict]:
             url,
             params={
                 "api_key": TMDB_API_KEY,
-                "language": "en-US",
+                "language": language,
             },
             timeout=10,
         )

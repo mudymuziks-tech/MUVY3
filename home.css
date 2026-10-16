@@ -573,7 +573,7 @@ body.home-body {
       radial-gradient(ellipse at 0% 100%, rgba(56, 20, 137, .22), transparent 35%),
       #070d20;
   }
-  .app-shell { width: min(100%, 1600px); padding: 158px 36px 70px 194px; }
+  .app-shell { width: min(100%, 1600px); padding: 158px 36px 70px 236px; }
   .app-header {
     top: 0; left: 50%; width: min(calc(100% - 64px), 1600px); min-height: 72px;
     justify-content: flex-start; gap: 17px; padding: 0 18px;
@@ -602,14 +602,17 @@ body.home-body {
   .search-row button { display: none; }
   .bottom-nav {
     position: fixed; z-index: 18; top: 96px; right: auto; bottom: auto;
-    left: max(22px, calc((100% - 1600px) / 2 + 22px)); display: flex; width: 146px;
+    left: max(22px, calc((100% - 1600px) / 2 + 22px)); display: flex; width: 188px;
     height: calc(100svh - 120px); max-height: 820px; flex-direction: column; align-items: stretch;
     justify-content: flex-start; gap: 7px; margin: 0; padding: 16px 10px;
+    overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
     border: 1px solid rgba(120,144,201,.16); border-radius: 17px;
     background: linear-gradient(180deg, rgba(8,17,41,.94), rgba(7,13,31,.9));
     box-shadow: 0 20px 50px rgba(0,0,0,.2); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
   }
   .sidebar-wordmark { display: block; margin: 0 6px 14px; color: #fff; font-size: 1.47rem; font-weight: 800; letter-spacing: -.07em; text-decoration: none; }
+  .bottom-nav::-webkit-scrollbar { display: none; }
+  .bottom-nav > * { flex-shrink: 0; }
   .sidebar-wordmark span { color: #9c68ff; }
   .nav-item {
     display: flex; width: 100%; min-width: 0; min-height: 41px; flex-direction: row; justify-content: flex-start;
@@ -619,7 +622,7 @@ body.home-body {
   .nav-item.is-active { background: linear-gradient(110deg,#6336d5,#4825a9); color: #fff; }
   .nav-item.is-active img { opacity: 1; filter: brightness(0) invert(1); }
   .sidebar-discover {
-    display: grid; gap: 8px; margin-top: auto; padding: 13px 11px;
+    display: grid; gap: 8px; flex-shrink: 0; margin-top: auto; padding: 13px 11px;
     border: 1px solid rgba(155,120,255,.12); border-radius: 11px;
     background: linear-gradient(145deg,rgba(79,45,173,.24),rgba(24,20,58,.62)); color: #f1edff; text-decoration: none;
   }
@@ -677,7 +680,7 @@ body.home-body {
   .poster-art { aspect-ratio: .7; border-radius: 8px; }
   .movie-card { gap: 5px; }
   .movie-title { font-size: .66rem; }
-  .toast { bottom: 24px; left: 194px; }
+  .toast { bottom: 24px; left: 236px; }
 }
 
 @media (min-width: 1000px) and (max-height: 680px) {
@@ -693,8 +696,8 @@ body.home-body {
 }
 
 @media (min-width: 1000px) and (max-width: 1199px) {
-  .app-shell { padding-left: 184px; padding-right: 24px; }
-  .bottom-nav { width: 140px; }
+  .app-shell { padding-left: 226px; padding-right: 24px; }
+  .bottom-nav { width: 188px; }
   .search-row, .search-row[hidden] { width: min(100%,620px); flex-basis: 400px; margin-right: 12px; }
   .recognize-section { grid-template-columns: minmax(0,1fr) 100px; padding: 17px; }
   .recognize-orb { width: 94px; height: 94px; }
@@ -703,5 +706,11 @@ body.home-body {
   .recognize-actions { gap: 8px; }
   .recognize-action { grid-template-columns: 30px minmax(0,1fr) 12px; gap: 3px 8px; padding: 9px; }
   .action-icon { width: 30px; height: 30px; }
+}
+
+/* Keep the desktop recognition-card chevron readable and decorative inside its button. */
+@media (min-width: 1000px) {
+  .recognize-action::after { content: "\203A"; font-size: 1.35rem; line-height: 1; pointer-events: none; }
+  .sidebar-theme-toggle { border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 }
 

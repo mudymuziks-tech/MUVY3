@@ -1,9 +1,9 @@
-// Home interactions: feedback, uploads, navigation state, search, and screen or camera capture.
+// HOME PAGE: shared toast and action feedback.
 const toast = document.getElementById('toast');
 let toastTimer;
 
 function showToast(message) {
-  toast.textContent = message;
+  toast.textContent = window.MUVYLocale?.t(message) ?? message;
   toast.classList.add('is-visible');
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 3000);
@@ -13,6 +13,7 @@ document.querySelectorAll('[data-message]').forEach((button) => {
   button.addEventListener('click', () => showToast(button.dataset.message));
 });
 
+// HOME PAGE: open file pickers and report selected uploads.
 document.querySelectorAll('[data-picker]').forEach((button) => {
   button.addEventListener('click', () => document.getElementById(button.dataset.picker).click());
 });
@@ -24,6 +25,7 @@ document.querySelectorAll('input[type="file"]').forEach((input) => {
   });
 });
 
+// HOME PAGE: movie card placeholder actions.
 document.querySelectorAll('.movie-card').forEach((card) => {
   card.addEventListener('click', (event) => {
     event.preventDefault();
@@ -31,6 +33,7 @@ document.querySelectorAll('.movie-card').forEach((card) => {
   });
 });
 
+// HOME PAGE: expandable movie search and account-based greeting.
 const searchToggle = document.getElementById('search-toggle');
 const searchRow = document.getElementById('search-row');
 const searchInput = document.getElementById('movie-search');
@@ -51,8 +54,9 @@ const greetingTitle = document.getElementById('greeting-title');
 const currentHour = new Date().getHours();
 const timeGreeting = currentHour < 12 ? 'Good morning' : currentHour < 17 ? 'Good afternoon' : 'Good evening';
 const firstName = currentAccount?.name?.trim().split(/\s+/)[0] || 'there';
-greetingTitle.textContent = `${timeGreeting}, ${firstName}`;
+greetingTitle.textContent = `${window.MUVYLocale?.t(timeGreeting) ?? timeGreeting}, ${firstName}`;
 
+// HOME CAPTURE: shared dialog, preview, and stream cleanup helpers.
 const captureDialog = document.getElementById('capture-dialog');
 const captureOptions = document.getElementById('capture-options');
 const captureLive = document.getElementById('capture-live');
@@ -77,7 +81,7 @@ function showCaptureError(message) {
   captureOptions.hidden = true;
   captureLive.hidden = false;
   capturePreview.classList.remove('has-preview');
-  captureStatus.textContent = message;
+  captureStatus.textContent = window.MUVYLocale?.t(message) ?? message;
   stopCaptureButton.hidden = true;
   captureFrameButton.hidden = true;
   identifyCaptureButton.hidden = true;
@@ -117,6 +121,7 @@ captureDialog.addEventListener('click', (event) => {
 });
 captureDialog.addEventListener('close', resetCaptureDialog);
 
+// HOME CAPTURE: screen recording flow.
 document.getElementById('screen-record-option').addEventListener('click', async () => {
   if (!navigator.mediaDevices?.getDisplayMedia || !window.MediaRecorder) {
     showCaptureError('Screen recording is not supported in this browser. Try uploading a clip instead.');
@@ -143,15 +148,15 @@ document.getElementById('screen-record-option').addEventListener('click', async 
       stopCaptureStream();
       stopCaptureButton.hidden = true;
       identifyCaptureButton.hidden = false;
-      captureStatus.textContent = 'Screen clip captured. It is ready to identify.';
+      captureStatus.textContent = window.MUVYLocale?.t('Screen clip captured. It is ready to identify.');
     };
     captureStream.getVideoTracks()[0]?.addEventListener('ended', () => {
       if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
     }, { once: true });
     recorder.start(1000);
-    stopCaptureButton.textContent = 'Stop recording';
+    stopCaptureButton.textContent = window.MUVYLocale?.t('Stop capture');
     stopCaptureButton.hidden = false;
-    captureStatus.textContent = 'Recording your selected screen. Stop when you have captured the scene.';
+    captureStatus.textContent = window.MUVYLocale?.t('Recording your selected screen. Stop when you have captured the scene.');
   } catch (error) {
     stopCaptureStream();
     showCaptureError(error.name === 'NotAllowedError'
@@ -160,6 +165,7 @@ document.getElementById('screen-record-option').addEventListener('click', async 
   }
 });
 
+// HOME CAPTURE: back-camera flow and still-frame capture.
 document.getElementById('back-camera-option').addEventListener('click', async () => {
   if (!navigator.mediaDevices?.getUserMedia) {
     showCaptureError('Camera access is not available in this browser.');
@@ -173,10 +179,10 @@ document.getElementById('back-camera-option').addEventListener('click', async ()
     showCaptureSession();
     captureVideo.srcObject = captureStream;
     await captureVideo.play();
-    stopCaptureButton.textContent = 'Close camera';
+    stopCaptureButton.textContent = window.MUVYLocale?.t('Close');
     stopCaptureButton.hidden = false;
     captureFrameButton.hidden = false;
-    captureStatus.textContent = 'Point the back camera at the movie, then capture a frame.';
+    captureStatus.textContent = window.MUVYLocale?.t('Point the back camera at the movie, then capture a frame.');
   } catch (error) {
     stopCaptureStream();
     showCaptureError(error.name === 'NotAllowedError'
@@ -193,7 +199,7 @@ stopCaptureButton.addEventListener('click', () => {
   stopCaptureStream();
   stopCaptureButton.hidden = true;
   captureFrameButton.hidden = true;
-  captureStatus.textContent = 'Camera closed.';
+  captureStatus.textContent = window.MUVYLocale?.t('Camera closed.');
 });
 
 captureFrameButton.addEventListener('click', () => {
@@ -208,11 +214,11 @@ captureFrameButton.addEventListener('click', () => {
     stopCaptureButton.hidden = true;
     captureFrameButton.hidden = true;
     identifyCaptureButton.hidden = false;
-    captureStatus.textContent = 'Frame captured. It is ready to identify.';
+    captureStatus.textContent = window.MUVYLocale?.t('Frame captured. It is ready to identify.');
   }, 'image/jpeg', .92);
 });
 
 identifyCaptureButton.addEventListener('click', () => {
   if (!captureBlob) return;
-  captureStatus.textContent = 'The capture is ready, but movie identification is not connected yet.';
+  captureStatus.textContent = window.MUVYLocale?.t('The capture is ready, but movie identification is not connected yet.');
 });

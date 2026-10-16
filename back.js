@@ -1,4 +1,4 @@
-// Use browser history for back actions, with each link's href as a safe direct-entry fallback.
+// BACK CONTROLS: use browser history when available and preserve each link's direct-entry fallback.
 const appBackControls = document.querySelectorAll('[data-app-back]');
 
 appBackControls.forEach((control) => {

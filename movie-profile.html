@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101b">
+  <title>Movie profile | MUVY</title>
+  <script src="theme-init.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="movie-profile.css">
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body class="movie-profile-body">
+  <main class="movie-profile" id="movie-profile">
+    <a class="page-back profile-back" href="home.html" data-app-back aria-label="Go back to previous page" title="Go back"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <section class="profile-hero" aria-label="Movie artwork"><img id="profile-backdrop" alt=""><div class="hero-shade"></div></section>
+    <article class="profile-content">
+      <h1 id="profile-title">Movie title</h1>
+      <p class="profile-meta" id="profile-meta"></p>
+      <div class="profile-rating" id="profile-rating"></div>
+      <div class="profile-genres" id="profile-genres"></div>
+      <p class="profile-overview" id="profile-overview"></p>
+      <section class="profile-section" id="cast-section" hidden><h2>Cast &amp; crew</h2><div class="cast-list" id="profile-cast"></div></section>
+      <section class="profile-section streaming-section"><h2>Where to watch</h2><p>Choose a service to search for this title. Availability varies by region.</p></section>
+      <div class="profile-actions">
+        <button class="streaming-link" id="play-movie" type="button">▶ <span>Play</span></button>
+        <button class="save-button" id="save-movie" type="button">♡ <span>Save to Watchlist</span></button>
+        <button class="share-button" id="share-movie" type="button">↗ <span>Share</span></button>
+      </div>
+      <p class="profile-status" id="profile-status" role="status" aria-live="polite"></p>
+    </article>
+  </main>
+  <dialog class="streaming-dialog" id="streaming-dialog" aria-labelledby="streaming-dialog-title">
+    <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
+    <h2 id="streaming-dialog-title">Choose a streaming service</h2>
+    <p>Search for this title on a service. Availability depends on your region.</p>
+    <div class="streaming-options" id="streaming-options"></div>
+  </dialog>
+  <script src="movie-profile.js" defer></script>
+  <script src="back.js" defer></script>
+  <script src="theme.js" defer></script>
+</body>
+</html>

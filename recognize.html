@@ -20,7 +20,7 @@
       <button class="recognize-menu" id="recognize-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="recognize-menu-panel">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
-      <h1>Recognize</h1>
+      <h1 id="recognize-page-title">Recognize</h1>
       <a class="recognize-brand" href="home.html" aria-label="MUVY home">MU<span>V</span>Y</a>
       <a class="recognize-search" href="explore.html" aria-label="Search titles"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></a>
       <span class="header-spacer" aria-hidden="true"></span>
@@ -69,19 +69,52 @@
         <button id="stop-audio" type="button" hidden>Stop listening</button>
       </div>
 
-      <aside class="match-preview" id="match-preview" aria-label="Movie identification result" hidden>
-        <div class="match-preview-heading"><span class="match-success-mark" aria-hidden="true">✓</span><strong>Identified result</strong><button type="button" aria-label="More result options">•••</button></div>
-        <div class="match-preview-title">
-          <img id="match-poster" alt="" hidden>
-          <div><h3 id="match-title"></h3><p id="match-metadata" hidden></p><span id="match-timestamp" hidden></span></div>
+      <section class="match-result" id="match-result" aria-labelledby="match-title" hidden>
+        <div class="match-result-toolbar">
+          <button class="match-result-back" id="match-result-back" type="button">
+            <span aria-hidden="true">←</span> Recognize another
+          </button>
+          <span class="match-result-label"><span aria-hidden="true">✓</span> Identified</span>
         </div>
-        <p class="match-preview-copy" id="match-summary" hidden></p>
-        <div class="match-preview-actions">
-          <button type="button" data-message="Watchlist saving will be available soon.">Save to Watchlist</button>
-          <button type="button" data-message="Sharing will be available soon.">Share</button>
+        <div class="match-result-hero">
+          <img id="match-backdrop" alt="" hidden>
+          <div class="match-result-hero-shade"></div>
+          <div class="match-result-hero-copy">
+            <p class="match-result-eyebrow">MUVY RECOGNITION</p>
+            <h2 id="match-title" tabindex="-1"></h2>
+            <p id="match-metadata"></p>
+          </div>
         </div>
-        <div class="match-providers" id="match-providers" hidden><strong>Where to watch</strong><div id="match-provider-list"></div></div>
-      </aside>
+        <div class="match-result-content">
+          <div class="match-result-facts">
+            <span class="match-result-rating" id="match-rating" hidden></span>
+            <span id="match-timestamp" hidden></span>
+          </div>
+          <p class="match-result-overview" id="match-summary" hidden></p>
+          <div class="match-result-actions">
+            <button type="button" data-message="Watchlist saving will be available soon.">Save to Watchlist</button>
+            <button type="button" data-message="Sharing will be available soon.">Share</button>
+          </div>
+          <section class="match-providers" id="match-providers" hidden>
+            <h3>Where to watch</h3>
+            <div id="match-provider-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="unmatched-panel" id="unmatched-panel" aria-labelledby="unmatched-title" hidden>
+        <h3 id="unmatched-title">We couldn't match this clip yet</h3>
+        <p class="unmatched-copy">It may be a movie MUVY hasn't indexed. Search TMDB by title to see its details, or suggest it for catalog review. Your clip is used only for matching and is not retained or attached to your suggestion.</p>
+        <form id="catalog-search-form">
+          <label for="catalog-search-input">Movie title</label>
+          <div class="catalog-search-row">
+            <input id="catalog-search-input" name="query" type="search" minlength="2" maxlength="100" autocomplete="off" required>
+            <button type="submit" id="catalog-search-button">Search</button>
+          </div>
+        </form>
+        <p class="catalog-status" id="catalog-status" role="status" aria-live="polite"></p>
+        <div class="catalog-results" id="catalog-results" aria-label="TMDB movie search results"></div>
+      </section>
 
       <aside class="recognize-tip">
         <span class="tip-info" aria-hidden="true">i</span>
@@ -90,6 +123,24 @@
     </main>
 
     <div class="recognize-toast" id="recognize-toast" role="status" aria-live="polite"></div>
+
+    <section class="identification-screen" id="identification-screen" role="status" aria-live="polite" aria-atomic="true" hidden>
+      <div class="identification-content">
+        <div class="identification-orb" aria-hidden="true">
+          <span class="identification-ring identification-ring-one"></span>
+          <span class="identification-ring identification-ring-two"></span>
+          <span class="identification-ring identification-ring-three"></span>
+          <span class="identification-core">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M18 8h12M16 13h16v22H16zM20 18h8M20 23h8M20 28h5M20 39h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+        <h2 id="identification-title">Identifying...</h2>
+        <p>Matching this clip against MUVY’s movie catalog.</p>
+        <button id="cancel-identification" type="button">Cancel</button>
+      </div>
+    </section>
 
     <aside class="recognize-sidebar" aria-label="Main navigation">
       <a class="recognize-sidebar-brand" href="home.html">MU<span>V</span>Y</a>
@@ -143,6 +194,7 @@
       </div>
     </dialog>
   </div>
+  <script src="api-config.js" defer></script>
   <script src="i18n.js" defer></script>
   <script src="auth.js" defer></script>
   <script src="recognize.js" defer></script>

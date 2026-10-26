@@ -1,0 +1,89 @@
+<!doctype html>
+<!-- App-wide account and recognition preferences. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101b">
+  <title>Profile Settings | MUVY</title>
+  <script src="theme-init.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="settings.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="profile-details.css">
+</head>
+<body class="settings-body">
+  <header class="profile-details-header">
+    <div class="prodile-details-header-overall">
+      <section class="profile-details-backbutton-section">
+        <a class="page-back settings-back" href="profile.html" data-app-back aria-label="Go back to previous page" title="Go back">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </section>
+      <section>
+        <span class="profile-brand1">
+          Profile Details
+        </span>
+      </section>
+    </div>
+  </header>
+  
+  <main>
+    <div class="profile-details-general">
+      <section class="profile-details-group" aria-labelledby="app-settings-title">
+        <h2 id="contactDetails">
+          Contact Details
+        </h2>
+        <div class="contact-row-container">
+          <div class="contact-row">
+            <span>
+              <strong>
+                Email Address
+              </strong>
+              <small>
+                Manage your Email Address
+              </small>
+            </span>
+          </div>
+
+          <div class="contact-row" id="phoneNumber">
+            <span>
+              <strong>
+                Phone
+              </strong>
+            <small>
+              Manage your phone number
+            </small>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-details-group" id="name" aria-labelledby="contact-details-title">
+        <h2 class="name-details" id="name-center">
+          Name
+        </h2>
+        <a class="username-row" href="profile-details.html">
+          <span>
+            <strong>
+              Username
+            </strong>
+            <small>
+              Update your Username
+            </small>
+          </span>
+          <b class="username-option-arrow" aria-hidden="true">›</b>
+        </a>
+      </section>
+    </div>
+  </main>
+  <script src="i18n.js" defer></script>
+  <script src="auth.js" defer></script>
+  <script src="settings.js" defer></script>
+  <script src="navigation.js" defer></script>
+  <script src="back.js" defer></script>
+  <script src="theme.js" defer></script>
+</body>
+</html>

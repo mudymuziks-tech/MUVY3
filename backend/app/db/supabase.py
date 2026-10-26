@@ -3,18 +3,24 @@ import os
 from dotenv import load_dotenv
 from supabase import Client, create_client
 
-load_dotenv()
+if not os.environ.get("PYTEST_CURRENT_TEST"):
+    load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-if not SUPABASE_URL:
-    raise RuntimeError("SUPABASE_URL is not configured")
+supabase: Client | None = None
 
-if not SUPABASE_KEY:
-    raise RuntimeError("SUPABASE_KEY is not configured")
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase = create_client(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+    )
 
-supabase: Client = create_client(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-)
+
+def get_supabase_client() -> Client:
+    if supabase is None:
+        raise RuntimeError(
+            "SUPABASE_URL and SUPABASE_KEY must be set in the environment."
+        )
+    return supabase

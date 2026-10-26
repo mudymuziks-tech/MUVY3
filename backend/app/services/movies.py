@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from app.db.supabase import supabase
+from app.db.supabase import get_supabase_client
 from app.services.tmdb import get_movie_details
 
 
@@ -11,8 +11,10 @@ def get_movie(movie_id: str) -> Optional[dict]:
     Get a MUVY movie by its internal ID.
     """
 
+    client = get_supabase_client()
+
     response = (
-        supabase
+        client
         .table("movies")
         .select("*")
         .eq("id", movie_id)
@@ -33,8 +35,10 @@ def get_movie_by_tmdb_id(
     Get a MUVY movie using its TMDB ID.
     """
 
+    client = get_supabase_client()
+
     response = (
-        supabase
+        client
         .table("movies")
         .select("*")
         .eq("tmdb_id", tmdb_id)
@@ -62,6 +66,8 @@ def create_movie(
     Create a movie record in Supabase.
     """
 
+    client = get_supabase_client()
+
     payload = {
         "id": movie_id,
         "tmdb_id": tmdb_id,
@@ -74,7 +80,7 @@ def create_movie(
     }
 
     response = (
-        supabase
+        client
         .table("movies")
         .insert(payload)
         .execute()
@@ -102,6 +108,8 @@ def upsert_movie(
     Create or update a movie record.
     """
 
+    client = get_supabase_client()
+
     payload = {
         "id": movie_id,
         "tmdb_id": tmdb_id,
@@ -114,7 +122,7 @@ def upsert_movie(
     }
 
     response = (
-        supabase
+        client
         .table("movies")
         .upsert(
             payload,

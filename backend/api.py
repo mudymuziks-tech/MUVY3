@@ -1,17 +1,24 @@
 from __future__ import annotations
 
+import io
 import os
 import tempfile
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, File, Header, HTTPException, UploadFile
+from dotenv import load_dotenv
+from fastapi import FastAPI, File, Header, HTTPException, Query, UploadFile
+from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from supabase import create_client
+from pydantic import BaseModel, Field
+from supabase import Client, create_client
+
+if not os.environ.get("PYTEST_CURRENT_TEST"):
+    load_dotenv()
 
 from identify import identify_video
-from tmdb import TMDBError, get_movie_details
+from tmdb import TMDBError, get_movie_details, search_movies
+from audio_fingerprint import AudioFingerprintDB, extract_audio_hashes, match_audio_clip
 
 
 # ---------------------------------------------------------
@@ -21,15 +28,22 @@ from tmdb import TMDBError, get_movie_details
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError(
-        "SUPABASE_URL and SUPABASE_KEY must be set in the environment."
+supabase: Client | None = None
+
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase = create_client(
+        SUPABASE_URL,
+        SUPABASE_KEY,
     )
 
-supabase = create_client(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-)
+
+def get_supabase_client() -> Client:
+    if supabase is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Supabase is not configured. Set SUPABASE_URL and SUPABASE_KEY.",
+        )
+    return supabase
 
 
 # ---------------------------------------------------------
@@ -47,18 +61,31 @@ app = FastAPI(
 # CORS
 # ---------------------------------------------------------
 
+DEFAULT_ALLOWED_ORIGINS = [
+    # Local development
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:5500",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5500",
+
+    # Production frontend (GitHub Pages)
+    "https://mudymuziks-tech.github.io",
+]
+
+# Extra origins from the ALLOWED_ORIGINS env var (comma-separated), so a
+# custom frontend domain can be added without editing code. Falls back to the
+# defaults above when unset.
+_extra_origins = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        # Local development
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:5173",
-
-        # Production frontend
-        "https://mudymuziks-tech.github.io",
-    ],
+    allow_origins=DEFAULT_ALLOWED_ORIGINS + _extra_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -79,6 +106,8 @@ class MovieResponse(BaseModel):
     overview: Optional[str] = None
     runtime: Optional[int] = None
     genres: Optional[list[dict]] = None
+    vote_average: Optional[float] = None
+    vote_count: Optional[int] = None
     created_at: Optional[str] = None
 
 
@@ -99,6 +128,18 @@ class IdentifySuccessResponse(BaseModel):
 class IdentifyFailureResponse(BaseModel):
     matched: bool
     message: str
+
+
+class TMDBSearchResult(BaseModel):
+    id: int
+    title: str
+    release_date: Optional[str] = None
+    overview: Optional[str] = None
+    poster_path: Optional[str] = None
+
+
+class CatalogRequest(BaseModel):
+    tmdb_id: int = Field(gt=0)
 
 
 # ---------------------------------------------------------
@@ -126,9 +167,11 @@ def health():
 # ---------------------------------------------------------
 
 def get_movie(movie_id: str) -> Optional[dict]:
+    client = get_supabase_client()
+
     try:
         response = (
-            supabase
+            client
             .table("movies")
             .select("*")
             .eq("id", movie_id)
@@ -176,6 +219,8 @@ def localize_movie(movie_data: dict, language: str) -> dict:
         "backdrop_path",
         "runtime",
         "genres",
+        "vote_average",
+        "vote_count",
     )
     return {
         **movie_data,
@@ -207,6 +252,116 @@ def movie(
         )
 
     return localize_movie(result, language)
+
+
+@app.get(
+    "/tmdb/search",
+    response_model=list[TMDBSearchResult],
+)
+def search_tmdb_movies(
+    q: str = Query(min_length=2, max_length=100),
+    language: str = Header(default="en-US", alias="Accept-Language"),
+):
+    query = q.strip()
+    if len(query) < 2:
+        raise HTTPException(
+            status_code=422,
+            detail="Search query must contain at least two non-whitespace characters.",
+        )
+
+    language = language if language in SUPPORTED_TMDB_LANGUAGES else "en-US"
+
+    try:
+        return search_movies(query, language=language)
+    except TMDBError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail="Movie search is temporarily unavailable.",
+        ) from exc
+
+
+@app.post("/catalog-requests")
+def submit_catalog_request(request: CatalogRequest):
+    # Resolve the client once so an unconfigured Supabase returns a clear
+    # 503 instead of an AttributeError masked as a generic failure.
+    client = get_supabase_client()
+
+    try:
+        existing_request = (
+            client
+            .table("catalog_requests")
+            .select("title,status")
+            .eq("tmdb_id", request.tmdb_id)
+            .limit(1)
+            .execute()
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Could not check whether this movie was already suggested.",
+        ) from exc
+
+    if existing_request.data:
+        existing = existing_request.data[0]
+        return {
+            "submitted": True,
+            "already_submitted": True,
+            "title": existing["title"],
+            "message": f"{existing['title']} has already been suggested and is {existing['status']}.",
+        }
+
+    try:
+        tmdb_movie = get_movie_details(request.tmdb_id)
+    except TMDBError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail="The selected movie could not be verified with TMDB.",
+        ) from exc
+
+    if tmdb_movie is None:
+        raise HTTPException(
+            status_code=404,
+            detail="The selected movie was not found on TMDB.",
+        )
+
+    title = tmdb_movie.get("title")
+    if not title:
+        raise HTTPException(
+            status_code=502,
+            detail="TMDB did not provide a title for the selected movie.",
+        )
+
+    try:
+        response = (
+            client
+            .table("catalog_requests")
+            .insert(
+                {
+                    "tmdb_id": request.tmdb_id,
+                    "title": title,
+                    "release_date": tmdb_movie.get("release_date") or None,
+                }
+            )
+            .execute()
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="The catalog suggestion could not be saved. Please try again.",
+        ) from exc
+
+    if not response.data:
+        raise HTTPException(
+            status_code=503,
+            detail="The catalog suggestion could not be saved. Please try again.",
+        )
+
+    return {
+        "submitted": True,
+        "already_submitted": False,
+        "title": title,
+        "message": "Suggestion submitted and is pending review. It will be recognizable by clip after it is added to MUVY's fingerprint catalog.",
+    }
 
 
 # ---------------------------------------------------------
@@ -266,7 +421,7 @@ def refresh_movie(movie_id: str):
 
     try:
         response = (
-            supabase
+            get_supabase_client()
             .table("movies")
             .update(update_data)
             .eq("id", movie_id)
@@ -335,6 +490,10 @@ async def identify(
             ),
         )
 
+    # Fail fast when Supabase is not configured so the request returns a
+    # clear 503 before any expensive video decoding or hashing begins.
+    get_supabase_client()
+
     temp_path = None
 
     try:
@@ -359,8 +518,12 @@ async def identify(
                 temp_file.write(chunk)
 
         # Run the proven identification engine.
-        result = identify_video(
-            temp_path
+        # identify_video is synchronous and CPU-bound (OpenCV decode + DCT
+        # hashing) plus blocking Supabase I/O, so run it in the threadpool to
+        # keep the async event loop responsive for concurrent requests.
+        result = await run_in_threadpool(
+            identify_video,
+            temp_path,
         )
 
         if result is None:
@@ -417,4 +580,85 @@ async def identify(
             except Exception:
                 pass
 
+        await file.close()
+
+
+@app.post(
+    "/identify-audio",
+    response_model=IdentifySuccessResponse | IdentifyFailureResponse,
+)
+async def identify_audio(
+    file: UploadFile = File(...),
+    language: str = Header(default="en-US", alias="Accept-Language"),
+):
+    if not file.filename:
+        raise HTTPException(
+            status_code=400,
+            detail="An audio file is required.",
+        )
+
+    content_type = (file.content_type or "").lower()
+    if not content_type.startswith("audio/"):
+        raise HTTPException(
+            status_code=415,
+            detail="An audio file is required.",
+        )
+
+    # Fail fast when Supabase is not configured.
+    get_supabase_client()
+
+    try:
+        payload = await file.read()
+        hashes = await run_in_threadpool(extract_audio_hashes, io.BytesIO(payload))
+
+        if not hashes:
+            return IdentifyFailureResponse(
+                matched=False,
+                message="No usable audio was captured. Try again with clearer sound.",
+            )
+
+        result = await run_in_threadpool(
+            match_audio_clip,
+            hashes,
+            AudioFingerprintDB(),
+        )
+
+        if result is None:
+            return IdentifyFailureResponse(
+                matched=False,
+                message="No confident audio match found.",
+            )
+
+        movie_data = get_movie(result["movie_id"])
+
+        if movie_data is None:
+            raise HTTPException(
+                status_code=404,
+                detail="The matcher identified a movie, but its metadata was not found.",
+            )
+
+        movie_data = localize_movie(movie_data, language)
+
+        return IdentifySuccessResponse(
+            matched=True,
+            movie=movie_data,
+            match=MatchResponse(
+                timestamp_seconds=result["offset_ms"] / 1000,
+                confidence=result["confidence"],
+                margin=float(result["clusters"]),
+                votes=result["votes"],
+                frames=len(hashes),
+            ),
+        )
+
+    except HTTPException:
+        raise
+
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Audio identification failed: {exc}",
+        )
+
+    finally:
         await file.close()

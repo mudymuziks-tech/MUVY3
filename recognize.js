@@ -55,31 +55,21 @@ document.querySelectorAll('[data-message]').forEach((button) => {
 // API helpers
 // ---------------------------------------------------------
 
-async function identifyVideoFile(file) {
-  if (!file) {
-    throw new Error('No video file was provided.');
-  }
-
+function getApiBaseUrl() {
+  const localFrontend = ['localhost', '127.0.0.1'].includes(window.location.hostname);
   const apiBaseUrl =
     window.MUVY_API_BASE_URL ||
-    (typeof API_BASE_URL === 'string' ? API_BASE_URL : '');
+    (typeof API_BASE_URL === 'string' ? API_BASE_URL : '') ||
+    (localFrontend ? 'http://127.0.0.1:8000' : '');
 
   if (!apiBaseUrl) {
     throw new Error('Movie identification service is not configured.');
   }
 
-  const formData = new FormData();
+  return apiBaseUrl.replace(/\/+$/, '');
+}
 
-  formData.append('file', file, file.name || 'muvy-video.webm');
-
-  const response = await fetch(`${apiBaseUrl.replace(/\/+$/, '')}/identify`, {
-    method: 'POST',
-    headers: {
-      'Accept-Language': window.MUVYLocale?.getTMDBLanguage() || 'en-US',
-    },
-    body: formData,
-  });
-
+async function readApiResponse(response) {
   let data;
 
   try {
@@ -102,6 +92,71 @@ async function identifyVideoFile(file) {
   return data;
 }
 
+const identificationScreen = document.getElementById('identification-screen');
+const cancelIdentificationButton = document.getElementById('cancel-identification');
+let activeIdentificationController = null;
+
+function setIdentifying(isIdentifying) {
+  if (identificationScreen) identificationScreen.hidden = !isIdentifying;
+  document.body.classList.toggle('is-identifying', isIdentifying);
+}
+
+if (cancelIdentificationButton) {
+  cancelIdentificationButton.addEventListener('click', () => {
+    activeIdentificationController?.abort();
+  });
+}
+
+// Time budget for a single identification request. The backend decodes the
+// clip and queries the fingerprint database, so allow a generous window but
+// never let a hung or cold-start connection block the interface indefinitely.
+const IDENTIFY_TIMEOUT_MS = 90_000;
+
+async function identifyVideoFile(file, signal) {
+  if (!file) {
+    throw new Error('No video file was provided.');
+  }
+
+  const apiBaseUrl = getApiBaseUrl();
+
+  const formData = new FormData();
+  formData.append('file', file, file.name || 'muvy-video.webm');
+
+  // Combine the caller's cancel signal with an internal timeout so the request
+  // can be aborted either by the user (Cancel) or by a stuck connection.
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => {
+    controller.abort(
+      new DOMException('The identification service took too long.', 'TimeoutError')
+    );
+  }, IDENTIFY_TIMEOUT_MS);
+
+  const forwardAbort = () => controller.abort(signal?.reason);
+  if (signal) {
+    if (signal.aborted) {
+      controller.abort(signal.reason);
+    } else {
+      signal.addEventListener('abort', forwardAbort, { once: true });
+    }
+  }
+
+  try {
+    const response = await fetch(`${apiBaseUrl}/identify`, {
+      method: 'POST',
+      headers: {
+        'Accept-Language': window.MUVYLocale?.getTMDBLanguage() || 'en-US',
+      },
+      body: formData,
+      signal: controller.signal,
+    });
+
+    return await readApiResponse(response);
+  } finally {
+    window.clearTimeout(timer);
+    signal?.removeEventListener('abort', forwardAbort);
+  }
+}
+
 
 // ---------------------------------------------------------
 // Recognition result UI
@@ -122,6 +177,17 @@ function getPosterUrl(posterPath) {
 
 function displayRecognitionResult(data) {
   if (!data || !data.matched || !data.movie) {
+    const matchResult = document.getElementById('match-result');
+    const unmatchedPanel = document.getElementById('unmatched-panel');
+
+    if (matchResult) matchResult.hidden = true;
+    document.querySelector('.recognize-main')?.classList.remove('is-result');
+    document.getElementById('recognize-page-title').textContent = 'Recognize';
+    if (unmatchedPanel) {
+      unmatchedPanel.hidden = false;
+      unmatchedPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
     showToast(
       data?.message || 'MUVY could not identify this movie.'
     );
@@ -129,73 +195,186 @@ function displayRecognitionResult(data) {
     return;
   }
 
+  const unmatchedPanel = document.getElementById('unmatched-panel');
+  if (unmatchedPanel) unmatchedPanel.hidden = true;
+
   const movie = data.movie;
   const match = data.match || {};
-  const posterUrl = getPosterUrl(movie.poster_path);
   const genres = Array.isArray(movie.genres)
     ? movie.genres
         .map((genre) => typeof genre === 'string' ? genre : genre?.name)
         .filter(Boolean)
     : [];
 
-  document.dispatchEvent(new CustomEvent('muvy:movie-identified', {
-    detail: {
-      title: movie.title || '',
-      year: typeof movie.release_date === 'string'
-        ? movie.release_date.slice(0, 4)
-        : '',
-      genres,
-      timestamp: typeof match.timestamp_seconds === 'number'
-        ? `${match.timestamp_seconds.toFixed(2)}s`
-        : '',
-      summary: movie.overview || '',
-      posterUrl,
-      providers: Array.isArray(data.providers) ? data.providers : [],
-    },
-  }));
+  const result = document.getElementById('match-result');
+  const title = movie.title || 'Unknown title';
+  const year = typeof movie.release_date === 'string'
+    ? movie.release_date.slice(0, 4)
+    : '';
+  const runtime = Number.isFinite(movie.runtime) && movie.runtime > 0
+    ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`
+    : '';
+  const metadata = [year, ...genres, runtime].filter(Boolean).join(' · ');
+  const backdropUrl = getPosterUrl(movie.backdrop_path || movie.poster_path);
+
+  document.getElementById('match-title').textContent = title;
+  document.getElementById('match-metadata').textContent = metadata;
+  document.getElementById('match-metadata').hidden = !metadata;
+
+  const backdrop = document.getElementById('match-backdrop');
+  backdrop.hidden = !backdropUrl;
+  if (backdropUrl) {
+    backdrop.src = backdropUrl.replace('/w500/', '/original/');
+    backdrop.alt = '';
+  } else {
+    backdrop.removeAttribute('src');
+    backdrop.alt = '';
+  }
+
+  const rating = document.getElementById('match-rating');
+  const ratingValue = Number(movie.vote_average);
+  rating.hidden = !Number.isFinite(ratingValue) || ratingValue <= 0;
+  const voteCount = Number(movie.vote_count);
+  const ratingCount = Number.isFinite(voteCount) && voteCount > 0
+    ? ` · ${new Intl.NumberFormat(undefined, { notation: 'compact' }).format(voteCount)} votes`
+    : '';
+  rating.textContent = rating.hidden ? '' : `★ ${ratingValue.toFixed(1)} / 10${ratingCount}`;
+
+  const timestamp = document.getElementById('match-timestamp');
+  timestamp.textContent = typeof match.timestamp_seconds === 'number'
+    ? `Matched at ${match.timestamp_seconds.toFixed(1)}s`
+    : '';
+  timestamp.hidden = !timestamp.textContent;
+
+  const overview = document.getElementById('match-summary');
+  overview.textContent = movie.overview || '';
+  overview.hidden = !overview.textContent;
+  result.hidden = false;
+  document.getElementById('unmatched-panel').hidden = true;
+  document.querySelector('.recognize-main').classList.add('is-result');
+  document.getElementById('recognize-page-title').textContent = 'Recognition Result';
+  document.getElementById('match-title').focus({ preventScroll: true });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const catalogSearchForm = document.getElementById('catalog-search-form');
+const catalogSearchInput = document.getElementById('catalog-search-input');
+const catalogSearchButton = document.getElementById('catalog-search-button');
+const catalogStatus = document.getElementById('catalog-status');
+const catalogResults = document.getElementById('catalog-results');
+
+if (
+  catalogSearchForm &&
+  catalogSearchInput &&
+  catalogSearchButton &&
+  catalogStatus &&
+  catalogResults
+) {
+  catalogSearchForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const query = catalogSearchInput.value.trim();
+    if (query.length < 2) return;
+
+    catalogSearchButton.disabled = true;
+    catalogStatus.textContent = 'Searching TMDB...';
+    catalogResults.replaceChildren();
+
+    try {
+      const url = new URL(`${getApiBaseUrl()}/tmdb/search`);
+      url.searchParams.set('q', query);
+      const response = await fetch(url, {
+        headers: {
+          'Accept-Language': window.MUVYLocale?.getTMDBLanguage() || 'en-US',
+        },
+      });
+      const movies = await readApiResponse(response);
+
+      if (!Array.isArray(movies) || movies.length === 0) {
+        catalogStatus.textContent = 'No TMDB titles matched that search. Try another title.';
+        return;
+      }
+
+      catalogStatus.textContent = `${movies.length} TMDB result${movies.length === 1 ? '' : 's'}. Choose a movie to suggest it for review.`;
+
+      for (const movie of movies) {
+        if (!Number.isInteger(movie.id) || typeof movie.title !== 'string') continue;
+
+        const result = document.createElement('article');
+        result.className = 'catalog-result';
+
+        if (movie.poster_path) {
+          const poster = document.createElement('img');
+          poster.src = getPosterUrl(movie.poster_path);
+          poster.alt = '';
+          poster.loading = 'lazy';
+          result.append(poster);
+        }
+
+        const details = document.createElement('div');
+        details.className = 'catalog-result-details';
+
+        const title = document.createElement('strong');
+        title.textContent = movie.title;
+        details.append(title);
+
+        if (movie.release_date) {
+          const year = document.createElement('small');
+          year.textContent = movie.release_date.slice(0, 4);
+          details.append(year);
+        }
+
+        if (movie.overview) {
+          const overview = document.createElement('p');
+          overview.textContent = movie.overview;
+          details.append(overview);
+        }
+
+        const suggestButton = document.createElement('button');
+        suggestButton.type = 'button';
+        suggestButton.className = 'catalog-suggest-button';
+        suggestButton.textContent = 'Suggest for review';
+        suggestButton.addEventListener('click', async () => {
+          suggestButton.disabled = true;
+          catalogStatus.textContent = `Sending "${movie.title}" for catalog review...`;
+          const controller = new AbortController();
+          const timeout = window.setTimeout(() => controller.abort(), 20000);
+
+          try {
+            const submission = await fetch(`${getApiBaseUrl()}/catalog-requests`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ tmdb_id: movie.id }),
+              signal: controller.signal,
+            });
+            const data = await readApiResponse(submission);
+            suggestButton.textContent = data.already_submitted ? 'Already suggested' : 'Suggestion sent';
+            catalogStatus.textContent = data.message;
+          } catch (error) {
+            suggestButton.disabled = false;
+            catalogStatus.textContent = error.name === 'AbortError'
+              ? 'The request timed out. Check your connection and try again; duplicate suggestions are safe.'
+              : error.message || 'Could not submit the suggestion.';
+          } finally {
+            window.clearTimeout(timeout);
+          }
+        });
+
+        result.append(details, suggestButton);
+        catalogResults.append(result);
+      }
+    } catch (error) {
+      catalogStatus.textContent = error.message || 'Movie search failed. Please try again.';
+    } finally {
+      catalogSearchButton.disabled = false;
+    }
+  });
 }
 
 
 // ---------------------------------------------------------
 // Upload video
 // ---------------------------------------------------------
-
-// Recognition integrations can publish a result when a movie has been identified.
-document.addEventListener('muvy:movie-identified', (event) => {
-  const movie = event.detail;
-  if (!movie || typeof movie.title !== 'string' || !movie.title.trim()) return;
-
-  const preview = document.getElementById('match-preview');
-  const poster = document.getElementById('match-poster');
-  const metadata = [movie.year, Array.isArray(movie.genres) ? movie.genres.join(', ') : movie.genres]
-    .filter(Boolean)
-    .join(' · ');
-  const providers = Array.isArray(movie.providers) ? movie.providers.filter((provider) => typeof provider === 'string') : [];
-
-  document.getElementById('match-title').textContent = movie.title.trim();
-  document.getElementById('match-metadata').textContent = metadata;
-  document.getElementById('match-metadata').hidden = !metadata;
-  document.getElementById('match-timestamp').textContent = movie.timestamp || '';
-  document.getElementById('match-timestamp').hidden = !movie.timestamp;
-  document.getElementById('match-summary').textContent = movie.summary || '';
-  document.getElementById('match-summary').hidden = !movie.summary;
-  poster.hidden = !movie.posterUrl;
-  if (movie.posterUrl) {
-    poster.src = movie.posterUrl;
-    poster.alt = `${movie.title.trim()} poster`;
-  } else {
-    poster.removeAttribute('src');
-    poster.alt = '';
-  }
-  const providerList = document.getElementById('match-provider-list');
-  providerList.replaceChildren(...providers.map((provider) => {
-    const item = document.createElement('span');
-    item.textContent = provider;
-    return item;
-  }));
-  document.getElementById('match-providers').hidden = providers.length === 0;
-  preview.hidden = false;
-});
 
 // VIDEO UPLOAD: open the clip picker and report the selected file.
 // This is the main section to find when wiring uploaded clips to identification.
@@ -243,10 +422,25 @@ async function identifyUploadedVideo(file) {
     return;
   }
 
-  showToast(`Uploading ${file.name}...`);
+  // Guard against empty or oversized uploads before touching the network. A
+  // 10–15 second clip is normally only a few megabytes.
+  const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
 
+  if (file.size === 0) {
+    showToast('That file is empty. Please choose a valid video clip.');
+    return;
+  }
+
+  if (file.size > MAX_UPLOAD_BYTES) {
+    showToast('That clip is too large. Please upload a short clip under 100 MB.');
+    return;
+  }
+
+  const controller = new AbortController();
+  activeIdentificationController = controller;
+  setIdentifying(true);
   try {
-    const data = await identifyVideoFile(file);
+    const data = await identifyVideoFile(file, controller.signal);
 
     displayRecognitionResult(data);
 
@@ -254,13 +448,47 @@ async function identifyUploadedVideo(file) {
       showToast(`Identified: ${data.movie.title}`);
     }
   } catch (error) {
+    if (error.name === 'AbortError') {
+      showToast('Identification cancelled.');
+      return;
+    }
+
+    if (error.name === 'TimeoutError') {
+      showToast('The recognition service took too long to respond. Please try again.');
+      return;
+    }
+
+    // fetch() rejects with a TypeError when the backend is unreachable
+    // (network down, wrong URL, or blocked by CORS).
+    if (
+      error instanceof TypeError ||
+      /failed to fetch|networkerror|load failed/i.test(error.message || '')
+    ) {
+      showToast(
+        'Cannot reach the recognition service. Check your connection and the configured API URL.'
+      );
+      return;
+    }
+
     console.error('MUVY identification error:', error);
 
     showToast(
       error.message || 'Movie identification failed.'
     );
+  } finally {
+    if (activeIdentificationController === controller) {
+      activeIdentificationController = null;
+      setIdentifying(false);
+    }
   }
 }
+
+document.getElementById('match-result-back').addEventListener('click', () => {
+  document.getElementById('match-result').hidden = true;
+  document.querySelector('.recognize-main').classList.remove('is-result');
+  document.getElementById('recognize-page-title').textContent = 'Recognize';
+  document.getElementById('upload-choice').focus({ preventScroll: true });
+});
 
 
 // ---------------------------------------------------------
@@ -343,6 +571,73 @@ function stopAudioCapture() {
 }
 
 
+async function identifyAudioClip(blob) {
+  const controller = new AbortController();
+  activeIdentificationController = controller;
+  setIdentifying(true);
+
+  const timer = window.setTimeout(() => {
+    controller.abort(
+      new DOMException('The audio identification service took too long.', 'TimeoutError')
+    );
+  }, 90_000);
+
+  try {
+    const apiBaseUrl = getApiBaseUrl();
+    const formData = new FormData();
+    const file = new File([blob], 'muvy-audio.webm', {
+      type: blob.type || 'audio/webm',
+    });
+    formData.append('file', file, file.name);
+
+    const response = await fetch(`${apiBaseUrl}/identify-audio`, {
+      method: 'POST',
+      headers: {
+        'Accept-Language': window.MUVYLocale?.getTMDBLanguage() || 'en-US',
+      },
+      body: formData,
+      signal: controller.signal,
+    });
+
+    const data = await readApiResponse(response);
+    displayRecognitionResult(data);
+
+    if (data.matched && data.movie) {
+      showToast(`Identified: ${data.movie.title}`);
+    }
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      showToast('Identification cancelled.');
+      return;
+    }
+
+    if (error.name === 'TimeoutError') {
+      showToast('The audio recognition service took too long to respond. Please try again.');
+      return;
+    }
+
+    if (
+      error instanceof TypeError ||
+      /failed to fetch|networkerror|load failed/i.test(error.message || '')
+    ) {
+      showToast(
+        'Cannot reach the recognition service. Check your connection and the configured API URL.'
+      );
+      return;
+    }
+
+    console.error('MUVY audio identification error:', error);
+    showToast(error.message || 'Audio identification failed.');
+  } finally {
+    window.clearTimeout(timer);
+    if (activeIdentificationController === controller) {
+      activeIdentificationController = null;
+      setIdentifying(false);
+    }
+  }
+}
+
+
 const startAudioRecognition = async () => {
   if (
     audioRecorder &&
@@ -399,12 +694,27 @@ const startAudioRecognition = async () => {
         stopAudioButton.hidden = true;
       }
 
+      if (audioFeedback) {
+        audioFeedback.hidden = true;
+      }
+
       setAudioButtonListening(false);
 
-      if (audioStatus) {
-        audioStatus.textContent =
-          window.MUVYLocale?.t('Audio captured. Audio recognition will be connected when the MUVY audio fingerprint service is available.');
+      if (!audioChunks.length) {
+        if (audioFeedback) audioFeedback.hidden = false;
+        if (audioStatus) {
+          audioStatus.textContent =
+            window.MUVYLocale?.t('No audio was captured. Please try again.');
+        }
+        return;
       }
+
+      const audioBlob = new Blob(audioChunks, {
+        type: audioRecorder.mimeType || 'audio/webm',
+      });
+      audioChunks = [];
+
+      identifyAudioClip(audioBlob);
     };
 
     if (audioFeedback) {
@@ -650,7 +960,7 @@ document.getElementById('screen-record-option').addEventListener('click', async 
       stopCaptureStream();
       stopCaptureButton.hidden = true;
       identifyCaptureButton.hidden = false;
-      captureStatus.textContent = window.MUVYLocale?.t('Screen clip captured. Movie identification is not connected yet.');
+      captureStatus.textContent = window.MUVYLocale?.t('Screen clip captured. It is ready to identify.');
     };
     captureStream.getVideoTracks()[0]?.addEventListener('ended', () => {
       if (recorder.state === 'recording') recorder.stop();
@@ -671,19 +981,45 @@ document.getElementById('screen-record-option').addEventListener('click', async 
 });
 
 document.getElementById('back-camera-option').addEventListener('click', async () => {
-  if (!navigator.mediaDevices?.getUserMedia) {
-    showCaptureError('Camera access is not available in this browser.');
+  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+    showCaptureError('Camera recording is not available in this browser. You can upload a clip instead.');
     return;
   }
   try {
-    captureStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+    captureStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' } },
+      audio: false,
+    });
     showCaptureSession();
     captureVideo.srcObject = captureStream;
-    await captureVideo.play();
-    stopCaptureButton.querySelector('span').textContent = window.MUVYLocale?.t('Close');
+    await captureVideo.play().catch(() => {});
+    recordedChunks = [];
+    captureBlob = null;
+    const mimeType = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm']
+      .find((type) => MediaRecorder.isTypeSupported(type));
+    const recorder = new MediaRecorder(captureStream, mimeType ? { mimeType } : undefined);
+    mediaRecorder = recorder;
+    recorder.ondataavailable = (event) => { if (event.data.size) recordedChunks.push(event.data); };
+    recorder.onstop = () => {
+      if (mediaRecorder !== recorder) return;
+      captureBlob = new Blob(recordedChunks, { type: recorder.mimeType || 'video/webm' });
+      stopCaptureStream();
+      stopCaptureButton.hidden = true;
+      captureFrameButton.hidden = true;
+      identifyCaptureButton.hidden = false;
+      captureStatus.textContent = window.MUVYLocale?.t('Camera clip captured. It is ready to identify.');
+    };
+    captureStream.getVideoTracks()[0]?.addEventListener('ended', () => {
+      if (recorder.state === 'recording') recorder.stop();
+    }, { once: true });
+    recorder.start(1000);
+    stopCaptureButton.querySelector('span').textContent = window.MUVYLocale?.t('Stop recording');
     stopCaptureButton.hidden = false;
-    captureFrameButton.hidden = false;
-    captureStatus.textContent = window.MUVYLocale?.t('Point the back camera at the movie, then capture a frame.');
+    captureFrameButton.hidden = true;
+    captureStatus.textContent = window.MUVYLocale?.t('Recording from the back camera. Keep it steady on the movie for 10 to 15 seconds.');
+    captureTimer = window.setTimeout(() => {
+      if (recorder.state === 'recording') recorder.stop();
+    }, 15000);
   } catch (error) {
     stopCaptureStream();
     showCaptureError(error.name === 'NotAllowedError'
@@ -715,10 +1051,29 @@ captureFrameButton.addEventListener('click', () => {
     stopCaptureStream();
     stopCaptureButton.hidden = true;
     captureFrameButton.hidden = true;
-    identifyCaptureButton.hidden = false;
-    captureStatus.textContent = window.MUVYLocale?.t('Frame captured. Movie identification is not connected yet.');
+    identifyCaptureButton.hidden = true;
+    captureStatus.textContent = window.MUVYLocale?.t('Frame captured. Still-image recognition is not available yet.');
   }, 'image/jpeg', .92);
 });
-identifyCaptureButton.addEventListener('click', () => {
-  if (captureBlob) captureStatus.textContent = window.MUVYLocale?.t('Your capture is ready. Connect the MUVY identification service to identify it.');
+identifyCaptureButton.addEventListener('click', async () => {
+  if (!captureBlob) return;
+
+  if (captureBlob.type.startsWith('image/')) {
+    showToast('Still-image recognition is not available yet. Capture a 10 to 15 second screen clip instead.');
+    return;
+  }
+
+  identifyCaptureButton.disabled = true;
+
+  try {
+    const file = new File([captureBlob], 'muvy-capture.webm', {
+      type: captureBlob.type || 'video/webm',
+    });
+    captureDialog.close();
+    await identifyUploadedVideo(file);
+  } catch (error) {
+    captureStatus.textContent = error.message || 'Movie identification failed.';
+  } finally {
+    identifyCaptureButton.disabled = false;
+  }
 });

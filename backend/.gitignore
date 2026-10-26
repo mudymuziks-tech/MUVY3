@@ -31,3 +31,25 @@ tests/fixtures/clips/*.avi
 
 # Logs
 *.log
+
+
+# Environment-specific files
+
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+
+# Python virtual environments in subdirectories
+
+backend/.venv/
+
+# Test and coverage output
+
+.coverage
+htmlcov/
+
+# Temporary files
+
+*.tmp
+*.bak

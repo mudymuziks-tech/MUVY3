@@ -1,6 +1,9 @@
 /* Genre picker reuses Recognize option cards for a consistent selection pattern. */
 .genres-main { padding-bottom: max(34px, env(safe-area-inset-bottom)); }
-.genres-main > h2 { margin-left: 0; }
+.genres-main > h2 { 
+  margin-left: 0;
+  font-size: calc(22px + (24 - 22) * ((100vw - 320px) / (699 - 320))); 
+}
 .genre-list { gap: 11px; }
 .genre-choice { min-height: 82px; }
 .genre-mark { color: #c4a5ff; font-size: 1.08rem; font-weight: 700; }

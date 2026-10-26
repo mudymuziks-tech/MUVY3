@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from ingest.extract import clip_to_query_frames
 from matcher.matcher import FingerprintDB, match_clip
 
@@ -44,6 +46,11 @@ TEST_CASES = [
         "timestamp_tolerance_seconds": 15.0,
     },
 ]
+
+pytestmark = pytest.mark.skipif(
+    not all(case["path"].exists() for case in TEST_CASES),
+    reason="Regression video fixtures are not present in this environment.",
+)
 
 
 def test_movie_identification_regression():

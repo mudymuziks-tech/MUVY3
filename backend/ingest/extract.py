@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import uuid
 
 import cv2
 import numpy as np
@@ -159,41 +160,56 @@ def ingest_movie(
     interval_ms: int = FRAME_INTERVAL_MS,
 ) -> int:
     """
-    Extract fingerprints from a movie
-    and store them in Supabase.
+    Extract, stage, and atomically publish a movie's video fingerprints.
     """
 
     batch: list[dict] = []
     count = 0
+    ingestion_id = str(uuid.uuid4())
+    print(f"Video fingerprint ingestion run: {ingestion_id}", flush=True)
+    db.create_ingestion(ingestion_id, movie_id)
 
-    for timestamp_ms, frame in _sample_frames(
-        path,
-        interval_ms,
-    ):
+    try:
+        for timestamp_ms, frame in _sample_frames(path, interval_ms):
+            batch.append(
+                {
+                    "hash": phash(frame),
+                    "movie_id": movie_id,
+                    "timestamp_ms": timestamp_ms,
+                }
+            )
+            count += 1
 
-        batch.append(
-            {
-                "hash": phash(frame),
-                "movie_id": movie_id,
-                "timestamp_ms": timestamp_ms,
-            }
-        )
+            if len(batch) >= FINGERPRINT_BATCH_SIZE:
+                db.stage_many(ingestion_id, batch)
+                batch.clear()
+                print(f"Uploaded {count} fingerprints...", flush=True)
 
-        count += 1
+        if batch:
+            db.stage_many(ingestion_id, batch)
 
-        if len(batch) >= FINGERPRINT_BATCH_SIZE:
-
-            db.add_many(batch)
-
-            batch.clear()
-
-            print(
-                f"Uploaded {count} fingerprints...",
-                flush=True,
+        if count == 0:
+            raise RuntimeError(
+                "No video fingerprints were generated; active fingerprints were not changed."
             )
 
-    if batch:
-        db.add_many(batch)
+        staged_count = db.complete_ingestion(ingestion_id, movie_id)
+        if staged_count != count:
+            raise RuntimeError(
+                f"Video run staged {staged_count} fingerprints but extracted {count}."
+            )
+
+        db.finalize_ingestion(ingestion_id, movie_id)
+    except Exception:
+        try:
+            db.fail_ingestion(ingestion_id, movie_id)
+        except Exception as failure_error:
+            print(
+                f"Could not mark video ingestion run {ingestion_id} failed: "
+                f"{failure_error}",
+                flush=True,
+            )
+        raise
 
     print(
         f"Finished ingesting {count} fingerprints "

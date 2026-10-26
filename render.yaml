@@ -1,0 +1,36 @@
+# Render Blueprint for the MUVY identification API.
+#
+# Deploys backend/ as a native Python web service. The working directory is
+# set to backend/ (rootDir) so the module imports (identify, tmdb, ingest,
+# matcher, app) resolve, matching how the service runs locally.
+#
+# One-time dashboard steps after the Blueprint is created:
+#   1. Set the SUPABASE_URL, SUPABASE_KEY, and TMDB_API_KEY env vars. They are
+#      marked sync:false below, so you provide their values in the Render
+#      dashboard, not in this file. Use the Supabase *service-role* key.
+#   2. Optionally set ALLOWED_ORIGINS to a comma-separated list of extra
+#      frontend origins. The GitHub Pages origin is already allowed in code.
+#
+# NOTE ON TIERS: OpenCV + numpy video decoding generally needs more than the
+# free tier's 512 MB. A Starter or Standard web service is recommended for
+# reliable identification.
+
+services:
+  - type: web
+    name: muvy-api
+    runtime: python
+    rootDir: backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn api:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.14.8"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: TMDB_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false

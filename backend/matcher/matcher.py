@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from collections import defaultdict
 from typing import Optional
 
-from app.db.supabase import supabase
+from app.db.supabase import get_supabase_client
 
 
 def hamming_distance(a: int, b: int) -> int:
@@ -42,8 +42,10 @@ class FingerprintDB:
         movie_id: str,
         timestamp_ms: int,
     ) -> None:
+        client = get_supabase_client()
+
         response = (
-            supabase
+            client
             .table("fingerprints")
             .insert(
                 {
@@ -67,8 +69,10 @@ class FingerprintDB:
         if not fingerprints:
             return
 
+        client = get_supabase_client()
+
         response = (
-            supabase
+            client
             .table("fingerprints")
             .insert(fingerprints)
             .execute()
@@ -78,6 +82,77 @@ class FingerprintDB:
             raise RuntimeError(
                 "Failed to insert fingerprints"
             )
+
+    def stage_many(
+        self,
+        ingestion_id: str,
+        fingerprints: list[dict],
+    ) -> None:
+        """Upload a batch through the database-guarded staging RPC."""
+        if not fingerprints:
+            raise ValueError("Cannot stage an empty video fingerprint batch")
+        movie_id = fingerprints[0]["movie_id"]
+        if any(fingerprint["movie_id"] != movie_id for fingerprint in fingerprints):
+            raise ValueError("A staging batch must contain fingerprints for one movie")
+        payload = [
+            {"hash": fingerprint["hash"], "timestamp_ms": fingerprint["timestamp_ms"]}
+            for fingerprint in fingerprints
+        ]
+        response = get_supabase_client().rpc(
+            "stage_video_fingerprint_batch",
+            {
+                "p_ingestion_id": ingestion_id,
+                "p_movie_id": movie_id,
+                "p_fingerprints": payload,
+            },
+        ).execute()
+        if int(response.data or 0) != len(payload):
+            raise RuntimeError("Video staging RPC did not accept the complete batch")
+
+    def create_ingestion(self, ingestion_id: str, movie_id: str) -> None:
+        response = get_supabase_client().rpc(
+            "create_fingerprint_ingestion",
+            {
+                "p_ingestion_id": ingestion_id,
+                "p_movie_id": movie_id,
+                "p_modality": "video",
+            },
+        ).execute()
+        if response.data is None:
+            raise RuntimeError("Failed to create video fingerprint ingestion run")
+
+    def complete_ingestion(self, ingestion_id: str, movie_id: str) -> int:
+        response = get_supabase_client().rpc(
+            "complete_fingerprint_ingestion",
+            {
+                "p_ingestion_id": ingestion_id,
+                "p_movie_id": movie_id,
+                "p_modality": "video",
+            },
+        ).execute()
+        if response.data is None:
+            raise RuntimeError("Failed to complete video fingerprint ingestion run")
+        return int(response.data)
+
+    def fail_ingestion(self, ingestion_id: str, movie_id: str) -> None:
+        get_supabase_client().rpc(
+            "fail_fingerprint_ingestion",
+            {
+                "p_ingestion_id": ingestion_id,
+                "p_movie_id": movie_id,
+                "p_modality": "video",
+            },
+        ).execute()
+
+    def finalize_ingestion(self, ingestion_id: str, movie_id: str) -> int:
+        """Atomically publish a ready video run."""
+        response = get_supabase_client().rpc(
+            "finalize_video_fingerprint_ingestion",
+            {"p_ingestion_id": ingestion_id, "p_movie_id": movie_id},
+        ).execute()
+        if response.data is None:
+            raise RuntimeError("Failed to finalize video fingerprint ingestion")
+        return int(response.data)
 
     def find_candidates(
         self,
@@ -95,8 +170,10 @@ class FingerprintDB:
         if not query_hashes:
             return []
 
+        client = get_supabase_client()
+
         response = (
-            supabase
+            client
             .rpc(
                 "match_fingerprint_candidates",
                 {
@@ -399,6 +476,12 @@ def match_clip(
         return None
 
     if margin < min_margin:
+        return None
+
+    if (
+        total_frames == 0
+        or top_support / total_frames < min_support_ratio
+    ):
         return None
 
     # ---------------------------------------------------------

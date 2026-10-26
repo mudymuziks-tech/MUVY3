@@ -23,7 +23,7 @@ def ingest_real_movie(
     2. Find the movie in Supabase using its TMDB ID.
     3. Create the movie from TMDB if necessary.
     4. Extract perceptual fingerprints.
-    5. Store fingerprints in Supabase.
+    5. Stage fingerprints and atomically replace the active video set.
     """
 
     path = Path(video_path)
@@ -76,7 +76,8 @@ def ingest_real_movie(
     print()
 
     # ---------------------------------------------------------
-    # Extract and store fingerprints
+    # Extract, stage, and publish fingerprints. The extractor finalizes only
+    # after every batch has been staged successfully.
     # ---------------------------------------------------------
 
     print("Extracting fingerprints...")

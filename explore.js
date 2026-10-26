@@ -71,11 +71,6 @@ categoryChips.forEach((chip) => {
 
 searchInput.addEventListener('input', filterCards);
 searchForm.addEventListener('submit', (event) => { event.preventDefault(); filterCards(); });
-cards.forEach((card) => card.addEventListener('click', (event) => {
-  event.preventDefault();
-  showToast(`${card.dataset.title} details are coming soon.`);
-}));
-
 // DEEP LINK: restore a selected genre when arriving from the Genres page.
 const requestedGenre = new URLSearchParams(window.location.search).get('genre');
 if (requestedGenre) {

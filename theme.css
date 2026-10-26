@@ -22,24 +22,61 @@ html[data-theme="light"] :is(.app-shell,.explore-shell,.recognize-shell,.watchli
   background-color: #f3f0e9;
   color: #242332;
 }
-html[data-theme="light"] .auth-shell { background: radial-gradient(ellipse at 78% 16%, rgba(142, 97, 208, .13), transparent 42%), #f3f0e9; }
-html[data-theme="light"] .auth-brand > span:not(.splash-v) { color: #000 !important; -webkit-text-fill-color: #000 !important; }
-html[data-theme="light"] .auth-tabs { border-color: rgba(45,42,59,.14); background: #e7e3db; }
-html[data-theme="light"] .auth-tab.is-active { background: #ddd2ee; color: #4c2e79 !important; box-shadow: inset 0 0 0 1px rgba(114,64,203,.2); }
+html[data-theme="light"] .auth-shell { 
+  background: radial-gradient(ellipse at 78% 16%, rgba(142, 97, 208, .13), transparent 42%), #f3f0e9; 
+}
+html[data-theme="light"] .auth-brand > span:not(.splash-v) { 
+  color: #000 !important; -webkit-text-fill-color: #000 !important; 
+}
+html[data-theme="light"] .auth-tabs { 
+  border-color: rgba(45,42,59,.14); background: #e7e3db; 
+}
+html[data-theme="light"] .auth-tab.is-active { 
+  background: #ddd2ee; color: #4c2e79 !important; box-shadow: inset 0 0 0 1px rgba(114,64,203,.2); 
+}
 html[data-theme="light"] :is(.app-header,.recognize-header,.watchlist-header,.profile-header,.settings-header,.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) {
   border-color: rgba(42, 39, 58, .12) !important;
-  background: rgba(250, 248, 243, .84) !important;
+  background: rgba(250, 250, 250, 0.288) !important;
   color: #282638 !important;
 }
 html[data-theme="light"] :is(.recognize-main,.watchlist-main,.profile-main,.settings-main,.explore-main) {
   background: transparent !important;
   color: #282638 !important;
 }
-html[data-theme="light"] :is(.movie-card,.explore-card,.recognize-choice,.watchlist-item,.profile-options,.profile-stats,.profile-option,.settings-group,.settings-row,.action-card,.capture-option,.capture-dialog,.capture-options,.category-chip:not(.is-selected),.watchlist-tabs,.genre-list) {
+html[data-theme="light"] :is(.movie-card,.explore-card,.recognize-choice,.watchlist-item,.profile-options,.profile-stats,.profile-option,.settings-group,.settings-row, .action-card,.capture-option,.capture-dialog,.capture-options,.category-chip:not(.is-selected),.watchlist-tabs,.genre-list) {
   border-color: rgba(45, 42, 59, .14) !important;
-  background: #f3f0e9 !important;
+  background: rgba(0, 0, 0, 0) !important;
   color: #282638 !important;
 }
+
+html[data-theme="light"] :is(.settings-row1, .settings-row2) {
+  border-color: rgba(45, 42, 59, .14) !important;
+  background: #ffffff !important;
+  color: #282638 !important;
+}
+
+html[data-theme="light"] .explore-categories button:hover {
+  border-color: rgba(181,138,255,.2);
+  background: linear-gradient(125deg, #6f3bd6, #2e0b7a) !important; color: #ffffff !important;
+}
+
+html[data-theme="light"] .explore-categories button:active {
+  border-color: rgba(181,138,255,.2);
+  background: linear-gradient(120deg, #7c3cf1, #5b2ac4) !important; color: #faf8f8 !important;
+}
+
+html[data-theme="dark"] .explore-categories button:hover {
+ color: white !important;
+}
+
+html[data-theme="dark"] .explore-categories button:active {
+  color: white !important;
+}
+
+html[data-theme="dark"] :is(.explore-categories button.is-selected) { 
+  color: white !important;
+}
+
 html[data-theme="light"] :is(.search-row input,.explore-search,.auth-field input,.capture-option,.capture-preview,.watchlist-tabs) {
   border-color: rgba(45, 42, 59, .18) !important;
   background-color: #e7e3db !important;
@@ -54,27 +91,45 @@ html[data-theme="light"] :is(h1,h2,h3,p,label,strong,small,span,a,button,li,.mov
 html[data-theme="light"] :is(.greeting p,.action-caption,.movie-year,.section-heading h2 span,.watchlist-page-heading p:not(.watchlist-eyebrow),.watchlist-item p,.profile-identity p,.profile-option-copy small,.settings-row small,.settings-subtitle,.explore-empty,.explore-card .movie-year,.auth-description,.account-prompt,.text-link) {
   color: #686778 !important;
 }
-html[data-theme="light"] :is(.app-wordmark span,.sidebar-wordmark span,.recognize-sidebar-brand span,.watchlist-sidebar-brand span,.settings-side-brand span,.profile-brand span,.settings-brand span,.section-heading a,.profile-stats strong,.profile-option-icon,.settings-eyebrow,.watchlist-eyebrow,.genre-mark,.explore-filter-button,.nav-item.is-active,.bottom-nav a.active,.recognize-bottom-nav a.active,.watchlist-bottom-nav a.active,.profile-bottom-nav a.active,.settings-bottom-nav a.active) {
-  color: #7240cb !important;
+html[data-theme="light"] :is(.app-wordmark span,.sidebar-wordmark span,.recognize-sidebar-brand span,.watchlist-sidebar-brand span,.settings-side-brand span,.profile-brand span,.settings-brand span,.section-heading a,.profile-stats strong,.profile-option-icon,.settings-eyebrow,.watchlist-eyebrow,.genre-mark,.explore-filter-button,.nav-item.is-active, .bottom-nav a.active, .recognize-bottom-nav a.active,.watchlist-bottom-nav a.active,.profile-bottom-nav a.active,.settings-bottom-nav a.active) {
+  color: #6f30db !important;
 }
 html[data-theme="light"] :is(.capture-primary,.category-chip.is-selected,.auth-submit,.auth-tab.is-active,.watchlist-tabs button.selected,.nav-item.is-active,.settings-sidebar nav a.active) {
   color: #fff !important;
 }
-html[data-theme="light"] :is(.bottom-nav a.active,.recognize-bottom-nav a.active,.watchlist-bottom-nav a.active,.profile-bottom-nav a.active,.settings-bottom-nav a.active) { color: #7240cb !important; }
+html[data-theme="light"] :is(.bottom-nav a.active,.bottom-nav + .nav-item span.is-active,.recognize-bottom-nav a.active,.watchlist-bottom-nav a.active,.profile-bottom-nav a.active,.settings-bottom-nav a.active, .bottom-nav-span.is-active) { 
+  color: #7240cb !important; 
+}
 html[data-theme="light"] :is(.sidebar-nav a,.nav-item,.bottom-nav a,.recognize-bottom-nav a,.watchlist-bottom-nav a,.profile-bottom-nav a,.settings-bottom-nav a,.watchlist-sidebar nav a,.recognize-sidebar nav a,.settings-sidebar nav a) { color: #555466; }
 html[data-theme="light"] :is(.app-menu-panel,.recognize-menu-panel,.watchlist-mobile-menu,.profile-menu-panel,.settings-menu-panel) {
   border-color: rgba(45, 42, 59, .16) !important;
   background: rgba(250, 248, 243, .98) !important;
   color: #282638 !important;
 }
-html[data-theme="light"] :is(.app-menu-panel a,.recognize-menu-panel a,.watchlist-mobile-menu a,.profile-menu-panel a,.settings-menu-panel a) { color: #282638 !important; }
-html[data-theme="light"] .app-menu-panel:not([hidden]) { border-color: rgba(55,48,73,.16) !important; border-left: 0 !important; background: rgba(250,248,243,.7) !important; box-shadow: 0 16px 40px rgba(39,32,53,.17); -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); }
-html[data-theme="light"] .app-menu-panel a:hover, html[data-theme="light"] .app-menu-panel a:focus-visible { background: rgba(126,79,199,.12); color: #6841a6 !important; }
-html[data-theme="light"] .app-menu-heading { color: #282638; }
-html[data-theme="light"] .app-menu-close:hover, html[data-theme="light"] .app-menu-close:focus-visible { background: rgba(126,79,199,.12); color: #6841a6; }
-html[data-theme="light"] .menu-theme-option { border-color: rgba(55,48,73,.18); color: #282638; }
-html[data-theme="light"] .menu-theme-option img { filter: brightness(0) saturate(100%) !important; }
-html[data-theme="light"] .menu-theme-option:hover, html[data-theme="light"] .menu-theme-option:focus-visible { border-color: rgba(126,79,199,.42); background: rgba(126,79,199,.12); color: #6841a6; }
+html[data-theme="light"] :is(.app-menu-panel a,.recognize-menu-panel a,.watchlist-mobile-menu a,.profile-menu-panel a,.settings-menu-panel a) { 
+  color: #282638 !important; 
+}
+html[data-theme="light"] .app-menu-panel:not([hidden]) {
+  border-color: rgba(55,48,73,.16) !important; border-left: 0 !important; background: rgba(250,248,243,.7) !important; box-shadow: 0 16px 40px rgba(39,32,53,.17); -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); 
+}
+html[data-theme="light"] .app-menu-panel a:hover, html[data-theme="light"] .app-menu-panel a:focus-visible { 
+  background: rgba(126,79,199,.12); color: #6841a6 !important; 
+}
+html[data-theme="light"] .app-menu-heading { 
+  color: #282638; 
+}
+html[data-theme="light"] .app-menu-close:hover, html[data-theme="light"] .app-menu-close:focus-visible { 
+  background: rgba(126,79,199,.12); color: #6841a6; 
+}
+html[data-theme="light"] .menu-theme-option { 
+  border-color: rgba(55,48,73,.18); color: #282638; 
+}
+html[data-theme="light"] .menu-theme-option img { 
+  filter: brightness(0) saturate(100%) !important; 
+}
+html[data-theme="light"] .menu-theme-option:hover, html[data-theme="light"] .menu-theme-option:focus-visible {
+  border-color: rgba(126,79,199,.42); background: rgba(126,79,199,.12); color: #6841a6; 
+}
 /* White SVG assets become dark when inactive on warm light surfaces. */
 html[data-theme="light"] :is(.app-header .icon-button,.app-header .app-menu-button,.recognize-header .recognize-menu,.watchlist-header .watchlist-menu-button,.profile-header .profile-menu-button,.settings-header .settings-menu-button) img { filter: brightness(0) saturate(100%) !important; }
 html[data-theme="light"] .profile-header .profile-settings-icon img { filter: brightness(0) saturate(100%) invert(34%) sepia(36%) saturate(1998%) hue-rotate(232deg) brightness(91%) contrast(91%) !important; opacity: 1 !important; }
@@ -125,6 +180,7 @@ html[data-theme="light"] .recognize-choice-icon { background: #e8def7 !important
 /* Keep filled navigation glyphs unmistakable: violet on light, white on dark. */
 html[data-theme="light"] :is(.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) img { width: 23px; height: 23px; }
 html[data-theme="light"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.settings-bottom-nav .active) img { transform: scale(1.08); }
+
 html[data-theme="dark"] :is(.bottom-nav a.active,.bottom-nav .is-active,.recognize-bottom-nav .active,.recognize-bottom-nav .is-active,.watchlist-bottom-nav .active,.watchlist-bottom-nav .is-active,.profile-bottom-nav .active,.settings-bottom-nav .active) img { filter: brightness(0) invert(1) !important; opacity: 1 !important; }
 html[data-theme="dark"] :is(.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) img { opacity: 1; }
 
@@ -182,6 +238,15 @@ html[data-theme="light"] .recognize-body .audio-start-button span { color: #fff 
 html[data-theme="light"] .recognize-body .match-preview-actions button:first-child,
 html[data-theme="light"] .recognize-body .recognize-premium button { color: #fff !important; }
 html[data-theme="light"] .recognize-body .match-preview-actions button + button { color: #59349a !important; }
+
+html[data-theme="dark"] .settings-body :is(.profile-details-header, .contact-row, .username-row){
+  background-color: rgb(7, 13, 24);
+}
+
+html[data-theme="dark"] .settings-body :is(.contact-row, .username-row){
+  background: linear-gradient(115deg,rgba(20,29,44,.93),rgba(14,21,34,.93)); 
+
+}
 
 /* Desktop light theme: recolor the wide layouts and their sidebar surfaces. */
 @media (min-width: 1000px) {
@@ -271,6 +336,27 @@ html[data-theme="light"] .recognize-body .match-preview-actions button + button 
     background: #f3f0e9 !important;
     color: #282638 !important;
   }
+  html[data-theme="light"] .unmatched-panel {
+    border-color: rgba(45,42,59,.14) !important;
+    background: #fffdf9 !important;
+    color: #282638 !important;
+  }
+  html[data-theme="light"] .catalog-result {
+    border-color: rgba(45,42,59,.14) !important;
+    background: #f3f0e9 !important;
+  }
+  html[data-theme="light"] .catalog-search-row input {
+    border-color: rgba(45,42,59,.2) !important;
+    background: #fff !important;
+    color: #282638 !important;
+  }
+  html[data-theme="light"] :is(.unmatched-panel h3,.unmatched-panel label,.catalog-result-details strong) {
+    color: #282638 !important;
+  }
+  html[data-theme="light"] :is(.unmatched-copy,.catalog-result-details small,.catalog-result-details p) {
+    color: #545162 !important;
+  }
+  html[data-theme="light"] .catalog-status { color: #59349a !important; }
   /* Profile and Settings cards use the same near-white surface as the main panel. */
   html[data-theme="light"] :is(.profile-stats,.profile-options,.profile-option,.settings-row) {
     border-color: rgba(45,42,59,.14) !important;
@@ -364,6 +450,19 @@ html[data-theme="light"] .auth-tab:not(.is-active) { color: #5a5269 !important; 
   }
 }
 
+html[data-theme="light"] :is(.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) :is(a.active,a.is-active),
+html[data-theme="light"] :is(.bottom-nav,.recognize-bottom-nav,.watchlist-bottom-nav,.profile-bottom-nav,.settings-bottom-nav) :is(a.active,a.is-active) span {
+  color: #7240cb !important;
+}
+
+html[data-theme="light"] .profile-options {
+  border-color: rgba(45, 42, 59, .24) !important;
+  background: #fffdf9 !important;
+}
+html[data-theme="light"] .profile-options > :not(:last-child) {
+  border-bottom: 1px solid rgba(45, 42, 59, .2) !important;
+}
+
 /* Settings theme switch control. */
 .theme-control { display: flex; align-items: center; gap: 10px; }
 .theme-control input { width: 42px; height: 24px; margin: 0; appearance: none; border: 1px solid rgba(196,211,233,.3); border-radius: 20px; background: #253148; cursor: pointer; transition: background .18s ease; }
@@ -420,4 +519,64 @@ html[data-theme="dark"] .profile-sidebar .profile-sidebar-logout img {
     filter: brightness(0) saturate(100%) invert(31%) sepia(57%) saturate(2007%) hue-rotate(238deg) brightness(91%) contrast(96%) !important;
     opacity: 1 !important;
   }
+}
+
+/* Movie profile: replace its standalone dark surfaces when light mode is active. */
+html[data-theme="light"] body.movie-profile-body {
+  background: #f3f0e9 !important;
+  color: #282638 !important;
+}
+html[data-theme="light"] .movie-profile .profile-content {
+  background: linear-gradient(rgba(243,240,233,.94), #f3f0e9 190px) !important;
+}
+html[data-theme="light"] .movie-profile .hero-shade {
+  background: linear-gradient(transparent, #f3f0e9) !important;
+}
+html[data-theme="light"] .movie-profile :is(.profile-meta,.profile-overview,.cast-person) {
+  color: #454253 !important;
+}
+html[data-theme="light"] .movie-profile .profile-rating { color: #a56a00 !important; }
+html[data-theme="light"] .movie-profile .profile-genres a {
+  background: #e4deef !important;
+  color: #393149 !important;
+}
+html[data-theme="light"] .movie-profile .profile-genres a:hover,
+html[data-theme="light"] .movie-profile .profile-genres a:focus-visible {
+  background: #d8c9ef !important;
+}
+html[data-theme="light"] .movie-profile .cast-portrait {
+  border-color: #d3c9e2 !important;
+  background: linear-gradient(145deg,#e4deef,#d7ddec) !important;
+  color: #503780 !important;
+}
+html[data-theme="light"] .movie-profile .cast-person span,
+html[data-theme="light"] .movie-profile .streaming-section p {
+  color: #686778 !important;
+}
+html[data-theme="light"] .movie-profile .profile-back { color: #282638 !important; }
+html[data-theme="light"] .movie-profile .profile-back:hover {
+  border-color: rgba(114,64,203,.35) !important;
+  background: rgba(255,255,255,.8) !important;
+}
+html[data-theme="light"] .movie-profile .profile-actions button { color: #fff !important; }
+html[data-theme="light"] .movie-profile .share-button { background: #535064 !important; }
+html[data-theme="light"] .movie-profile .profile-status {
+  border-color: #d3c9e2 !important;
+  background: #fffdf8 !important;
+  color: #393149 !important;
+}
+html[data-theme="light"] .streaming-dialog {
+  border-color: #d3c9e2 !important;
+  background: #fffdf8 !important;
+  color: #282638 !important;
+}
+html[data-theme="light"] .streaming-dialog p { color: #686778 !important; }
+html[data-theme="light"] .streaming-options a {
+  border-color: #d8d2e0 !important;
+  background: #f0ecf6 !important;
+  color: #282638 !important;
+}
+html[data-theme="light"] .streaming-dialog .dialog-close {
+  background: #e4deef !important;
+  color: #282638 !important;
 }

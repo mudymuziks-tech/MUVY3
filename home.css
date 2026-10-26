@@ -48,7 +48,7 @@ body.home-body {
 .app-wordmark span { color: #a878ff; }
 .home-brand-lockup { display: flex; flex: 0 0 auto; align-items: center; gap: 16px; }
 .header-actions { display: flex; align-items: center; gap: 18px; }
-.icon-button, .avatar-button {
+.icon-button {
   display: grid;
   width: 38px;
   height: 38px;
@@ -60,19 +60,7 @@ body.home-body {
   cursor: pointer;
 }
 .icon-button img { width: 21px; height: 21px; opacity: .94; }
-.avatar-button {
-  position: relative;
-  flex: 0 0 38px;
-  overflow: hidden;
-  border: 2px solid rgba(230, 236, 255, .72);
-  border-radius: 50%;
-  background: linear-gradient(145deg, #f1c49c, #7450aa 53%, #2e596c);
-  box-shadow: 0 0 0 2px rgba(159, 111, 255, .22);
-  font-size: .75rem;
-  font-weight: 800;
-}
-.avatar-button img { position: absolute; inset: 2px; display: block; width: calc(100% - 4px); height: calc(100% - 4px); border-radius: 50%; object-fit: cover; }
-.icon-button:focus-visible, .avatar-button:focus-visible, .recognize-action:focus-visible, .nav-item:focus-visible, .recognize-feature:focus-visible {
+.icon-button:focus-visible, .recognize-action:focus-visible, .nav-item:focus-visible, .recognize-feature:focus-visible {
   outline: 2px solid #c5a0ff;
   outline-offset: 3px;
 }
@@ -539,32 +527,52 @@ body.home-body {
     margin-top: 0;
     min-width: 0;
   }
-  .section-heading { margin-bottom: 15px; }
-  .section-heading h2 { font-size: 1.13rem; }
+  .section-heading {
+    margin-bottom: 15px; 
+  }
+  .section-heading h2 { 
+    font-size: 1.13rem; 
+  }
   .poster-rail {
     grid-auto-columns: clamp(118px, 10.8vw, 154px);
     gap: clamp(11px, 1.25vw, 18px);
     overflow-x: auto;
     padding-bottom: 9px;
   }
-  .poster-art { aspect-ratio: .7; border-radius: 11px; }
-  .movie-card { gap: 7px; }
-  .movie-title { font-size: .75rem; }
-  .toast { bottom: 28px; left: 16px; }
+  .poster-art { 
+    aspect-ratio: .7; border-radius: 11px; 
+  }
+  .movie-card { 
+    gap: 7px;
+  }
+  .movie-title { 
+    font-size: .75rem; 
+  }
+  .toast { 
+    bottom: 28px; left: 16px; 
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .recognize-feature, .recognize-action, .toast, .capture-option { transition: none; }
+  .recognize-feature, 
+  .recognize-action, 
+  .toast, 
+  .capture-option { 
+    transition: none;
+  }
 }
 
 
 /* Consolidated desktop dashboard rules formerly in home-desktop.css. */
 /* Desktop dashboard composition; home.css provides the tablet and mobile baseline. */
 .desktop-brand-copy,
-.notification-button,
 .recognize-desktop-intro,
 .recognize-orb,
 .sidebar-wordmark,
 .sidebar-discover { display: none; }
+
+.recognize-section .recognize-desktop-intro {
+  row-gap: 14px;
+}
 
 @media (min-width: 1000px) {
   body.home-body {
@@ -575,10 +583,19 @@ body.home-body {
   }
   .app-shell { width: min(100%, 1600px); padding: 158px 36px 70px 236px; }
   .app-header {
-    top: 0; left: 50%; width: min(calc(100% - 64px), 1600px); min-height: 72px;
-    justify-content: flex-start; gap: 17px; padding: 0 18px;
-    border: 1px solid rgba(173,190,229,.1); border-top: 0; border-radius: 0 0 14px 14px;
-    background: rgba(7,13,32,.68); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+    top: 0; 
+    left: 50%; 
+    width: min(calc(100% - 64px), 1600px); 
+    min-height: 72px;
+    justify-content: space-between; 
+    gap: 17px; 
+    padding: 0 18px;
+    border: 1px solid rgba(173,190,229,.1); 
+    border-top: 0; 
+    border-radius: 0 0 14px 14px;
+    background: rgba(7, 13, 32, 0.116); 
+    -webkit-backdrop-filter: blur(18px); 
+    backdrop-filter: blur(18px);
     transform: translateX(-50%);
   }
   .app-wordmark { font-size: 2rem; }
@@ -631,7 +648,7 @@ body.home-body {
   .sidebar-discover strong { font-size: .73rem; line-height: 1.4; }
   .sidebar-discover small { color: #abb1c8; font-size: .59rem; line-height: 1.5; }
   main { display: flex; flex-direction: column; gap: 27px; }
-  .greeting { display: none; }
+  .greeting { margin: 0; }
   .recognize-section {
     position: static; top: auto; grid-column: auto; grid-row: auto; display: grid;
     grid-template-columns: minmax(0,1fr) 126px; grid-template-rows: auto auto; gap: 18px 22px;
@@ -713,4 +730,3 @@ body.home-body {
   .recognize-action::after { content: "\203A"; font-size: 1.35rem; line-height: 1; pointer-events: none; }
   .sidebar-theme-toggle { border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 }
-

@@ -18,6 +18,18 @@ class TMDBError(Exception):
     """Raised when a TMDB request fails."""
 
 
+def _read_json(response: requests.Response) -> dict:
+    try:
+        data = response.json()
+    except ValueError as exc:
+        raise TMDBError("TMDB returned an invalid JSON response.") from exc
+
+    if not isinstance(data, dict):
+        raise TMDBError("TMDB returned an invalid JSON response.")
+
+    return data
+
+
 def get_movie_details(
     tmdb_id: int,
     language: str = "en-US",
@@ -58,4 +70,39 @@ def get_movie_details(
             f"TMDB returned HTTP {response.status_code}: {response.text}"
         )
 
-    return response.json()
+    return _read_json(response)
+
+
+def search_movies(
+    query: str,
+    language: str = "en-US",
+) -> list[dict]:
+    """Search TMDB for movie titles."""
+
+    if not TMDB_API_KEY:
+        raise TMDBError("TMDB_API_KEY is not configured.")
+
+    try:
+        response = requests.get(
+            f"{TMDB_BASE_URL}/search/movie",
+            params={
+                "api_key": TMDB_API_KEY,
+                "query": query,
+                "language": language,
+                "include_adult": False,
+            },
+            timeout=10,
+        )
+    except requests.RequestException as exc:
+        raise TMDBError(f"TMDB request failed: {exc}") from exc
+
+    if response.status_code != 200:
+        raise TMDBError(
+            f"TMDB returned HTTP {response.status_code}: {response.text}"
+        )
+
+    results = _read_json(response).get("results", [])
+    if not isinstance(results, list):
+        raise TMDBError("TMDB returned an invalid movie search response.")
+
+    return results

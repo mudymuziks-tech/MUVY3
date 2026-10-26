@@ -1,0 +1,103 @@
+* {
+  overflow-y: hidden;
+}
+
+.profile-details-header {
+  display: flow-root;
+  position: fixed;
+  width: 100%;
+  background-color: rgba(250, 248, 243, 0.84);
+  box-shadow: 1px 0 1px 0 rgb(109, 109, 109);
+}
+.prodile-details-header-overall {
+  margin: 15px 10px;
+}
+
+.profile-details-general {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  padding: 100px calc(15px + (50 - 15) * ((100vw - 370px) / (999 - 370))) 0 calc(15px + (50 - 15) * ((100vw - 370px) / (999 - 370)));
+}
+
+.prodile-details-header-overall {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-brand1 {
+  grid-column: 2; 
+  justify-self: start; 
+  margin-left: 15px; 
+  color: #c9d1df; 
+  font-size: 1rem; 
+  font-weight: 700; 
+  letter-spacing: -.015em; 
+  text-decoration: none; 
+}
+.profile-details-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-details-general h2 {
+  font-size: 16px;
+  margin: 0 0 9px 12px;
+}
+
+.contact-row-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-row {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid rgba(75, 75, 75, 0.274);
+  border-radius: 8px;
+  padding: 16px 10px;
+}
+
+.username-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border: 1px solid rgba(75, 75, 75, 0.274);
+  border-radius: 8px;
+  padding: 16px 10px;
+  text-decoration: none;
+  cursor: default;
+}
+
+.contact-row span,
+.username-row span {
+  display: flex;
+  flex-direction: column;
+}
+
+.username-option-arrow {
+  cursor: pointer;
+}
+
+.contact-row strong,
+.username-row strong {
+  font-size: 13px;
+}
+
+.username-row b {
+  display: grid; place-items: center; justify-self: end; color: #aab4c4; font-size: 1.30rem; text-decoration: none; cursor: pointer;
+}
+
+@media (min-width: 1000px) {
+  .profile-details-general {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 150px calc(66px + (120 - 66) * ((100vw - 1000px) / (1366 - 1000))) 0 calc(66px + (120 - 66) * ((100vw - 1000px) / (1366 - 1000)));
+  }
+}

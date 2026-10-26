@@ -21,37 +21,65 @@
         </button>
         <a class="app-wordmark" href="#home" aria-label="MUVY home">MU<span>V</span>Y</a>
       </div>
-      <div class="desktop-brand-copy" aria-hidden="true"><strong>Same experience. Bigger screens.</strong><span>Recognize &nbsp; Discover &nbsp; Keep</span></div>
-      <form class="search-row" id="search-row" role="search" hidden>
-        <label class="visually-hidden" for="movie-search">Search movies and shows</label>
-        <input id="movie-search" type="search" placeholder="Search movies and shows" autocomplete="off">
-        <button type="submit">Search</button>
-      </form>
+
+      
       <div class="header-actions">
-        <button class="icon-button" id="search-toggle" type="button" aria-label="Open movie search" aria-expanded="false">
-          <img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
-        </button>
         <button class="icon-button notification-button" type="button" aria-label="Notifications" data-message="You are all caught up.">
           <img src="images/nav%20tools/notifications_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
         </button>
-        <a class="avatar-button" id="profile-button" href="profile.html" aria-label="Open profile"><img src="images/0f3cef7f-cca3-482f-bbc7-264b839abbe5.jpg" alt=""></a>
       </div>
     </header>
     <nav class="app-menu-panel" id="app-menu-panel" hidden aria-label="App menu">
-      <div class="app-menu-heading"><span>Menu</span><button class="app-menu-close" id="app-menu-close" type="button" aria-label="Close app menu"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
-      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html">Recognize</a><a href="genres.html">Browse</a><a href="watchlist.html">Watchlist</a><a href="profile.html">Profile</a><a href="settings.html#premium" data-premium-upsell>Go Premium</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
-      <button class="menu-theme-option" id="theme-toggle-home" data-theme-toggle type="button" aria-label="Switch to light mode" aria-pressed="false"><img src="images/nav%20tools/light_mode_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></button>
+      <div class="app-menu-heading">
+        <span>
+          Menu
+        </span>
+        <button class="app-menu-close" id="app-menu-close" type="button" aria-label="Close app menu">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <a href="home.html">
+        Home
+      </a>
+      <a href="explore.html">
+        Explore
+      </a>
+      <a href="recognize.html">
+        Recognize
+      </a>
+      <a href="genres.html">
+        Browse
+      </a>
+      <a href="watchlist.html">
+        Watchlist
+      </a>
+      <a href="profile.html">
+        Profile
+      </a>
+      <a href="settings.html#premium" data-premium-upsell>
+        Go Premium
+      </a>
+      <a href="settings.html">
+        Settings
+      </a>
+      <a href="login.html?logout=1">
+        Log Out
+      </a>
+      <button class="menu-theme-option" id="theme-toggle-home" data-theme-toggle type="button" aria-label="Switch to light mode" aria-pressed="false">
+        <img src="images/nav%20tools/light_mode_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+      </button>
     </nav>
 
     <main>
       <section class="greeting" aria-labelledby="greeting-title">
-        <h1 id="greeting-title">Good morning</h1>
+        <h1 id="greeting-title">Good morning, Mudy!</h1>
         <p>What would you like to do today?</p>
       </section>
 
       <section class="recognize-section" id="recognize" aria-label="Recognize a movie">
         <div class="recognize-desktop-intro">
-          <p>Recognize a movie</p>
           <h2>What would you like to do today?</h2>
           <span>Use one of the methods below to identify a movie, show or sound.</span>
         </div>
@@ -67,19 +95,22 @@
             <span class="action-icon audio-icon" aria-hidden="true"><img src="images/nav%20tools/mic_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
             <span class="action-title">Audio</span><span class="action-caption">Listen</span>
           </button>
-          <button class="recognize-action" id="camera-options-button" type="button" aria-haspopup="dialog" aria-controls="capture-dialog">
+          <button class="recognize-action" id="camera-options-button" type="button">
             <span class="action-icon"><img src="images/nav%20tools/mobile_cast_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
             <span class="action-title">Screen</span><span class="action-caption">Capture your screen</span>
           </button>
           <button class="recognize-action" type="button" data-picker="clip-picker">
             <span class="action-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="action-title">Upload Clip</span><span class="action-caption">Video or image</span>
+            <span class="action-title">Upload Clip</span><span class="action-caption">Recognize a video clip</span>
           </button>
         </div>
         <button class="recognize-orb" type="button" aria-label="Listen to identify a movie" data-message="Audio recognition will be available soon.">
-          <span class="recognize-orb-core" aria-hidden="true"><svg viewBox="0 -960 960 960" focusable="false"><path d="M395-435q-35-35-35-85v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q0 50-35 85t-85 35Zm85-205Zm-40 520v-123q-104-14-172-93t-68-184h80q0 83 58.5 141.5T480-320q83 0 141.5-58.5T680-520h80q0 105-68 184t-172 93v123h-80Z"/></svg></span>
+          <span class="recognize-orb-core" aria-hidden="true">
+            <svg viewBox="0 -960 960 960" focusable="false">
+              <path d="M395-435q-35-35-35-85v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q0 50-35 85t-85 35Zm85-205Zm-40 520v-123q-104-14-172-93t-68-184h80q0 83 58.5 141.5T480-320q83 0 141.5-58.5T680-520h80q0 105-68 184t-172 93v123h-80Z"/>
+            </svg>
+          </span>
         </button>
-        <input class="visually-hidden" id="clip-picker" type="file" accept="video/*,image/*">
       </section>
 
       <section class="movie-section" id="for-you" aria-labelledby="for-you-title">
@@ -203,6 +234,7 @@
   </div>
   <script src="i18n.js" defer></script>
   <script src="auth.js" defer></script>
+  <script src="movie-cards.js" defer></script>
   <script src="home.js" defer></script>
   <script src="app-menu.js" defer></script>
   <script src="navigation.js" defer></script>
@@ -211,4 +243,3 @@
 
 </body>
 </html>
-

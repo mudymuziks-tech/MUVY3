@@ -2,7 +2,7 @@
 
 ## Status
 
-Verified baseline — September 2026.
+Verified baseline â€” September 2026.
 
 ## Acceptance thresholds
 
@@ -25,14 +25,14 @@ Relaxed matching:
 
 Known movies:
 
-- Reckless — PASS
-- Interstellar — PASS
-- Michael — PASS
-- Enola Holmes 3 — PASS
+- Reckless â€” PASS
+- Interstellar â€” PASS
+- Michael â€” PASS
+- Enola Holmes 3 â€” PASS
 
 Unknown movie:
 
-- record test1.mp4 — correctly rejected
+- record test1.mp4 â€” correctly rejected
 
 ## Rule
 

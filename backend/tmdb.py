@@ -33,6 +33,7 @@ def _read_json(response: requests.Response) -> dict:
 def get_movie_details(
     tmdb_id: int,
     language: str = "en-US",
+    append_to_response: Optional[str] = None,
 ) -> Optional[dict]:
     """
     Fetch full movie details from TMDB using a movie ID.
@@ -50,13 +51,17 @@ def get_movie_details(
 
     url = f"{TMDB_BASE_URL}/movie/{tmdb_id}"
 
+    params = {
+        "api_key": TMDB_API_KEY,
+        "language": language,
+    }
+    if append_to_response:
+        params["append_to_response"] = append_to_response
+
     try:
         response = requests.get(
             url,
-            params={
-                "api_key": TMDB_API_KEY,
-                "language": language,
-            },
+            params=params,
             timeout=10,
         )
     except requests.RequestException as exc:

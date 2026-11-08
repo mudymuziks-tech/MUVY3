@@ -1,0 +1,34 @@
+.notification-shell{width:min(100%,1080px);padding-bottom:120px}
+.notification-page-header{position:relative;display:flex;min-height:78px;align-items:center;gap:16px;margin:0 -24px;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(8,6,17,.4)}
+.notification-back{display:grid;width:40px;height:40px;place-items:center;border:1px solid rgba(255,255,255,.13);border-radius:50%;background:rgba(255,255,255,.04);color:#f8f5ff}
+.notification-back svg{width:21px;height:21px}
+.notification-page-header .muvy-wordmark{font-size:1.55rem}
+.notification-header-title{margin:0;color:#f8f5ff;font-size:1rem;font-weight:800;letter-spacing:.02em}
+.notification-header-label{margin-left:auto;color:#9e94ad;font-size:.62rem;font-weight:800;letter-spacing:.16em}
+.notifications-main{width:min(760px,100%);margin:0 auto;padding:52px 0 48px}
+.notifications-main>.page-eyebrow{margin-bottom:10px}
+.notifications-main h1{margin:0;font-size:clamp(2.2rem,6vw,3.4rem);letter-spacing:-.065em;line-height:1.02}
+.notifications-intro{margin:12px 0 0;color:#aaa4b8;font-size:.91rem;line-height:1.65}
+.notification-state{display:grid;min-height:380px;align-content:center;justify-items:center;margin-top:27px;padding:35px 20px;border:1px solid rgba(255,255,255,.09);border-radius:24px;background:radial-gradient(ellipse at 50% 30%,rgba(133,64,195,.13),transparent 53%),linear-gradient(145deg,rgba(24,18,38,.78),rgba(12,10,19,.78));text-align:center}
+.notification-illustration{display:grid;width:112px;height:112px;place-items:center;margin-bottom:12px;border:1px solid rgba(182,121,255,.28);border-radius:50%;background:radial-gradient(circle,rgba(128,68,190,.18),rgba(128,68,190,.03) 70%);color:#c295ff;box-shadow:0 0 45px rgba(153,89,222,.12)}
+.notification-illustration svg{width:76px;height:76px}
+.notification-state h2{margin:8px 0 0;font-size:1.15rem;letter-spacing:-.025em}
+.notification-state p{margin:9px 0 0;color:#aaa4b8;font-size:.84rem;line-height:1.6}
+.notification-list[hidden]{display:none}
+.notification-list-items{display:grid;gap:10px;margin-top:27px}
+.notification-item{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:start;gap:13px;padding:17px;border:1px solid rgba(255,255,255,.1);border-radius:17px;background:rgba(255,255,255,.035);color:#f8f5ff;text-decoration:none}
+.notification-item.is-unread{border-color:rgba(173,104,255,.32);background:linear-gradient(110deg,rgba(128,63,193,.13),rgba(255,255,255,.025))}
+.notification-item-icon{display:grid;width:40px;height:40px;place-items:center;border-radius:13px;background:rgba(157,83,217,.16);color:#c596ff}
+.notification-item-copy{min-width:0}
+.notification-item-copy strong{display:block;font-size:.88rem}
+.notification-item-copy p{margin:5px 0 0;color:#aaa4b8;font-size:.78rem;line-height:1.5}
+.notification-item-copy time{display:block;margin-top:8px;color:#81798e;font-size:.66rem}
+.notification-unread-dot{width:8px;height:8px;margin-top:7px;border-radius:50%;background:#c385ff;box-shadow:0 0 10px rgba(195,133,255,.7)}
+html[data-theme="light"] .notification-page-header{border-bottom-color:rgba(42,39,58,.12);background:rgba(250,248,243,.4)}
+html[data-theme="light"] .notification-back{border-color:rgba(45,42,59,.14);background:#ffffff80;color:#282638}
+html[data-theme="light"] .notification-header-label{color:#686778}
+html[data-theme="light"] .notification-state{border-color:rgba(45,42,59,.12);background:radial-gradient(ellipse at 50% 30%,rgba(133,64,195,.09),transparent 53%),#fff9}
+html[data-theme="light"] .notification-state h2,html[data-theme="light"] .notification-item-copy strong{color:#282638}
+html[data-theme="light"] .notification-state p,html[data-theme="light"] .notification-item-copy p{color:#686778}
+html[data-theme="light"] .notification-item{border-color:rgba(45,42,59,.12);background:#ffffffa8;color:#282638}
+@media(max-width:600px){.notification-shell{padding-right:14px;padding-left:14px}.notification-page-header{margin-inline:-14px;padding-inline:14px}.notifications-main{padding:36px 0}.notification-state{min-height:320px;margin-top:22px;border-radius:20px}.notification-header-label{font-size:.53rem}}

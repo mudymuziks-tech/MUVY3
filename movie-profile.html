@@ -2,40 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07101b">
-  <title>Movie profile | MUVY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080611">
+  <title>Movie | MUVY</title>
   <script src="theme-init.js"></script>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="movie-profile.css">
   <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="muvy-app.css">
+  <link rel="stylesheet" href="movie-profile.css">
 </head>
-<body class="movie-profile-body">
+<body class="muvy-page movie-profile-body">
   <main class="movie-profile" id="movie-profile">
-    <a class="page-back profile-back" href="home.html" data-app-back aria-label="Go back to previous page" title="Go back"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    <section class="profile-hero" aria-label="Movie artwork"><img id="profile-backdrop" alt=""><div class="hero-shade"></div></section>
+    <section class="profile-hero" aria-label="Movie artwork">
+      <img id="profile-backdrop" alt="" aria-hidden="true">
+      <div class="hero-shade"></div>
+      <nav class="detail-topbar" aria-label="Movie details navigation">
+        <a class="detail-back" href="home.html" data-app-back aria-label="Go back to previous page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="detail-top-actions">
+          <button class="detail-icon-button" id="save-movie" data-save-movie type="button" aria-label="Bookmark movie" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.75A1.75 1.75 0 0 1 7.75 2h8.5A1.75 1.75 0 0 1 18 3.75V22l-6-3.8L6 22z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
+          <button class="detail-icon-button" id="share-movie" type="button" aria-label="Share movie"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6m-1-5-9 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </nav>
+      <span class="backdrop-credit" id="backdrop-credit" hidden>ARTWORK</span>
+    </section>
     <article class="profile-content">
-      <h1 id="profile-title">Movie title</h1>
-      <p class="profile-meta" id="profile-meta"></p>
-      <div class="profile-rating" id="profile-rating"></div>
-      <div class="profile-genres" id="profile-genres"></div>
-      <p class="profile-overview" id="profile-overview"></p>
-      <section class="profile-section" id="cast-section" hidden><h2>Cast &amp; crew</h2><div class="cast-list" id="profile-cast"></div></section>
-      <section class="profile-section streaming-section"><h2>Where to watch</h2><p>Choose a service to search for this title. Availability varies by region.</p></section>
+      <div class="detail-heading">
+        <img class="detail-poster" id="profile-poster" alt="" hidden>
+        <div class="detail-title-block">
+          <h1 id="profile-title">Movie title</h1>
+          <p class="profile-meta" id="profile-meta"></p>
+          <p class="profile-rating" id="profile-rating" hidden></p>
+          <div class="profile-genres" id="profile-genres" hidden></div>
+        </div>
+      </div>
+      <section class="detail-overview-section" id="overview-section" hidden>
+        <h2>About this movie</h2>
+        <p class="profile-overview" id="profile-overview"></p>
+      </section>
       <div class="profile-actions">
-        <button class="streaming-link" id="play-movie" type="button">▶ <span>Play</span></button>
-        <button class="save-button" id="save-movie" type="button">♡ <span>Save to Watchlist</span></button>
-        <button class="share-button" id="share-movie" type="button">↗ <span>Share</span></button>
+        <button class="save-button" data-save-movie type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.75A1.75 1.75 0 0 1 7.75 2h8.5A1.75 1.75 0 0 1 18 3.75V22l-6-3.8L6 22z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Bookmark</span></button>
+        <a class="detail-action trailer-link" id="trailer-link" href="#" target="_blank" rel="noopener noreferrer" hidden><span aria-hidden="true">▶</span> Watch trailer</a>
       </div>
       <p class="profile-status" id="profile-status" role="status" aria-live="polite"></p>
+      <section class="profile-section" id="cast-section" hidden><h2>Cast</h2><div class="cast-list" id="profile-cast"></div></section>
+      <section class="profile-section" id="production-section" hidden><h2>Production</h2><div class="production-list" id="profile-production"></div></section>
+      <section class="profile-section" id="provider-section" hidden><h2>Where to watch <span id="provider-region"></span></h2><div class="provider-list" id="profile-providers"></div></section>
+      <section class="profile-section similar-section" id="similar-section" hidden><h2>You might also like</h2><div class="similar-list" id="similar-movies"></div></section>
     </article>
   </main>
-  <dialog class="streaming-dialog" id="streaming-dialog" aria-labelledby="streaming-dialog-title">
-    <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
-    <h2 id="streaming-dialog-title">Choose a streaming service</h2>
-    <p>Search for this title on a service. Availability depends on your region.</p>
-    <div class="streaming-options" id="streaming-options"></div>
-  </dialog>
+  <nav class="floating-nav detail-floating-nav" aria-label="Primary navigation">
+    <a href="home.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></svg></span><span>Home</span></a>
+    <a href="recognize.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="11" r="3.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m14.5 13.5 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>Discover</span></a>
+    <a href="ai.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="currentColor"/><path d="m19 2 .7 2.3L22 5l-2.3.7L19 8l-.7-2.3L16 5l2.3-.7z" fill="currentColor"/></svg></span><span>AI</span></a>
+  </nav>
+  <script src="api-config.js" defer></script>
+  <script src="movie-cards.js" defer></script>
   <script src="movie-profile.js" defer></script>
   <script src="back.js" defer></script>
   <script src="theme.js" defer></script>

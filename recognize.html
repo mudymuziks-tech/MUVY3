@@ -1,69 +1,59 @@
 <!doctype html>
-<!-- Recognition method picker for audio listening, screen capture, and clip or image upload. -->
+<!-- Recognition method picker for sound recognition and clip upload. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07101b">
-  <title>Recognize | MUVY</title>
+  <title>Discover &amp; Recognize | MUVY</title>
   <script src="theme-init.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="recognize.css">
   <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="muvy-app.css">
+  <link rel="stylesheet" href="muvy-discover.css">
 </head>
 <body class="recognize-body">
-  <div class="recognize-shell">
-    <header class="recognize-header">
-      <a class="recognize-back" href="home.html" data-app-back aria-label="Go back to previous page">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <button class="recognize-menu" id="recognize-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="recognize-menu-panel">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      </button>
-      <h1 id="recognize-page-title">Recognize</h1>
-      <a class="recognize-brand" href="home.html" aria-label="MUVY home">MU<span>V</span>Y</a>
-      <a class="recognize-search" href="explore.html" aria-label="Search titles"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></a>
-      <span class="header-spacer" aria-hidden="true"></span>
+  <div class="recognize-shell muvy-shell">
+    <header class="muvy-header">
+      <div class="brand-side">
+        <a class="muvy-history-back" href="home.html" data-app-back aria-label="Go back to previous page" title="Go back">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <span class="muvy-page-heading" id="recognize-page-title">DISCOVER</span>
+      </div>
     </header>
-
-    <nav class="recognize-menu-panel" id="recognize-menu-panel" hidden aria-label="App navigation">
-      <a href="home.html">Home</a><a href="explore.html">Explore</a><a href="recognize.html" aria-current="page">Recognize</a><a href="watchlist.html">Watchlist</a><a href="genres.html">Browse</a><a href="profile.html">Profile</a><a href="settings.html">Settings</a><a href="login.html?logout=1">Log Out</a>
-    </nav>
 
     <main class="recognize-main">
       <div class="recognize-intro">
-        <a class="page-back recognize-desktop-back" href="home.html" data-app-back aria-label="Go back to previous page" title="Go back">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
         <p class="recognize-eyebrow">Recognize</p>
-        <h2>How do you want to recognize?</h2>
-        <p class="recognize-description">MUVY listens, watches, or identifies from your clip.</p>
+        <h2>Find the movie in a moment.</h2>
+        <p class="recognize-description">Recognize a movie from a clip or its sound.</p>
       </div>
       <div class="recognize-list">
         <button class="recognize-choice" id="audio-choice" type="button">
           <span class="recognize-choice-icon audio-choice-icon"><img src="images/nav%20tools/mic_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
-          <span class="recognize-choice-copy"><strong>Audio</strong><small>Listen to the audio around you<br>or play a sound.</small></span>
-          <svg class="choice-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="recognize-choice" id="screen-choice" type="button" aria-haspopup="dialog" aria-controls="capture-dialog">
-          <span class="recognize-choice-icon screen-choice-icon"><img src="images/nav%20tools/mobile_cast_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span>
-          <span class="recognize-choice-copy"><strong>Screen</strong><small>Capture your screen to identify<br>what's playing.</small></span>
+          <span class="recognize-choice-copy"><strong>Sound recognition</strong><small>Listen to a scene and find the movie.</small></span>
           <svg class="choice-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <button class="recognize-choice" id="upload-choice" type="button">
           <span class="recognize-choice-icon upload-choice-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="recognize-choice-copy"><strong>Upload Clip</strong><small>Upload a short video clip<br>(10 to 15 seconds).</small></span>
+          <span class="recognize-choice-copy"><strong>Clip upload</strong><small>Choose a short video from your device.</small></span>
           <svg class="choice-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
 
-      <button class="audio-start-button" id="audio-recognition-button" type="button" aria-pressed="false">
-        <img class="audio-button-eq" src="images/nav%20tools/graphic_eq_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
-        <img class="audio-button-stop" src="images/nav%20tools/stop_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" hidden>
-        <span id="audio-button-label">Start audio recognition</span>
-      </button>
+      <section class="recognition-history" aria-labelledby="recognition-history-title">
+        <div class="recognition-history-heading">
+          <div><p class="recognition-history-eyebrow">YOUR ACTIVITY</p><h2 id="recognition-history-title">Recognition history</h2></div>
+        </div>
+        <div class="recognition-history-empty">
+          <span class="recognition-history-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v13A2.5 2.5 0 0 1 17.5 21h-11A2.5 2.5 0 0 1 4 18.5z" stroke="currentColor" stroke-width="1.5"/><path d="M8 8h8M8 12h8M8 16h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <p>Movies you identify with MUVY will appear here.</p>
+        </div>
+      </section>
 
-      <input class="visually-hidden" id="clip-picker" type="file" accept="video/*">
+      <input class="visually-hidden" id="clip-picker" type="file" accept="video/mp4,video/quicktime,video/x-matroska,video/x-msvideo,video/webm,video/x-m4v">
       <div class="audio-feedback" id="audio-feedback" hidden>
         <p id="audio-status" role="status" aria-live="polite"></p>
         <button id="stop-audio" type="button" hidden>Stop listening</button>
@@ -142,29 +132,7 @@
       </div>
     </section>
 
-    <aside class="recognize-sidebar" aria-label="Main navigation">
-      <a class="recognize-sidebar-brand" href="home.html">MU<span>V</span>Y</a>
-      <nav>
-        <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
-        <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Explore</span></a>
-        <a class="is-active" href="recognize.html" aria-current="page"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
-        <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
-        <!-- <a href="home.html#recognitions"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognitions</span></a> -->
-        <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
-        <a href="settings.html"><img src="images/nav%20tools/settings_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""><span>Settings</span></a>
-        <button class="sidebar-theme-toggle" data-theme-toggle type="button" aria-label="Switch to light mode" aria-pressed="false"><img src="images/nav%20tools/light_mode_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Theme</span></button>
-      </nav>
-      <a class="sidebar-premium" href="settings.html#premium" data-premium-upsell><span>Go Premium</span><span aria-hidden="true">›</span></a>
-      <a class="recognize-logout sidebar-logout" href="login.html?logout=1"><img src="images/nav%20tools/logout_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true"><span>Log Out</span></a>
-    </aside>
-
-    <nav class="recognize-bottom-nav" aria-label="Main navigation">
-      <a href="home.html"><img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Home</span></a>
-      <a href="explore.html"><img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Explore</span></a>
-      <a class="is-active" href="recognize.html" aria-current="page"><img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Recognize</span></a>
-      <a href="watchlist.html"><img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Watchlist</span></a>
-      <a href="profile.html"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Profile</span></a>
-    </nav>
+    <nav class="floating-nav" aria-label="Primary navigation"><a href="home.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></svg></span><span>Home</span></a><a class="active" href="recognize.html" aria-current="page"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="11" r="3.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m14.5 13.5 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>Discover</span></a><a href="ai.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v9a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.5a2.5 2.5 0 0 1-1-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 12.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span>AI</span></a></nav>
 
     <dialog class="capture-dialog" id="capture-dialog" aria-labelledby="capture-title">
       <div class="capture-sheet">
@@ -187,7 +155,7 @@
           <p class="capture-status" id="capture-status" role="status" aria-live="polite"></p>
           <div class="capture-controls">
             <button class="capture-secondary" id="stop-capture" type="button" hidden><img src="images/nav%20tools/stop_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""><span>Stop capture</span></button>
-            <button class="capture-secondary" id="capture-frame" type="button" hidden>Capture frame</button>
+            <button class="capture-secondary" id="camera-record" type="button" hidden>Record clip</button>
             <button class="capture-primary" id="identify-capture" type="button" hidden>Identify clip</button>
           </div>
         </div>
@@ -198,6 +166,7 @@
   <script src="i18n.js" defer></script>
   <script src="auth.js" defer></script>
   <script src="recognize.js" defer></script>
+  <script src="muvy-app.js" defer></script>
   <script src="navigation.js" defer></script>
   <script src="back.js" defer></script>
   <script src="theme.js" defer></script>

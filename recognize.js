@@ -393,12 +393,12 @@ if (uploadChoice && clipPicker) {
       return;
     }
 
-    await identifyUploadedVideo(file);
+    await identifyUploadedMedia(file);
   });
 }
 
 
-async function identifyUploadedVideo(file) {
+async function identifyUploadedMedia(file) {
   const allowedExtensions = [
     '.mp4',
     '.mov',
@@ -416,7 +416,7 @@ async function identifyUploadedVideo(file) {
 
   if (!isAllowed) {
     showToast(
-      'Unsupported video format. Please select MP4, MOV, MKV, AVI, WEBM or M4V.'
+      'Unsupported format. Choose a supported video clip.'
     );
 
     return;
@@ -798,7 +798,7 @@ const captureVideo = document.getElementById('capture-video');
 const capturePreview = document.querySelector('.capture-preview');
 const captureStatus = document.getElementById('capture-status');
 const stopCaptureButton = document.getElementById('stop-capture');
-const captureFrameButton = document.getElementById('capture-frame');
+const cameraRecordButton = document.getElementById('camera-record');
 const identifyCaptureButton = document.getElementById('identify-capture');
 let captureStream = null;
 let mediaRecorder = null;
@@ -830,8 +830,8 @@ function showCaptureError(message) {
     stopCaptureButton.hidden = true;
   }
 
-  if (captureFrameButton) {
-    captureFrameButton.hidden = true;
+  if (cameraRecordButton) {
+    cameraRecordButton.hidden = true;
   }
 
   if (identifyCaptureButton) {
@@ -912,13 +912,86 @@ function resetCaptureDialog() {
     stopCaptureButton.hidden = true;
   }
 
-  if (captureFrameButton) {
-    captureFrameButton.hidden = true;
+  if (cameraRecordButton) {
+    cameraRecordButton.hidden = true;
   }
 
   if (identifyCaptureButton) {
     identifyCaptureButton.hidden = true;
   }
+}
+
+
+function startCaptureRecording(statusMessage) {
+  if (!window.MediaRecorder) {
+    stopCaptureStream();
+    showCaptureError('Video recording is not supported in this browser.');
+    return;
+  }
+
+  if (!captureStream?.getVideoTracks().length) {
+    showCaptureError('No video stream is available to record.');
+    return;
+  }
+
+  recordedChunks = [];
+  captureBlob = null;
+  const mimeType = typeof MediaRecorder.isTypeSupported === 'function'
+    ? ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4']
+      .find((type) => MediaRecorder.isTypeSupported(type))
+    : undefined;
+  let recorder;
+  try {
+    recorder = new MediaRecorder(captureStream, mimeType ? { mimeType } : undefined);
+  } catch (error) {
+    stopCaptureStream();
+    showCaptureError('Could not start video recording in this browser.');
+    return;
+  }
+
+  mediaRecorder = recorder;
+  recorder.ondataavailable = (event) => {
+    if (event.data.size) recordedChunks.push(event.data);
+  };
+  recorder.onerror = () => {
+    stopCaptureStream();
+    showCaptureError('An error occurred while recording the clip.');
+  };
+  recorder.onstop = () => {
+    if (mediaRecorder !== recorder) return;
+    window.clearTimeout(captureTimer);
+    captureTimer = null;
+    captureBlob = new Blob(recordedChunks, { type: recorder.mimeType || 'video/webm' });
+    stopCaptureStream();
+    stopCaptureButton.hidden = true;
+    cameraRecordButton.hidden = true;
+    identifyCaptureButton.hidden = captureBlob.size === 0;
+    captureStatus.textContent = window.MUVYLocale?.t(
+      captureBlob.size
+        ? 'Clip captured. It is ready to identify.'
+        : 'The recording was empty. Please try again.'
+    );
+  };
+  captureStream.getVideoTracks()[0]?.addEventListener('ended', () => {
+    if (recorder.state === 'recording') recorder.stop();
+  }, { once: true });
+  try {
+    recorder.start(1000);
+  } catch (error) {
+    mediaRecorder = null;
+    stopCaptureStream();
+    showCaptureError('Could not start video recording.');
+    return;
+  }
+
+  stopCaptureButton.querySelector('span').textContent =
+    window.MUVYLocale?.t('Stop capture') ?? 'Stop capture';
+  stopCaptureButton.hidden = false;
+  cameraRecordButton.hidden = true;
+  captureStatus.textContent = window.MUVYLocale?.t(statusMessage);
+  captureTimer = window.setTimeout(() => {
+    if (recorder.state === 'recording') recorder.stop();
+  }, 15000);
 }
 
 
@@ -931,13 +1004,17 @@ if (screenChoice && captureDialog) {
     captureDialog.showModal();
   });
 }
-document.getElementById('capture-close').addEventListener('click', () => captureDialog.close());
+const captureCloseButton = document.getElementById('capture-close');
+if (captureCloseButton && captureDialog) {
+  captureCloseButton.addEventListener('click', () => captureDialog.close());
+}
 captureDialog.addEventListener('click', (event) => {
   if (event.target === captureDialog) captureDialog.close();
 });
 captureDialog.addEventListener('close', resetCaptureDialog);
 
-document.getElementById('screen-record-option').addEventListener('click', async () => {
+const screenRecordOption = document.getElementById('screen-record-option');
+if (screenRecordOption) screenRecordOption.addEventListener('click', async () => {
   if (!navigator.mediaDevices?.getDisplayMedia || !window.MediaRecorder) {
     showCaptureError('Screen recording is not supported here. You can upload a clip instead.');
     return;
@@ -947,31 +1024,9 @@ document.getElementById('screen-record-option').addEventListener('click', async 
     showCaptureSession();
     captureVideo.srcObject = captureStream;
     await captureVideo.play().catch(() => {});
-    recordedChunks = [];
-    captureBlob = null;
-    const mimeType = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm']
-      .find((type) => MediaRecorder.isTypeSupported(type));
-    const recorder = new MediaRecorder(captureStream, mimeType ? { mimeType } : undefined);
-    mediaRecorder = recorder;
-    recorder.ondataavailable = (event) => { if (event.data.size) recordedChunks.push(event.data); };
-    recorder.onstop = () => {
-      if (mediaRecorder !== recorder) return;
-      captureBlob = new Blob(recordedChunks, { type: recorder.mimeType || 'video/webm' });
-      stopCaptureStream();
-      stopCaptureButton.hidden = true;
-      identifyCaptureButton.hidden = false;
-      captureStatus.textContent = window.MUVYLocale?.t('Screen clip captured. It is ready to identify.');
-    };
-    captureStream.getVideoTracks()[0]?.addEventListener('ended', () => {
-      if (recorder.state === 'recording') recorder.stop();
-    }, { once: true });
-    recorder.start(1000);
-    stopCaptureButton.querySelector('span').textContent = window.MUVYLocale?.t('Stop capture');
-    stopCaptureButton.hidden = false;
-    captureStatus.textContent = window.MUVYLocale?.t('Recording your selected screen. Stop after 10 to 15 seconds.');
-    captureTimer = window.setTimeout(() => {
-      if (recorder.state === 'recording') recorder.stop();
-    }, 15000);
+    startCaptureRecording(
+      'Recording your selected screen. Stop after 10 to 15 seconds.'
+    );
   } catch (error) {
     stopCaptureStream();
     showCaptureError(error.name === 'NotAllowedError'
@@ -980,55 +1035,46 @@ document.getElementById('screen-record-option').addEventListener('click', async 
   }
 });
 
-document.getElementById('back-camera-option').addEventListener('click', async () => {
-  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
-    showCaptureError('Camera recording is not available in this browser. You can upload a clip instead.');
+const backCameraOption = document.getElementById('back-camera-option');
+if (backCameraOption) backCameraOption.addEventListener('click', async () => {
+  if (!navigator.mediaDevices?.getUserMedia) {
+    showCaptureError(
+      'Camera access is not available in this browser.'
+    );
     return;
   }
+
   try {
     captureStream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: { ideal: 'environment' } },
-      audio: false,
+      audio: false
     });
+
     showCaptureSession();
+
     captureVideo.srcObject = captureStream;
     await captureVideo.play().catch(() => {});
-    recordedChunks = [];
-    captureBlob = null;
-    const mimeType = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm']
-      .find((type) => MediaRecorder.isTypeSupported(type));
-    const recorder = new MediaRecorder(captureStream, mimeType ? { mimeType } : undefined);
-    mediaRecorder = recorder;
-    recorder.ondataavailable = (event) => { if (event.data.size) recordedChunks.push(event.data); };
-    recorder.onstop = () => {
-      if (mediaRecorder !== recorder) return;
-      captureBlob = new Blob(recordedChunks, { type: recorder.mimeType || 'video/webm' });
-      stopCaptureStream();
-      stopCaptureButton.hidden = true;
-      captureFrameButton.hidden = true;
-      identifyCaptureButton.hidden = false;
-      captureStatus.textContent = window.MUVYLocale?.t('Camera clip captured. It is ready to identify.');
-    };
-    captureStream.getVideoTracks()[0]?.addEventListener('ended', () => {
-      if (recorder.state === 'recording') recorder.stop();
-    }, { once: true });
-    recorder.start(1000);
-    stopCaptureButton.querySelector('span').textContent = window.MUVYLocale?.t('Stop recording');
+
+    stopCaptureButton.textContent =
+      window.MUVYLocale?.t('Close') ?? 'Close';
+
     stopCaptureButton.hidden = false;
-    captureFrameButton.hidden = true;
-    captureStatus.textContent = window.MUVYLocale?.t('Recording from the back camera. Keep it steady on the movie for 10 to 15 seconds.');
-    captureTimer = window.setTimeout(() => {
-      if (recorder.state === 'recording') recorder.stop();
-    }, 15000);
+    cameraRecordButton.hidden = false;
+
+    captureStatus.textContent =
+      'Point the back camera at the movie, then record a short clip.';
   } catch (error) {
     stopCaptureStream();
-    showCaptureError(error.name === 'NotAllowedError'
-      ? 'Camera permission was not granted. Choose an option to try again.'
-      : 'Could not open the back camera. Choose an option to try again.');
+
+    showCaptureError(
+      error.name === 'NotAllowedError'
+        ? 'Camera permission was not granted. Choose an option to try again.'
+        : 'Could not open the back camera. Choose an option to try again.'
+    );
   }
 });
 
-stopCaptureButton.addEventListener('click', () => {
+if (stopCaptureButton) stopCaptureButton.addEventListener('click', () => {
   window.clearTimeout(captureTimer);
   if (mediaRecorder?.state === 'recording') {
     mediaRecorder.stop();
@@ -1036,43 +1082,54 @@ stopCaptureButton.addEventListener('click', () => {
   }
   stopCaptureStream();
   stopCaptureButton.hidden = true;
-  captureFrameButton.hidden = true;
+  cameraRecordButton.hidden = true;
   captureStatus.textContent = window.MUVYLocale?.t('Camera closed.');
 });
 
-captureFrameButton.addEventListener('click', () => {
-  if (!captureVideo.videoWidth || !captureVideo.videoHeight) return;
-  const canvas = document.createElement('canvas');
-  canvas.width = captureVideo.videoWidth;
-  canvas.height = captureVideo.videoHeight;
-  canvas.getContext('2d').drawImage(captureVideo, 0, 0);
-  canvas.toBlob((blob) => {
-    captureBlob = blob;
-    stopCaptureStream();
-    stopCaptureButton.hidden = true;
-    captureFrameButton.hidden = true;
-    identifyCaptureButton.hidden = true;
-    captureStatus.textContent = window.MUVYLocale?.t('Frame captured. Still-image recognition is not available yet.');
-  }, 'image/jpeg', .92);
+if (cameraRecordButton) cameraRecordButton.addEventListener('click', () => {
+  startCaptureRecording(
+    'Recording from the back camera. Keep the movie in frame for up to 15 seconds.'
+  );
 });
-identifyCaptureButton.addEventListener('click', async () => {
+if (identifyCaptureButton) identifyCaptureButton.addEventListener('click', async () => {
   if (!captureBlob) return;
 
   if (captureBlob.type.startsWith('image/')) {
-    showToast('Still-image recognition is not available yet. Capture a 10 to 15 second screen clip instead.');
+    showToast('Still-image recognition is not available yet. Capture a video clip instead.');
     return;
   }
 
   identifyCaptureButton.disabled = true;
 
   try {
-    const file = new File([captureBlob], 'muvy-capture.webm', {
-      type: captureBlob.type || 'video/webm',
-    });
-    captureDialog.close();
-    await identifyUploadedVideo(file);
+    captureStatus.textContent =
+      window.MUVYLocale?.t('Sending your clip to MUVY for identification...')
+      ?? 'Sending your clip to MUVY for identification...';
+
+    const extension = captureBlob.type.includes('mp4') ? 'mp4' : 'webm';
+
+    const file = new File(
+      [captureBlob],
+      `muvy-capture.${extension}`,
+      { type: captureBlob.type || 'video/webm' }
+    );
+
+    const result = await identifyVideoFile(file);
+
+    displayRecognitionResult(result);
+    captureStatus.textContent =
+      result?.matched && result?.movie?.title
+        ? `Identified: ${result.movie.title}`
+        : result?.message || 'No confident match found.';
+
   } catch (error) {
-    captureStatus.textContent = error.message || 'Movie identification failed.';
+    console.error('Capture identification failed:', error);
+
+    captureStatus.textContent =
+      error.message || 'Movie identification failed.';
+
+    showToast(captureStatus.textContent);
+
   } finally {
     identifyCaptureButton.disabled = false;
   }

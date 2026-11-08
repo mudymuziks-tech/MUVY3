@@ -81,6 +81,7 @@ def test_match_clip_enforces_support_ratio():
         min_votes=8,
         min_margin=1.5,
         min_support_ratio=0.60,
+        relaxed_support_ratio=0.60,
     )
     assert rejected is None
 
@@ -91,6 +92,7 @@ def test_match_clip_enforces_support_ratio():
         min_votes=8,
         min_margin=1.5,
         min_support_ratio=0.60,
+        relaxed_support_ratio=0.60,
     )
     assert accepted is not None
     assert accepted.movie_id == "movie-a"

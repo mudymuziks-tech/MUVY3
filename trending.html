@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080611">
+  <title>Trending This Week | MUVY</title>
+  <script src="theme-init.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="muvy-app.css">
+  <link rel="stylesheet" href="muvy-pages.css">
+  <link rel="stylesheet" href="muvy-listings.css">
+</head>
+<body class="muvy-page">
+  <div class="muvy-shell">
+    <header class="muvy-header">
+      <div class="brand-side">
+        <button class="menu-trigger" id="app-menu-button" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="app-menu-panel"><span></span><span></span><span></span></button>
+        <span class="muvy-page-heading">TRENDING</span>
+      </div>
+    </header>
+    <nav class="muvy-menu" id="app-menu-panel" hidden aria-label="Menu options"></nav>
+    <main class="listing-main">
+      <div class="page-eyebrow">WHAT'S CATCHING ATTENTION</div>
+      <h1>Trending This Week</h1>
+      <p class="listing-intro">Browse the titles making waves with MUVY viewers.</p>
+      <div class="listing-grid" aria-label="Trending movies">
+        <article class="trend-card listing-card">
+          <a class="movie-card trend-link" data-title="Sinners" href="movie-profile.html"><img class="poster-art" src="images/6b65c239-aa8a-4105-a81b-e0ef9cfa503d%20-%20Copy.jfif" alt="Sinners poster"><span>Sinners</span></a>
+          <button class="bookmark-toggle" type="button" aria-label="Save Sinners" data-bookmark="Sinners"></button>
+        </article>
+        <article class="trend-card listing-card">
+          <a class="movie-card trend-link" data-title="Peaky Blinders 2" href="movie-profile.html"><img class="poster-art" src="images/8c6ef1d2-7ffb-4b93-ab07-5db127913e99.jfif" alt="Peaky Blinders 2 poster"><span>Peaky Blinders 2</span></a>
+          <button class="bookmark-toggle" type="button" aria-label="Save Peaky Blinders 2" data-bookmark="Peaky Blinders 2"></button>
+        </article>
+        <article class="trend-card listing-card">
+          <a class="movie-card trend-link" data-title="The Expendables 3" href="movie-profile.html"><img class="poster-art" src="images/38fd25ee-3093-408b-8e8e-426535a7a7dd.jfif" alt="The Expendables 3 poster"><span>The Expendables 3</span></a>
+          <button class="bookmark-toggle" type="button" aria-label="Save The Expendables 3" data-bookmark="The Expendables 3"></button>
+        </article>
+        <article class="trend-card listing-card">
+          <a class="movie-card trend-link" data-title="Redemption" href="movie-profile.html"><img class="poster-art" src="images/809d7f90-1464-452e-af18-a321fe0fa209.jfif" alt="Redemption poster"><span>Redemption</span></a>
+          <button class="bookmark-toggle" type="button" aria-label="Save Redemption" data-bookmark="Redemption"></button>
+        </article>
+      </div>
+    </main>
+    <nav class="floating-nav" aria-label="Primary navigation">
+      <a href="home.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></svg></span><span>Home</span></a>
+      <a href="recognize.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="11" r="3.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m14.5 13.5 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>Discover</span></a>
+      <a href="ai.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v9a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.5a2.5 2.5 0 0 1-1-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 12.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span>AI</span></a>
+    </nav>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script src="auth.js" defer></script>
+  <script src="movie-cards.js" defer></script>
+  <script src="muvy-app.js" defer></script>
+  <script src="theme.js" defer></script>
+</body>
+</html>

@@ -395,8 +395,8 @@
       .splash-progress-track span { animation: none; width: 100%; opacity: .75; }
     }
 
-    /* Keep the home screen as the only page with a hamburger navigation button. */
-    html body :is(.explore-body .app-menu-button, .profile-menu-button, .watchlist-menu-button, .settings-menu-button, .recognize-menu) {
+    /* Keep legacy, unsupported menu buttons hidden while shared menus handle app navigation. */
+    html body :is(.profile-menu-button, .watchlist-menu-button, .recognize-menu) {
       display: none !important;
     }
 
@@ -438,4 +438,3 @@
       .app-menu-button, .app-menu-panel { display: none !important; }
       .desktop-settings-item, .desktop-logout-item, .desktop-sidebar-item { display: flex !important; }
     }
-

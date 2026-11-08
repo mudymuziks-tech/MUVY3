@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080611">
+  <title>Notifications | MUVY</title>
+  <script src="theme-init.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="muvy-app.css">
+  <link rel="stylesheet" href="muvy-pages.css">
+  <link rel="stylesheet" href="notifications.css">
+</head>
+<body class="muvy-page">
+  <div class="muvy-shell notification-shell">
+    <header class="notification-page-header">
+      <a class="notification-back" href="home.html" data-app-back aria-label="Go back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <h1 class="notification-header-title">Notifications</h1>
+    </header>
+    <main class="notifications-main">
+      <div class="page-eyebrow">YOUR UPDATES</div>
+      <h1>Notifications</h1>
+      <p class="notifications-intro">Updates from your MUVY experience, all in one place.</p>
+      <section class="notification-state" id="notification-empty" aria-live="polite">
+        <div class="notification-illustration" aria-hidden="true">
+          <svg viewBox="0 0 96 96" fill="none"><path d="M25 67h46l-6-8V43a17 17 0 0 0-34 0v16z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M41 74a8 8 0 0 0 14 0M19 39l-5-2m68 2 5-2M25 22l-4-4m50 4 4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="69" cy="27" r="13" fill="#171020" stroke="currentColor" stroke-width="2"/><path d="M69 20v8m0 5h.02" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </div>
+        <h2>No notifications yet</h2>
+        <p>Your notifications will appear here.</p>
+      </section>
+      <section class="notification-list" id="notification-list" aria-label="Notifications" hidden>
+        <div class="notification-list-items" id="notification-list-items"></div>
+      </section>
+    </main>
+    <nav class="floating-nav" aria-label="Primary navigation">
+      <a href="home.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></svg></span><span>Home</span></a>
+      <a href="recognize.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="11" r="3.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m14.5 13.5 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>Discover</span></a>
+      <a href="ai.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="currentColor"/><path d="m19 2 .7 2.3L22 5l-2.3.7L19 8l-.7-2.3L16 5l2.3-.7z" fill="currentColor"/></svg></span><span>AI</span></a>
+    </nav>
+  </div>
+  <script src="auth.js" defer></script>
+  <script src="notifications.js" defer></script>
+  <script src="back.js" defer></script>
+  <script src="theme.js" defer></script>
+</body>
+</html>

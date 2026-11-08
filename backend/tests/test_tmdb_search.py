@@ -52,3 +52,29 @@ def test_search_movies_rejects_invalid_json(mock_get):
 
     with pytest.raises(tmdb.TMDBError, match="invalid JSON"):
         tmdb.search_movies("Elephants Dream")
+
+
+@patch("tmdb.TMDB_API_KEY", "test-api-key")
+@patch("tmdb.requests.get")
+def test_get_movie_details_appends_requested_metadata(mock_get):
+    response = Mock()
+    response.status_code = 200
+    response.json.return_value = {"id": 9761, "title": "Elephants Dream"}
+    mock_get.return_value = response
+
+    result = tmdb.get_movie_details(
+        9761,
+        language="en-US",
+        append_to_response="credits,videos,recommendations,watch/providers",
+    )
+
+    assert result == {"id": 9761, "title": "Elephants Dream"}
+    mock_get.assert_called_once_with(
+        "https://api.themoviedb.org/3/movie/9761",
+        params={
+            "api_key": "test-api-key",
+            "language": "en-US",
+            "append_to_response": "credits,videos,recommendations,watch/providers",
+        },
+        timeout=10,
+    )

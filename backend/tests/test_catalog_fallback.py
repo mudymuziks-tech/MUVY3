@@ -43,6 +43,31 @@ def test_tmdb_search_rejects_whitespace_queries():
     assert response.status_code == 422
 
 
+@patch("api.get_movie_details")
+def test_tmdb_movie_details_returns_details_and_related_metadata(mock_details):
+    movie_data = {
+        "id": 9761,
+        "title": "Elephants Dream",
+        "credits": {"cast": [{"name": "Example Actor"}]},
+        "videos": {"results": []},
+        "recommendations": {"results": []},
+    }
+    mock_details.return_value = movie_data
+
+    response = client.get(
+        "/tmdb/movies/9761",
+        headers={"Accept-Language": "en-US"},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == movie_data
+    mock_details.assert_called_once_with(
+        9761,
+        language="en-US",
+        append_to_response="credits,videos,recommendations,watch/providers",
+    )
+
+
 @patch("api.supabase")
 @patch("api.get_movie_details")
 def test_catalog_request_saves_only_tmdb_metadata(mock_get_movie, mock_supabase):

@@ -13,15 +13,18 @@ if (profileLanguageName) {
 // PROFILE MENU: toggle the small-screen menu and close it on outside click.
 const profileMenuButton = document.getElementById('profile-menu-button');
 const profileMenuPanel = document.getElementById('profile-menu-panel');
-profileMenuButton.addEventListener('click', () => {
+profileMenuButton?.addEventListener('click', () => {
   const opening = profileMenuPanel.hidden;
   profileMenuPanel.hidden = !opening;
   profileMenuButton.setAttribute('aria-expanded', String(opening));
 });
 document.addEventListener('click', (event) => {
-  if (!profileMenuPanel.hidden && !profileMenuPanel.contains(event.target) && !profileMenuButton.contains(event.target)) {
+  if (profileMenuPanel && profileMenuButton && !profileMenuPanel.hidden && !profileMenuPanel.contains(event.target) && !profileMenuButton.contains(event.target)) {
     profileMenuPanel.hidden = true;
     profileMenuButton.setAttribute('aria-expanded', 'false');
   }
 });
 
+
+const savedCount = document.getElementById('saved-count');
+if (savedCount) { try { savedCount.textContent = String(JSON.parse(localStorage.getItem('muvy.savedMovies') || '[]').length); } catch { savedCount.textContent = '0'; } }

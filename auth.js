@@ -2,7 +2,7 @@
 (() => {
   const sessionKey = 'muvyLocalSession';
   const sessionDurationMs = 8 * 60 * 60 * 1000;
-  const protectedPages = new Set(['home.html', 'explore.html', 'recognize.html', 'watchlist.html', 'genres.html', 'settings.html', 'profile.html']);
+  const protectedPages = new Set(['home.html', 'explore.html', 'recognize.html', 'watchlist.html', 'genres.html', 'settings.html', 'profile.html', 'notifications.html', 'recommendations.html', 'trending.html']);
 
   // STORAGE: prefer local storage, with session storage as a fallback.
   function getStore() {

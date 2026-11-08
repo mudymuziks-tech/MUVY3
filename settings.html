@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="settings.css">
   <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="muvy-app.css">
 </head>
 <body class="settings-body">
   <div class="settings-shell">
@@ -22,9 +23,7 @@
       <button class="settings-menu-button" id="settings-menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="settings-menu-panel"><img src="images/nav%20tools/menu_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></button>
       <span class="settings-brand">Settings</span>
     </header>
-    <nav class="settings-menu-panel" id="settings-menu-panel" hidden aria-label="App navigation">
-      <a href="home.html">Home</a><a href="explore.html">Discover</a><a href="recognize.html">Recognize</a><a href="watchlist.html">Watchlist</a><a href="profile.html">Profile</a><a href="settings.html" aria-current="page">Settings</a><a href="login.html?logout=1">Log Out</a>
-    </nav>
+    <nav class="settings-menu-panel" id="settings-menu-panel" hidden aria-label="Menu options"></nav>
     <aside class="settings-sidebar" aria-label="Main navigation">
       <a class="settings-side-brand" href="home.html">MU<span>V</span>Y</a>
       <nav>
@@ -33,21 +32,14 @@
           <span>Home</span>
         </a>
 
-        <a href="explore.html">
-          <img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
-          <span>
-            Explore
-          </span>
-        </a>
-
         <a href="recognize.html">
-          <img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
-          <span>Recognize</span>
+          <img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
+          <span>Discover</span>
         </a>
 
-        <a href="watchlist.html">
-          <img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" aria-hidden="true">
-          <span>Watchlist</span>
+        <a href="ai.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v9a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.5a2.5 2.5 0 0 1-1-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 12.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <span>AI</span>
         </a>
 
         <a href="profile.html">
@@ -71,138 +63,41 @@
       <a class="page-back settings-main-back" href="profile.html" data-app-back aria-label="Go back to previous page" title="Go back">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <!--<p class="settings-eyebrow">Your account</p>
-      <h1>Settings</h1> -->
-      <h1 class="settings-subtitle">Manage your preferences.</h1>
-      <section class="settings-group" id="preferences" aria-labelledby="account-settings-title">
+      <section class="settings-group" aria-labelledby="account-settings-title">
         <h2 id="account-settings-title">Account</h2>
-        <a class="settings-row2" href="profile-details.html">
-          <span>
-            <strong>
-              Profile details
-            </strong>
-            <small>
-              Manage your account details
-            </small>
-          </span>
-          <b class="profile-option-arrow2" aria-hidden="true">›</b>
-        </a>
-      </section>
-
-      <section class="settings-group" aria-labelledby="app-settings-title">
-        <h2 id="app-settings-title">
-          App preferences
-        </h2>
-
-        <div class="settings-row">
-          <span>
-            <strong>
-              Recognition access
-            </strong>
-            <small>
-              MUVY asks before using your microphone or camera.
-            </small>
-          </span>
-        </div>
-
-        <div class="settings-row" id="notifications">
-          <span>
-            <strong>
-              Notifications
-            </strong>
-          <small>
-            Notification preferences will be available here.
-          </small>
-          </span>
-        </div>
-
-        <a class="settings-row1" href="language.html">
-          <span class="profile-option-icon">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M3 12h18M12 3a15 15 0 0 0 0 18m0-18a15 15 0 0 0 0 18" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-          </span>
-
-          <span class="profile-option-copy">
-            <strong>
-              Language
-            </strong>
-            <small id="profile-language-name" data-l10n-skip>
-              English
-            </small>
-          </span>
-
-          <span class="profile-option-arrow" aria-hidden="true">
-            ›
-          </span>
-        </a>
-
-        <label class="settings-row theme-setting" for="theme-toggle">
-          <span>
-            <strong>
-              Appearance
-            </strong>
-            <small>
-              Switch between light and dark mode.
-            </small>
-          </span>
-          <span class="theme-control">
-            <input id="theme-toggle" type="checkbox" role="switch" aria-label="Use light mode">
-          </span>
-        </label>
-        <div class="settings-row">
-          <span>
-            <strong>
-              Privacy
-            </strong>
-            <small>
-              Your captures stay on your device until you choose to identify them.
-            </small>
-          </span>
+        <div class="settings-options">
+          <a class="settings-option" href="profile-details.html"><span class="settings-option-icon" aria-hidden="true"><img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>Edit Profile</strong><span class="settings-option-arrow" aria-hidden="true">›</span></a>
+          <a class="settings-option" href="app-info.html#privacy"><span class="settings-option-icon" aria-hidden="true"><img src="images/nav%20tools/encrypted_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>Privacy &amp; Security</strong><span class="settings-option-arrow" aria-hidden="true">›</span></a>
+          <div class="settings-option is-unavailable" aria-disabled="true" title="Linked account management is not available yet."><span class="settings-option-icon" aria-hidden="true"><img src="images/nav%20tools/currency_exchange_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>Linked Accounts</strong><span class="settings-option-state">Not available yet</span></div>
         </div>
       </section>
 
-      <section class="settings-group" id="help" aria-labelledby="help-settings-title"><h2 id="help-settings-title">Help &amp; Support</h2><div class="settings-row"><span><strong>Support</strong><small>Support information will be available here.</small></span></div></section>
+      <section class="settings-group" id="preferences" aria-labelledby="preferences-settings-title">
+        <h2 id="preferences-settings-title">Preferences</h2>
+        <div class="settings-options">
+          <a class="settings-option" href="language.html"><span class="settings-option-icon" aria-hidden="true"><img src="images/nav%20tools/browse_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>Language</strong><span class="settings-option-value" id="settings-language-name" data-l10n-skip>English</span><span class="settings-option-arrow" aria-hidden="true">›</span></a>
+          <div class="settings-option is-unavailable" aria-disabled="true" title="Content preferences are not available yet."><span class="settings-option-icon" aria-hidden="true"><img src="images/nav%20tools/tune_37dp_E3E3E3_FILL0_wght400_GRAD0_opsz40.svg" alt=""></span><strong>Content Preferences</strong><span class="settings-option-state">Not available yet</span></div>
+          <a class="settings-option" id="notifications" href="notifications.html"><span class="settings-option-icon" aria-hidden="true"><img src="images/nav%20tools/notifications_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>Notifications</strong><span class="settings-option-arrow" aria-hidden="true">›</span></a>
+        </div>
+      </section>
+
+      <section class="settings-group" id="help" aria-labelledby="app-settings-title">
+        <h2 id="app-settings-title">App</h2>
+        <div class="settings-options">
+          <a class="settings-option" href="app-info.html#about"><span class="settings-option-icon" aria-hidden="true"><img src="images/nav%20tools/help_center_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>About MUVY</strong><span class="settings-option-arrow" aria-hidden="true">›</span></a>
+          <a class="settings-option" href="app-info.html#contact"><span class="settings-option-icon" aria-hidden="true"><img src="images/nav%20tools/help_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>Help &amp; Support</strong><span class="settings-option-arrow" aria-hidden="true">›</span></a>
+          <label class="settings-option settings-appearance-option" for="theme-toggle"><span class="settings-option-icon" aria-hidden="true"><img src="images/nav%20tools/dark_mode_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></span><strong>Appearance</strong><input id="theme-toggle" type="checkbox" role="switch" aria-label="Use light mode"></label>
+        </div>
+      </section>
       <section class="settings-group" id="premium" aria-labelledby="premium-settings-title">
         <h2 id="premium-settings-title">MUVY Premium</h2>
-        <div class="settings-row"><span><strong>Upgrade options</strong><small>Premium plans and benefits will be available here.</small></span></div>
+        <div class="settings-options"><div class="settings-option is-unavailable" aria-disabled="true"><span class="settings-option-icon" aria-hidden="true">✦</span><strong>Upgrade options</strong><span class="settings-option-state">Not available yet</span></div></div>
       </section>
     </main>
-    <nav class="settings-bottom-nav" aria-label="Main navigation">
-      <a href="home.html">
-        <img src="images/nav%20tools/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
-        <span class="bottom-nav-span">
-          Home
-        </span>
-      </a>
-
-      <a href="explore.html">
-        <img src="images/nav%20tools/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
-        <span class="bottom-nav-span">
-          Discover
-        </span>
-      </a>
-
-      <a href="recognize.html">
-        <img src="images/nav%20tools/play_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
-        <span class="bottom-nav-span">
-          Recognize
-        </span>
-      </a>
-
-      <a href="watchlist.html">
-        <img src="images/nav%20tools/favorite_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
-        <span class="bottom-nav-span">
-          Watchlist
-        </span>
-      </a>
-      <a href="profile.html">
-        <img src="images/nav%20tools/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
-        <span class="bottom-nav-span">
-          Profile
-        </span>
-      </a>
+    <nav class="floating-nav settings-bottom-nav" aria-label="Primary navigation">
+      <a href="home.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></svg></span><span>Home</span></a>
+      <a href="recognize.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="11" r="3.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m14.5 13.5 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>Discover</span></a>
+      <a href="ai.html"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="currentColor"/><path d="m19 2 .7 2.3L22 5l-2.3.7L19 8l-.7-2.3L16 5l2.3-.7z" fill="currentColor"/></svg></span><span>AI</span></a>
     </nav>
   </div>
 
@@ -211,6 +106,7 @@
   <script src="settings.js" defer></script>
   <script src="navigation.js" defer></script>
   <script src="back.js" defer></script>
+  <script src="muvy-app.js" defer></script>
   <script src="theme.js" defer></script>
 </body>
 </html>
